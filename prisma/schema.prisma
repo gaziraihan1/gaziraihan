@@ -1,13 +1,248 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+// ------------------------------------------------------------------
+// Enums for Type Safety
+// ------------------------------------------------------------------
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+enum ProjectStatus {
+  LIVE
+  ARCHIVED
+  IN_PROGRESS
+}
+
+enum MessageStatus {
+  UNREAD
+  READ
+  ARCHIVED
+}
+
+enum ContentType {
+  PROJECT
+  BLOG
+  EXPERIENCE
+}
+
+// ------------------------------------------------------------------
+// Models - Optimized with Indexes
+// ------------------------------------------------------------------
+
+model SiteConfig {
+  id          String   @id @default(uuid())
+  key         String   @unique // e.g., "site_title", "hero_subtitle"
+  value       String   @db.Text
+  type        String   @default("string") // string, json, boolean
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  @@index([key])
+}
+
+/// Professional Experience (Work History)
+model Experience {
+  id          String   @id @default(uuid())
+  company     String
+  role        String
+  location    String?
+  startDate   DateTime
+  endDate     DateTime? // Null means "Present"
+  isCurrent   Boolean  @default(false)
+  description String   @db.Text // Supports Markdown/HTML
+  highlights  String[] // Array of strings for bullet points
+  technologies String[] // Tech used in this role
+  order       Int      @default(0) // For manual sorting
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isCurrent, startDate])
+  @@index([order, startDate])
+  @@index([createdAt])
+}
+
+/// Skills & Technologies
+model Skill {
+  id          String   @id @default(uuid())
+  name        String
+  category    String   // e.g., "Frontend", "Backend", "Design"
+  icon        String?  // Lucide icon name
+  proficiency Int      @default(50) // 0-100 percentage
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category, order, name])
+  @@index([proficiency])
+}
+
+/// Projects Portfolio
+model Project {
+  id          String        @id @default(uuid())
+  title       String
+  slug        String        @unique // For SEO friendly URLs
+  summary     String        @db.Text
+  description String        @db.Text // Full Markdown content
+  status      ProjectStatus @default(LIVE)
+  thumbnail   String        // Main image URL
+  images      String[]      // Gallery images
+  demoUrl     String?
+  repoUrl     String?
+  featured    Boolean       @default(false)
+  order       Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  tags        Tag[]         @relation("ProjectTags")
+  metrics     ProjectMetric[]
+
+  @@index([slug])
+  @@index([featured, status, order, createdAt])
+  @@index([status, createdAt])
+  @@index([createdAt])
+  
+}
+
+/// Specific metrics for a project (e.g., "Improved load time by 40%")
+model ProjectMetric {
+  id        String  @id @default(uuid())
+  label     String  // e.g., "Performance Boost"
+  value     String  // e.g., "+40%"
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+/// Blog / Articles
+model BlogPost {
+  id          String   @id @default(uuid())
+  title       String
+  slug        String   @unique
+  excerpt     String   @db.Text
+  content     String   @db.Text // Markdown
+  published   Boolean  @default(false)
+  publishedAt DateTime?
+  views       Int      @default(0)
+  thumbnail   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  tags        Tag[]     @relation("BlogPostTags")
+  authorId    String?   // If you add Admin auth later
+  author      User?     @relation(fields: [authorId], references: [id])
+
+  @@index([slug])
+  @@index([published, publishedAt])
+  @@index([published, createdAt])
+  @@index([authorId, published, publishedAt])
+  @@index([published, slug])
+  @@index([views])
+  
+}
+
+/// Unified Tags for Projects and Blogs
+model Tag {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  slug      String   @unique
+  color     String   @default("#6366f1") // Hex color for UI badge
+  createdAt DateTime @default(now())
+
+  // Relations - ✅ OPTIMIZED: Use explicit relation names to avoid ambiguity
+  projects  Project[] @relation("ProjectTags")
+  posts     BlogPost[] @relation("BlogPostTags")
+
+  @@index([slug])
+  @@index([name])
+}
+
+/// Contact Form Submissions
+model ContactMessage {
+  id        String      @id @default(uuid())
+  name      String
+  email     String
+  subject   String?
+  message   String      @db.Text
+  status    MessageStatus @default(UNREAD)
+  ipAddr    String?     // For spam protection
+  userAgent String?     // For debugging
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@index([status, createdAt])
+  @@index([email])
+  @@index([createdAt])
+  @@index([ipAddr])
+}
+
+/// Newsletter Subscribers (Optional Growth Feature)
+model Subscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  
+  @@index([email, active])
+  @@index([createdAt])
+}
+
+/// Admin Users (For future CMS login)
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hashed
+  name      String?
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  posts     BlogPost[]
+
+  @@index([email, role])
+}
+
+/// Education History (New Model)
+model Education {
+  id          String   @id @default(uuid())
+  degree      String
+  school      String
+  location    String?
+  startDate   DateTime
+  endDate     DateTime?
+  description String?  @db.Text
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([startDate, endDate])
+  @@index([order, startDate])
+}
+
+/// Certifications (New Model)
+model Certification {
+  id          String   @id @default(uuid())
+  name        String
+  issuer      String
+  issueDate   DateTime?
+  expiryDate  DateTime?
+  credentialId String?
+  url         String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order, issueDate])
+  @@index([expiryDate])
 }
