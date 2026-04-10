@@ -12,6 +12,7 @@ import { FeaturedProjectsCard } from '@/components/features/home/FeaturedProject
 import { ExperienceCard } from '@/components/features/home/ExperienedCard';
 import { BlogPreviewCard } from '@/components/features/home/BlogPreviewCard';
 import { ContactCard } from '@/components/features/home/ContactCard';
+import { TechSkill } from '@/types/skills';
 
 export const meta: Metadata = {
   title: 'Home',
@@ -66,11 +67,12 @@ async function getHomeSkills() {
           category: true,
           icon: true,
           proficiency: true,
+          order: true
         },
         where: { order: { gt: -1 } },
         orderBy: { order: 'asc' },
         take: 12,
-      });
+      }) as TechSkill[];
 
       console.log(`✅ Fetched ${skills.length} skills for home page`);
       return skills;

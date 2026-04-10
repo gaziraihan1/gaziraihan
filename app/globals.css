@@ -70,3 +70,74 @@
     50% { transform: translateY(-20px); }
   }
 }
+
+/* app/globals.css - Add or update these styles */
+
+/* Code blocks */
+.prose pre {
+  @apply relative my-6 rounded-lg border border-white/10 bg-[#0a0a0a] p-0 overflow-hidden;
+}
+
+.prose code {
+  @apply bg-white/10 px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.prose pre code {
+  @apply bg-transparent p-4 block overflow-x-auto text-sm;
+}
+
+/* Headings */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply text-white font-bold mt-12 mb-6 scroll-mt-24;
+}
+
+.prose h1 { @apply text-3xl; }
+.prose h2 { @apply text-2xl mt-10 mb-4; }
+.prose h3 { @apply text-xl mt-8 mb-3; }
+
+/* Links */
+.prose a {
+  @apply text-indigo-400 hover:text-indigo-300 underline underline-offset-4 transition-colors;
+}
+
+/* Lists */
+.prose ul,
+.prose ol {
+  @apply text-gray-300 mb-4 space-y-2;
+}
+
+.prose ul { @apply list-disc list-inside; }
+.prose ol { @apply list-decimal list-inside; }
+
+/* Blockquotes */
+.prose blockquote {
+  @apply border-l-4 border-indigo-500 pl-4 italic text-gray-400 my-6 bg-white/5 py-4 pr-4 rounded-r-lg;
+}
+
+/* Images */
+.prose img {
+  @apply my-8 rounded-lg border border-white/10 max-w-full h-auto;
+}
+
+/* Tables */
+.prose table {
+  @apply w-full my-6 border border-white/10 rounded-lg overflow-hidden;
+}
+
+.prose th {
+  @apply bg-white/5 text-white font-semibold py-3 px-4 text-left border-b border-white/10;
+}
+
+.prose td {
+  @apply py-3 px-4 text-gray-300 border-b border-white/10 last:border-b-0;
+}
+
+/* Horizontal rule */
+.prose hr {
+  @apply my-12 border-white/10;
+}

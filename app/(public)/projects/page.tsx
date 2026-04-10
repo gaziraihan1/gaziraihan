@@ -10,6 +10,7 @@ import { EmptyState } from '@/components/ui/emptyState';
 import { ProjectGrid } from '@/components/features/projects/ProjectGrid';
 import { ProjectPagination } from '@/components/features/projects/ProjectPagination';
 import { ProjectsSkeleton } from '@/components/features/projects/ProjectsSkeleton';
+import { ProjectTag } from '@/types/project';
 
 export const metadata: Metadata = {
   title: 'Projects',
@@ -53,7 +54,7 @@ async function getFilterOptions() {
       ]);
 
       return {
-        tags,
+        tags: tags as ProjectTag[],
         categories: categories.map((c) => c.category),
       };
     },

@@ -18,7 +18,7 @@ export function ProjectMarkdown({ content }: ProjectMarkdownProps) {
         remarkPlugins={[remarkGfm]}
         components={{
           // Custom Code Block
-          code({ node, inline, className, children, ...props }: any) {
+          code({ inline, className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || '');
             return !inline && match ? (
               <SyntaxHighlighter
@@ -46,23 +46,19 @@ export function ProjectMarkdown({ content }: ProjectMarkdownProps) {
           blockquote: (props) => (
             <blockquote className="border-l-4 border-indigo-500 pl-4 italic text-gray-400 my-6" {...props} />
           ),
+          // ✅ SIMPLEST FIX: Use regular <img> instead of Next.js Image
           img: (props) => (
-            <ImageWrapper src={props.src} alt={props.alt} />
+            < Image
+              src={props.src as string}
+              alt={props.alt || 'Project image'}
+              className="w-full h-64 md:h-96 my-8 rounded-lg object-cover border border-white/10"
+              loading="lazy"
+            />
           ),
         }}
       >
         {content}
       </ReactMarkdown>
-    </div>
-  );
-}
-
-// Helper for Markdown Images
-function ImageWrapper({ src, alt }: { src?: string; alt?: string }) {
-  if (!src) return null;
-  return (
-    <div className="relative w-full h-64 md:h-96 my-8 rounded-lg overflow-hidden border border-white/10">
-      <Image src={src} alt={alt || ''} fill className="object-cover" />
     </div>
   );
 }

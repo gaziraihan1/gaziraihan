@@ -4,10 +4,14 @@
 import { motion } from 'framer-motion';
 import { Briefcase, Building2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Experience } from '@/generated/prisma/client';
+import { ExperienceItem } from '@/types/experience';
+
+// ✅ FIXED: Custom type matching the selected fields from getExperience()
+// Instead of using @prisma/client Experience (which has createdAt/updatedAt)
+
 
 interface ExperienceTimelineProps {
-  experience: Experience[];
+  experience: ExperienceItem[]; // ✅ Use custom type instead of Prisma type
 }
 
 export function ExperienceTimeline({ experience }: ExperienceTimelineProps) {

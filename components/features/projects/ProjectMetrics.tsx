@@ -2,7 +2,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { TrendingUp, Zap, Users, Shield } from 'lucide-react';
+import { TrendingUp, Zap, Users, Shield, type LucideIcon } from 'lucide-react';
 
 interface Metric {
   id: string;
@@ -10,7 +10,9 @@ interface Metric {
   value: string;
 }
 
-const iconMap: Record<string> = {
+// ✅ FIXED: Record requires 2 type arguments: <KeyType, ValueType>
+// Key: string (metric label), Value: LucideIcon component
+const iconMap: Record<string, LucideIcon> = {
   Performance: Zap,
   Growth: TrendingUp,
   Users: Users,
@@ -21,7 +23,9 @@ export function ProjectMetrics({ metrics }: { metrics: Metric[] }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
       {metrics.map((metric, index) => {
+        // ✅ Fallback to default icon if label not in map
         const Icon = iconMap[metric.label] || TrendingUp;
+        
         return (
           <motion.div
             key={metric.id}

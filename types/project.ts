@@ -40,3 +40,10 @@ export interface ProjectDetailProps {
   previousProject: NavigationProject | null;
   nextProject: NavigationProject | null;
 }
+
+export type ProjectTag = {
+  id: string;
+  name: string;
+  slug: string;
+  color?: string | null;
+};
