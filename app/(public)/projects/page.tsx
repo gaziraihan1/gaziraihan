@@ -31,6 +31,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 3600; // 1 hour
+
 // ✅ OPTIMIZATION 1: Cache filter options with in-memory cache
 const FILTER_CACHE_KEY = 'projects:filters';
 const FILTER_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
@@ -235,15 +237,4 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
       </Suspense>
     </div>
   );
-}
-
-// ✅ OPTIMIZATION 7: Enable ISR (Incremental Static Regeneration)
-export const revalidate = 60 * 60; // 1 hour
-
-// ✅ OPTIMIZATION 8: Generate static params for pre-rendering
-export async function generateStaticParams() {
-  // Pre-render first 3 pages for faster initial loads
-  return [1, 2, 3].map((page) => ({
-    page: page.toString(),
-  }));
 }

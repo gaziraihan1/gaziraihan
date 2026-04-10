@@ -1,6 +1,7 @@
 // lib/markdown.ts
 import { marked } from 'marked';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
+
 
 // ✅ FIXED: Configure marked with v9+ compatible options
 marked.setOptions({

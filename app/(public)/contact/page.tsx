@@ -5,7 +5,7 @@ import { ContactForm } from '@/components/features/contact/ContactForm';
 import { ContactInfo } from '@/components/features/contact/ContactInfo';
 import { FAQSection } from '@/components/features/contact/FaqSection';
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: 'Contact',
   description: 'Get in touch for project inquiries, collaborations, or just to say hello. I respond to all messages within 24-48 hours.',
   openGraph: {

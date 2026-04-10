@@ -14,7 +14,7 @@ import { BlogPreviewCard } from '@/components/features/home/BlogPreviewCard';
 import { ContactCard } from '@/components/features/home/ContactCard';
 import { TechSkill } from '@/types/skills';
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: 'Home',
   description: siteConfig.description,
   openGraph: {
@@ -33,6 +33,7 @@ export const meta: Metadata = {
   },
 };
 
+export const revalidate = 3600; // 1 hour
 // ============================================================================
 // CACHED DATA FETCHING FUNCTIONS
 // ============================================================================
@@ -372,13 +373,5 @@ export default async function HomePage() {
 // ============================================================================
 
 // ✅ OPTIMIZATION: Enable ISR (home page rarely changes)
-export const revalidate = 60 * 60; // 1 hour
 
 // ✅ OPTIMIZATION: Pre-render home page at build time (it's static!)
-export const dynamic = 'force-static';
-
-// ✅ OPTIMIZATION: Generate static params (for SSG)
-export async function generateStaticParams() {
-  // Home page has no dynamic params, but this ensures it's pre-rendered
-  return [{}];
-}

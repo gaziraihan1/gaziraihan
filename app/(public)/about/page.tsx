@@ -13,7 +13,7 @@ import { PersonalInterests } from '@/components/features/about/PersonalInterests
 import { ResumeDownload } from '@/components/features/about/ResumeDownload';
 import { AboutSkeleton } from '@/components/features/about/AboutSkeleton'; // ✅ Create this skeleton
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: 'About',
   description: 'Learn more about my journey, experience, and what drives me as a Full-stack Web Developer & UI/UX Developer.',
   openGraph: {
@@ -31,6 +31,7 @@ export const meta: Metadata = {
     images: [siteConfig.ogImage],
   },
 };
+export const revalidate = 3600; // 24 hours
 
 // ============================================================================
 // CACHED DATA FETCHING FUNCTIONS
@@ -222,13 +223,5 @@ export default async function AboutPage() {
 // ============================================================================
 
 // ✅ OPTIMIZATION: Enable ISR (About page rarely changes)
-export const revalidate = 24 * 60 * 60; // 24 hours
 
 // ✅ OPTIMIZATION: Pre-render the about page at build time
-export const dynamic = 'force-static';
-
-// ✅ OPTIMIZATION: Generate static params (for SSG)
-export async function generateStaticParams() {
-  // About page has no dynamic params, but this ensures it's pre-rendered
-  return [{}];
-}

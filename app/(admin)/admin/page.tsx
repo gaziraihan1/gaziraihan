@@ -6,7 +6,7 @@ import { RecentMessages } from '@/components/admin/RecentMessages';
 import { RecentProjects } from '@/components/admin/RecentProjects';
 import { QuickActions } from '@/components/admin/QuickActions';
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: 'Dashboard | Admin',
   description: 'Admin dashboard overview',
 };

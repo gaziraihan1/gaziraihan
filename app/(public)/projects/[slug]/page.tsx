@@ -41,6 +41,14 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     },
   };
 }
+// app/(public)/projects/[slug]/page.tsx
+export async function generateStaticParams() {
+  const projects = await prisma.project.findMany({
+    where: { status: 'LIVE' },
+    select: { slug: true }
+  });
+  return projects.map(p => ({ slug: p.slug }));
+}
 
 // 2. Fetch Project Data + Adjacent Projects for Navigation
 async function getProjectData(slug: string) {

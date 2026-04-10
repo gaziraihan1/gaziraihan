@@ -14,7 +14,7 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: {
     default: "Mohammad Raihan Gazi | Full-stack web Developer",
     template: "%s | Mohammad Raihan Gazi",

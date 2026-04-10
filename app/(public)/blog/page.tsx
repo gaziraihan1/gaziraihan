@@ -11,7 +11,7 @@ import { BlogPagination } from '@/components/features/blog/BlogPagination';
 import { BlogFilters } from '@/components/features/blog/BlogFilters';
 import { BlogSkeleton } from '@/components/features/blog/BlogSkeleton';
 
-export const meta: Metadata = {
+export const metadata: Metadata = {
   title: 'Blog',
   description: 'Technical articles, tutorials, and insights on web development, UI/UX design, and Web Development.',
   openGraph: {
@@ -29,6 +29,8 @@ export const meta: Metadata = {
     images: [siteConfig.ogImage],
   },
 };
+export const revalidate = 3600; // 1 hour
+
 
 // ✅ OPTIMIZATION 1: Cache filter options with in-memory cache
 // Revalidate every 24 hours or on-demand
@@ -214,17 +216,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <NewsletterSignup />
     </div>
   );
-}
-
-// ✅ OPTIMIZATION 11: Enable ISR (Incremental Static Regeneration)
-export const revalidate = 60 * 60; // 1 hour
-
-// ✅ OPTIMIZATION 12: Generate static params for pre-rendering
-export async function generateStaticParams() {
-  // Pre-render first 3 pages for faster initial loads
-  return [1, 2, 3].map((page) => ({
-    page: page.toString(),
-  }));
 }
 
 // Newsletter Signup Component

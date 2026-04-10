@@ -10,6 +10,7 @@ import { BlogPost } from '@/components/features/blog/BlogPost';
 import { ReadingProgress } from '@/components/features/blog/ReadingProgress';
 import { RelatedPosts } from '@/components/features/blog/RelatedPost';
 
+export const revalidate = 3600; // 1 
 interface BlogPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -40,6 +41,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     },
     60 * 60 * 1000 // 1 hour cache for metadata
   );
+  
 
   if (!post) {
     return { title: 'Post Not Found' };
@@ -67,6 +69,28 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     },
   };
 }
+export async function generateStaticParams() {
+  console.log('🔧 Generating static params for blog posts...');
+  
+  try {
+    const posts = await prisma.blogPost.findMany({
+      where: { published: true },
+      select: { slug: true },
+      orderBy: { publishedAt: 'desc' },
+      take: 50, // Limit to most recent 50 posts for build time
+    });
+
+    console.log(`✅ Pre-rendering ${posts.length} blog posts`);
+    
+    return posts.map((post) => ({
+      slug: post.slug,
+    }));
+  } catch (error) {
+    console.error('❌ Error generating static params:', error);
+    return []; // Fallback: dynamic rendering
+  }
+}
+
 
 // ============================================================================
 // CACHED DATA FETCHING
@@ -306,36 +330,3 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
     </>
   );
 }
-
-// ============================================================================
-// NEXT.JS OPTIMIZATIONS
-// ============================================================================
-
-// ✅ OPTIMIZATION 4: Enable ISR with short revalidate (content can update)
-export const revalidate = 60 * 60; // 1 hour
-
-// ✅ OPTIMIZATION 5: Pre-render all published blog posts at build time
-export async function generateStaticParams() {
-  console.log('🔧 Generating static params for blog posts...');
-  
-  try {
-    const posts = await prisma.blogPost.findMany({
-      where: { published: true },
-      select: { slug: true },
-      orderBy: { publishedAt: 'desc' },
-      take: 50, // Limit to most recent 50 posts for build time
-    });
-
-    console.log(`✅ Pre-rendering ${posts.length} blog posts`);
-    
-    return posts.map((post) => ({
-      slug: post.slug,
-    }));
-  } catch (error) {
-    console.error('❌ Error generating static params:', error);
-    return []; // Fallback: dynamic rendering
-  }
-}
-
-// ✅ OPTIMIZATION 6: Ensure page is statically generated when possible
-export const dynamic = 'force-static';
