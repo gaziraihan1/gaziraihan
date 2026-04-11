@@ -12,7 +12,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <Link href="/" className="text-xl font-bold tracking-tight">
-              <span className="text-white">Raihan</span>
+              <span className="text-white">Raihan </span>
               <span className="text-indigo-400">Gazi</span>
             </Link>
             <p className="mt-4 text-gray-400 max-w-md">

@@ -18,12 +18,12 @@ export function AboutHero() {
           
           <div className="relative aspect-square rounded-3xl overflow-hidden border border-white/10 bg-white/5">
             <Image
-              src="/images/profile.jpg" // Replace with your photo
+              src="/portfolio-image-for-gaziraihan.png" // Replace with your photo
               alt="Your Name"
               fill
               className="object-cover"
               fetchPriority='high'
-              loading='lazy'
+              loading='eager'
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             

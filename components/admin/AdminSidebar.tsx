@@ -37,11 +37,13 @@ export function AdminSidebar() {
 
   useEffect(() => {
     const checkDesktop = () => {
-      setIsDesktop(window.innerWidth >= 768);
+      const desktop = window.innerWidth >= 768;
+      setIsDesktop(desktop);
+      // ✅ Close mobile menu in the same handler — no cascading effect
+      if (desktop) setIsMobileOpen(false);
     };
-    
+
     checkDesktop();
-    
     window.addEventListener('resize', checkDesktop);
     return () => window.removeEventListener('resize', checkDesktop);
   }, []);
@@ -57,12 +59,6 @@ export function AdminSidebar() {
     };
   }, [isMobileOpen, isDesktop]);
 
-  useEffect(() => {
-    if (isDesktop) {
-      setIsMobileOpen(false);
-    }
-  }, [isDesktop]);
-
   return (
     <>
       <button
@@ -75,16 +71,16 @@ export function AdminSidebar() {
 
       <motion.aside
         initial={isDesktop ? { x: 0 } : { x: -280 }}
-        animate={{ 
-          x: isDesktop ? 0 : (isMobileOpen ? 0 : -280),
+        animate={{
+          x: isDesktop ? 0 : isMobileOpen ? 0 : -280,
         }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
         className={cn(
-          "fixed md:static left-0 top-0 h-full md:h-auto w-64",
-          "bg-[#0a0a0a] md:bg-white/5 border-r border-white/10 p-6",
-          "z-40 md:z-auto",
-          "overflow-y-auto overflow-x-hidden",
-          isDesktop ? "md:translate-x-0" : ""
+          'fixed md:static left-0 top-0 h-full md:h-auto w-64',
+          'bg-[#0a0a0a] md:bg-white/5 border-r border-white/10 p-6',
+          'z-40 md:z-auto',
+          'overflow-y-auto overflow-x-hidden',
+          isDesktop ? 'md:translate-x-0' : ''
         )}
       >
         <Link href="/admin" className="flex items-center gap-3 mb-8">
@@ -100,8 +96,8 @@ export function AdminSidebar() {
             const isActive = pathname === item.href;
 
             return (
-              <Link 
-                key={item.href} 
+              <Link
+                key={item.href}
                 href={item.href}
                 onClick={() => !isDesktop && setIsMobileOpen(false)}
                 className="block"
@@ -116,10 +112,12 @@ export function AdminSidebar() {
                       : 'text-white/90 hover:text-white hover:bg-white/10'
                   )}
                 >
-                  <Icon className={cn(
-                    "w-5 h-5",
-                    isActive ? "text-indigo-400" : "text-white/80"
-                  )} />
+                  <Icon
+                    className={cn(
+                      'w-5 h-5',
+                      isActive ? 'text-indigo-400' : 'text-white/80'
+                    )}
+                  />
                   <span>{item.label}</span>
                 </motion.div>
               </Link>

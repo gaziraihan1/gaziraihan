@@ -126,7 +126,7 @@ export function ProjectsTable({ projects }: { projects: Project[] }) {
                           alt={project.title}
                           fill
                           className="object-cover"
-                          priority
+                          fetchPriority='high'
                           loading='lazy'
                         />
                       </div>

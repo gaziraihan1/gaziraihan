@@ -1,104 +1,80 @@
-import NextAuth, { 
-  NextAuthOptions,
-  DefaultSession,    // ✅ Import default types
-  DefaultUser,
-} from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import { prisma } from '@/lib/prisma';
-import bcrypt from 'bcryptjs';
+import NextAuth, { type DefaultSession } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
 
-declare module 'next-auth' {
-  interface Session extends DefaultSession {
+declare module "next-auth" {
+  interface Session {
     user: {
-      id: string;      // ✅ Add custom fields
-      role?: string;   // ✅ Add custom fields
-    } & DefaultSession['user'];  // ✅ Extend default user, not Session['user']
+      id: string;
+      role?: string;
+    } & DefaultSession["user"];
   }
-  
-  interface User extends DefaultUser {
-    id: string;        // ✅ Add custom fields
-    role?: string;     // ✅ Add custom fields
+
+  interface User {
+    role?: string;
   }
 }
 
-declare module 'next-auth/jwt' {
+declare module "next-auth/jwt" {
   interface JWT {
     id: string;
     role?: string;
   }
 }
 
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  adapter: PrismaAdapter(prisma as any),
   providers: [
     CredentialsProvider({
-      name: 'credentials',
+      name: "credentials",
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error('Invalid credentials');
-        }
+        if (!credentials?.email || !credentials?.password) return null;
 
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
+          where: { email: credentials.email as string },
         });
 
-        if (!user || !user.password) {
-          throw new Error('Invalid credentials');
-        }
+        if (!user || !user.password) return null;
 
         const isCorrectPassword = await bcrypt.compare(
-          credentials.password,
+          credentials.password as string,
           user.password
         );
 
-        if (!isCorrectPassword) {
-          throw new Error('Invalid credentials');
-        }
+        if (!isCorrectPassword) return null;
 
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.role,
+          role: user.role ?? "USER",
         };
       },
     }),
   ],
-  session: {
-    strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60,
-  },
-  pages: {
-    signIn: '/admin/login',
-  },
+  session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
+  pages: { signIn: "/admin/login" },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token.id = user.id ?? "";
         token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string;
-        session.user.role = token.role as string;
+        session.user.id = token.id;
+        session.user.role = token.role;
       }
       return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
-};
-
-const handler = NextAuth(authOptions);
-
-export { handler as GET, handler as POST };
-
-export { getServerSession } from 'next-auth';
-
-export { signIn, signOut } from 'next-auth/react';
+});
