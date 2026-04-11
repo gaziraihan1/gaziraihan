@@ -28,6 +28,8 @@ export function ProjectGallery({ images }: { images: string[] }) {
               alt={`Project screenshot ${index + 1}`}
               fill
               className="object-cover transition-transform group-hover:scale-105"
+              loading='lazy'
+              fetchPriority='high'
             />
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <ZoomIn className="w-8 h-8 text-white" />

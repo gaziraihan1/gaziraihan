@@ -61,7 +61,8 @@ export function RecentProjects({ projects }: { projects: Project[] }) {
                     alt={project.title}
                     fill
                     className="object-cover"
-                    priority
+                    fetchPriority='high'
+                    loading='lazy'
                   />
                 </div>
                 <div className="flex-1 min-w-0">

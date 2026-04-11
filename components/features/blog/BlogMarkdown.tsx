@@ -1,7 +1,7 @@
-// components/features/blog/blog-markdown.tsx
+// components/features/blog/BlogMarkdown.tsx
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { parseMarkdownToHtml } from '@/lib/markdown';
 
 interface BlogMarkdownProps {
@@ -11,11 +11,24 @@ interface BlogMarkdownProps {
 export function BlogMarkdown({ content }: BlogMarkdownProps) {
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // ✅ Parse markdown to HTML on mount
-  // (Could also do this on server for better performance)
+  // ✅ Parse markdown to HTML (memoize to avoid re-parsing on every render)
   const htmlContent = parseMarkdownToHtml(content);
 
-  // ✅ Add click handlers for code block copy buttons (optional)
+  // ✅ Memoize the click handler so we can remove it later
+  const handleAnchorClick = useCallback((e: Event) => {
+    e.preventDefault();
+    const link = e.currentTarget as HTMLAnchorElement;
+    const targetId = link.getAttribute('href')?.slice(1);
+    
+    if (targetId) {
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.pushState(null, '', `#${targetId}`);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const contentEl = contentRef.current;
     if (!contentEl) return;
@@ -26,10 +39,10 @@ export function BlogMarkdown({ content }: BlogMarkdownProps) {
       const pre = codeBlock.parentElement;
       if (!pre) return;
 
-      // Create copy button
       const copyBtn = document.createElement('button');
       copyBtn.className = 'absolute top-2 right-2 p-1.5 text-xs text-gray-400 hover:text-white bg-white/10 rounded transition-colors';
       copyBtn.textContent = 'Copy';
+      
       copyBtn.onclick = async (e) => {
         e.preventDefault();
         try {
@@ -42,35 +55,23 @@ export function BlogMarkdown({ content }: BlogMarkdownProps) {
         }
       };
 
-      // Position button container
       pre.className = 'relative my-6';
       pre.appendChild(copyBtn);
     });
 
-    // Add smooth scroll for anchor links (for TOC)
+    // Add smooth scroll for anchor links
     const anchorLinks = contentEl.querySelectorAll('a[href^="#"]');
     anchorLinks.forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = (link as HTMLAnchorElement).getAttribute('href')?.slice(1);
-        if (targetId) {
-          const target = document.getElementById(targetId);
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // Update URL without jump
-            history.pushState(null, '', `#${targetId}`);
-          }
-        }
-      });
+      link.addEventListener('click', handleAnchorClick);
     });
 
+    // ✅ Proper cleanup: remove the exact same handler reference
     return () => {
-      // Cleanup event listeners if needed
       anchorLinks.forEach((link) => {
-        link.removeEventListener('click', () => {});
+        link.removeEventListener('click', handleAnchorClick);
       });
     };
-  }, [htmlContent]);
+  }, [htmlContent, handleAnchorClick]); // ✅ Include dependencies
 
   return (
     <div 

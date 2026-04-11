@@ -27,6 +27,7 @@ export function AboutHero() {
               fill
               className="object-cover"
               priority
+              loading='lazy'
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             

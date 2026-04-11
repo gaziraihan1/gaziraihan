@@ -89,6 +89,8 @@ export function BlogPost({ post }: BlogPostProps) {
             width={200}
             height={200}
             className="w-full h-full object-cover"
+            fetchPriority='high'
+            loading='lazy'
           />
         </div>
       )}

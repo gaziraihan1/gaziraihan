@@ -156,7 +156,8 @@ export function BlogTable({ posts }: { posts: BlogPost[] }) {
                             alt={post.title}
                             fill
                             className="object-cover"
-                            priority
+                            fetchPriority='high'
+                            loading='lazy'
                           />
                         </div>
                       )}

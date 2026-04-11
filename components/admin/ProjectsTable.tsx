@@ -130,6 +130,7 @@ export function ProjectsTable({ projects }: { projects: Project[] }) {
                           fill
                           className="object-cover"
                           priority
+                          loading='lazy'
                         />
                       </div>
                       <div>

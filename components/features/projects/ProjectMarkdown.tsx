@@ -53,6 +53,7 @@ export function ProjectMarkdown({ content }: ProjectMarkdownProps) {
               alt={props.alt || 'Project image'}
               className="w-full h-64 md:h-96 my-8 rounded-lg object-cover border border-white/10"
               loading="lazy"
+              fetchPriority='high'
             />
           ),
         }}

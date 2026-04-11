@@ -1,7 +1,6 @@
-// components/features/home/github-stats-card.tsx
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Star, GitFork, Code, ExternalLink, RefreshCw } from 'lucide-react';
 import { BentoCard } from '@/components/animations/BentoCard';
@@ -9,7 +8,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 import { FaGithub } from 'react-icons/fa';
 
-// ✅ Interface for GitHub stats (all fields nullable-safe)
+// ============================================================================
+// TYPES
+// ============================================================================
+
 export interface GitHubStats {
   followers: number;
   publicRepos: number;
@@ -24,175 +26,133 @@ export interface GitHubStats {
 }
 
 interface GitHubStatsCardProps {
-  githubStats?: GitHubStats | null;
-  username?: string;
+  initialStats?: GitHubStats | null; // ✅ renamed from githubStats
 }
 
-export function GitHubStatsCard({ githubStats: initialStats, username: propUsername }: GitHubStatsCardProps) {
-  // ✅ Initialize with safe defaults to prevent undefined
-  const [stats, setStats] = useState<GitHubStats | null>(
-    initialStats 
-      ? {
-          followers: initialStats.followers ?? 0,
-          publicRepos: initialStats.publicRepos ?? 0,
-          totalStars: initialStats.totalStars ?? 0,
-          topRepos: initialStats.topRepos,
-        }
-      : null
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+
+const FALLBACK_STATS: GitHubStats = {
+  followers: 0,
+  publicRepos: 0,
+  totalStars: 0,
+  topRepos: [],
+};
+
+const USERNAME = process.env.NEXT_PUBLIC_GITHUB_USERNAME ?? 'gaziraihan1';
+
+// ============================================================================
+// HELPERS
+// ============================================================================
+
+function formatNumber(num: number | undefined | null): string {
+  const safeNum = Number(num);
+  if (!Number.isFinite(safeNum)) return '0';
+  if (safeNum >= 1_000_000) return (safeNum / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+  if (safeNum >= 1_000) return (safeNum / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
+  return safeNum.toString();
+}
+
+// ============================================================================
+// SUB-COMPONENTS
+// ============================================================================
+
+interface StatRowProps {
+  icon: React.ReactNode;
+  label: string;
+  value: number | undefined;
+  title: string;
+  delay: number;
+}
+
+function StatRow({ icon, label, value, title, delay }: StatRowProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay, duration: 0.3 }}
+      className="flex items-center justify-between group"
+    >
+      <div className="flex items-center gap-2 text-gray-400 group-hover:text-gray-300 transition-colors">
+        {icon}
+        <span className="text-sm">{label}</span>
+      </div>
+      <span className="text-lg font-bold text-white tabular-nums" title={title}>
+        {formatNumber(value)}
+      </span>
+    </motion.div>
   );
+}
+
+// ============================================================================
+// MAIN COMPONENT
+// ============================================================================
+
+export function GitHubStatsCard({ initialStats }: GitHubStatsCardProps) {
+  const [stats, setStats] = useState<GitHubStats | null>(initialStats ?? null);
   const [loading, setLoading] = useState(!initialStats);
   const [error, setError] = useState<string | null>(null);
-  
-  const username = useMemo(() => {
-    return propUsername || process.env.NEXT_PUBLIC_GITHUB_USERNAME || 'yourusername';
-  }, [propUsername]);
 
-  useEffect(() => {
-    if (initialStats) return;
+  // ✅ Fetch from API route — token never reaches the browser
+  const fetchStats = useCallback(async () => {
+    setLoading(true);
+    setError(null);
 
-    let isMounted = true;
-    
-    async function fetchGitHubStats() {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-        
-        const userRes = await fetch(`https://api.github.com/users/${username}`, {
-          signal: controller.signal,
-          headers: {
-            'Accept': 'application/vnd.github.v3+json',
-            ...(process.env.NEXT_PUBLIC_GITHUB_TOKEN && {
-              'Authorization': `token ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-            }),
-          },
-          next: { revalidate: 1800 },
-        });
-        
-        if (!userRes.ok) {
-          throw new Error(`GitHub API error: ${userRes.status}`);
-        }
-        
-        const userData = await userRes.json();
-        
-        const reposRes = await fetch(
-          `https://api.github.com/users/${username}/repos?per_page=100&sort=updated`,
-          {
-            signal: controller.signal,
-            headers: {
-              'Accept': 'application/vnd.github.v3+json',
-              ...(process.env.NEXT_PUBLIC_GITHUB_TOKEN && {
-                'Authorization': `token ${process.env.NEXT_PUBLIC_GITHUB_TOKEN}`,
-              }),
-            },
-            next: { revalidate: 1800 },
-          }
-        );
-        
-        if (!reposRes.ok) {
-          throw new Error(`GitHub repos API error: ${reposRes.status}`);
-        }
-        
-        const reposData = await reposRes.json();
-        
-        // ✅ Safe reduce with null checks
-        const totalStars = reposData?.reduce?.(
-          (acc: number, repo: any) => acc + (repo?.stargazers_count || 0), 
-          0
-        ) || 0;
-        
-        clearTimeout(timeoutId);
-        
-        if (isMounted) {
-          // ✅ Ensure all values are valid numbers with defaults
-          setStats({
-            followers: Number(userData?.followers) || 0,
-            publicRepos: Number(userData?.public_repos) || 0,
-            totalStars,
-            topRepos: reposData?.slice?.(0, 3)?.map((repo: any) => ({
-              name: repo?.name || 'Unknown',
-              description: repo?.description,
-              stars: repo?.stargazers_count || 0,
-              language: repo?.language,
-              url: repo?.html_url || '#',
-            })) || [],
-          });
-        }
-        
-      } catch (error: any) {
-        console.error('Error fetching GitHub stats:', error);
-        
-        if (error.name === 'AbortError') {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+      const res = await fetch('/api/github-stats', {
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
+
+      const data: GitHubStats = await res.json();
+      setStats(data);
+
+    } catch (err) {
+      if (err instanceof Error) {
+        if (err.name === 'AbortError') {
           setError('Request timed out');
-        } else if (error.message?.includes('403')) {
+        } else if (err.message.includes('429')) {
           setError('Rate limit exceeded');
         } else {
           setError('Failed to load stats');
         }
-        
-        if (isMounted) {
-          // ✅ Set safe fallback stats with guaranteed numbers
-          setStats({ 
-            followers: 0, 
-            publicRepos: 0, 
-            totalStars: 0,
-            topRepos: [],
-          });
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
       }
+      setStats(FALLBACK_STATS);
+    } finally {
+      setLoading(false);
     }
+  }, []);
 
-    fetchGitHubStats();
-    
-    return () => {
-      isMounted = false;
-    };
-  }, [initialStats, username]);
-
-  // ✅ FIXED: Safe formatNumber that handles undefined/null/non-number values
-  const formatNumber = (num: number | undefined | null): string => {
-    // ✅ Handle undefined, null, or non-finite numbers
-    const safeNum = Number(num);
-    if (!Number.isFinite(safeNum)) {
-      return '0';
-    }
-    
-    if (safeNum >= 1_000_000) {
-      return (safeNum / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
-    }
-    if (safeNum >= 1_000) {
-      return (safeNum / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
-    }
-    // ✅ Safe toString with fallback
-    return safeNum.toString();
-  };
+  useEffect(() => {
+    // ✅ Skip client fetch — server already provided stats via initialStats
+    if (initialStats) return;
+    fetchStats();
+  }, [initialStats, fetchStats]);
 
   return (
     <div className="md:col-span-1 md:row-span-1">
       <BentoCard gradientColor="indigo" className="h-full">
         <div className="flex flex-col h-full p-6">
+
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <FaGithub className="w-5 h-5 text-indigo-400" />
               <h3 className="text-lg font-semibold text-white">GitHub</h3>
             </div>
-            {error && !initialStats && (
+            {error && (
               <button
-                onClick={() => {
-                  setLoading(true);
-                  setError(null);
-                  setStats(null);
-                }}
-                className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1"
+                onClick={fetchStats}
                 disabled={loading}
                 aria-label="Retry loading GitHub stats"
+                className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1 disabled:opacity-50"
               >
                 <RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin' : ''}`} />
                 Retry
@@ -200,10 +160,10 @@ export function GitHubStatsCard({ githubStats: initialStats, username: propUsern
             )}
           </div>
 
-          {/* Loading State */}
+          {/* Loading */}
           {loading && (
             <div className="flex-1 space-y-4">
-              {[...Array(3)].map((_, i) => (
+              {Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Skeleton className="w-4 h-4 rounded" />
@@ -215,7 +175,7 @@ export function GitHubStatsCard({ githubStats: initialStats, username: propUsern
             </div>
           )}
 
-          {/* Error State */}
+          {/* Error — only when no fallback available */}
           {error && !loading && !stats && (
             <div className="flex-1 flex items-center justify-center">
               <p className="text-gray-400 text-sm text-center">
@@ -226,67 +186,32 @@ export function GitHubStatsCard({ githubStats: initialStats, username: propUsern
             </div>
           )}
 
-          {/* Stats Display */}
+          {/* Stats */}
           {stats && !loading && (
             <div className="flex-1 space-y-4">
-              {/* Followers - ✅ Safe number access with ?? operator */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1, duration: 0.3 }}
-                className="flex items-center justify-between group"
-              >
-                <div className="flex items-center gap-2 text-gray-400 group-hover:text-gray-300 transition-colors">
-                  <Star className="w-4 h-4" />
-                  <span className="text-sm">Followers</span>
-                </div>
-                <span 
-                  className="text-lg font-bold text-white tabular-nums" 
-                  title={`${stats.followers ?? 0} followers`}
-                >
-                  {formatNumber(stats.followers)}
-                </span>
-              </motion.div>
+              <StatRow
+                icon={<Star className="w-4 h-4" />}
+                label="Followers"
+                value={stats.followers}
+                title={`${stats.followers} followers`}
+                delay={0.1}
+              />
+              <StatRow
+                icon={<Code className="w-4 h-4" />}
+                label="Repositories"
+                value={stats.publicRepos}
+                title={`${stats.publicRepos} repositories`}
+                delay={0.2}
+              />
+              <StatRow
+                icon={<GitFork className="w-4 h-4" />}
+                label="Total Stars"
+                value={stats.totalStars}
+                title={`${stats.totalStars} total stars`}
+                delay={0.3}
+              />
 
-              {/* Repositories */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.3 }}
-                className="flex items-center justify-between group"
-              >
-                <div className="flex items-center gap-2 text-gray-400 group-hover:text-gray-300 transition-colors">
-                  <Code className="w-4 h-4" />
-                  <span className="text-sm">Repositories</span>
-                </div>
-                <span 
-                  className="text-lg font-bold text-white tabular-nums"
-                  title={`${stats.publicRepos ?? 0} repositories`}
-                >
-                  {formatNumber(stats.publicRepos)}
-                </span>
-              </motion.div>
-
-              {/* Total Stars */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.3 }}
-                className="flex items-center justify-between group"
-              >
-                <div className="flex items-center gap-2 text-gray-400 group-hover:text-gray-300 transition-colors">
-                  <GitFork className="w-4 h-4" />
-                  <span className="text-sm">Total Stars</span>
-                </div>
-                <span 
-                  className="text-lg font-bold text-white tabular-nums"
-                  title={`${stats.totalStars ?? 0} total stars`}
-                >
-                  {formatNumber(stats.totalStars)}
-                </span>
-              </motion.div>
-
-              {/* Top Repos (if available) */}
+              {/* Top Repos */}
               {stats.topRepos && stats.topRepos.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -298,18 +223,18 @@ export function GitHubStatsCard({ githubStats: initialStats, username: propUsern
                   <div className="space-y-2">
                     {stats.topRepos.map((repo, index) => (
                       <Link
-                        key={repo?.url || index}
-                        href={repo?.url || '#'}
+                        key={repo.url || index}
+                        href={repo.url || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="block text-xs text-gray-400 hover:text-indigo-400 transition-colors truncate"
-                        title={repo?.description || repo?.name || 'Unknown repo'}
+                        title={repo.description ?? repo.name}
                       >
-                        <span className="font-medium text-white">{repo?.name || 'Unknown'}</span>
-                        {repo?.language && (
+                        <span className="font-medium text-white">{repo.name}</span>
+                        {repo.language && (
                           <span className="text-gray-500"> · {repo.language}</span>
                         )}
-                        <span className="text-indigo-400"> ★ {formatNumber(repo?.stars)}</span>
+                        <span className="text-indigo-400"> ★ {formatNumber(repo.stars)}</span>
                       </Link>
                     ))}
                   </div>
@@ -318,10 +243,10 @@ export function GitHubStatsCard({ githubStats: initialStats, username: propUsern
             </div>
           )}
 
-          {/* Footer Link */}
+          {/* Footer */}
           <div className="mt-4 pt-4 border-t border-white/10">
             <Link
-              href={`https://github.com/${username}`}
+              href={`https://github.com/${USERNAME}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1 group"
@@ -330,6 +255,7 @@ export function GitHubStatsCard({ githubStats: initialStats, username: propUsern
               <ExternalLink className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
+
         </div>
       </BentoCard>
     </div>

@@ -85,6 +85,8 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
               className="object-cover"
               priority
               sizes="100vw"
+              loading='lazy'
+              fetchPriority='high'
             />
           </div>
 

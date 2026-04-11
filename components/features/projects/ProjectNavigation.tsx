@@ -35,6 +35,8 @@ export function ProjectNavigation({
                 alt={previous.title}
                 fill
                 className="object-cover"
+                loading='lazy'
+                fetchPriority='high'
               />
             </div>
             <div>
@@ -71,6 +73,8 @@ export function ProjectNavigation({
                 alt={next.title}
                 fill
                 className="object-cover"
+                fetchPriority='high'
+                loading='lazy'
               />
             </div>
           </motion.div>
