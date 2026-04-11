@@ -1,4 +1,3 @@
-// components/ui/button.tsx
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot"; // Allows rendering as <a> or <button>
 import { cva, type VariantProps } from "class-variance-authority";

@@ -1,4 +1,3 @@
-// components/admin/blog-table.tsx
 'use client';
 
 import { useState } from 'react';
@@ -101,7 +100,6 @@ export function BlogTable({ posts }: { posts: BlogPost[] }) {
 
   return (
     <>
-      {/* Filters */}
       <div className="flex items-center gap-4 mb-6">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
@@ -123,7 +121,6 @@ export function BlogTable({ posts }: { posts: BlogPost[] }) {
         </select>
       </div>
 
-      {/* ✅ FIXED: Table container with overflow-visible for dropdowns */}
       <div className="rounded-lg border border-white/10 overflow-visible">
         <Table>
           <TableHeader>
@@ -207,7 +204,6 @@ export function BlogTable({ posts }: { posts: BlogPost[] }) {
                   <TableCell className="text-gray-400">{post.views.toLocaleString()}</TableCell>
                   <TableCell className="text-gray-400">{formatDate(post.publishedAt)}</TableCell>
                   
-                  {/* ✅ FIXED: Actions cell with proper z-index stacking */}
                   <TableCell className="text-right relative">
                     <div className="flex items-center justify-end gap-2">
                       <DropdownMenu>
@@ -216,7 +212,6 @@ export function BlogTable({ posts }: { posts: BlogPost[] }) {
                             <Edit className="w-4 h-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        {/* ✅ FIXED: Dropdown content with high z-index and portal */}
                         <DropdownMenuContent 
                           align="end" 
                           className="z-100 bg-[#0a0a0a] border-white/10"
@@ -260,7 +255,6 @@ export function BlogTable({ posts }: { posts: BlogPost[] }) {
         </Table>
       </div>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={!!deleteDialog} onOpenChange={() => setDeleteDialog(null)}>
         <DialogContent className="bg-[#0a0a0a] border-white/10">
           <DialogHeader>

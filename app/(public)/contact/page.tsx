@@ -1,4 +1,3 @@
-// app/(public)/contact/page.tsx
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
 import { ContactForm } from '@/components/features/contact/ContactForm';
@@ -28,7 +27,6 @@ export default function ContactPage() {
   return (
     <div className="container mx-auto px-4 py-20">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Let&apos;s Work Together
@@ -40,18 +38,15 @@ export default function ContactPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-          {/* Contact Form (2/3 width) */}
           <div className="lg:col-span-2">
             <ContactForm />
           </div>
 
-          {/* Contact Info (1/3 width) */}
           <div className="lg:col-span-1">
             <ContactInfo />
           </div>
         </div>
 
-        {/* FAQ Section */}
         <FAQSection />
       </div>
     </div>

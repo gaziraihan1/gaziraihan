@@ -1,4 +1,3 @@
-// actions/contact-actions.ts
 'use server';
 
 import { z } from 'zod';
@@ -16,7 +15,6 @@ interface FormResult {
 export async function submitContactForm(
   rawData: z.infer<typeof contactFormSchema>
 ): Promise<FormResult> {
-  // 1. Validate input
   const validatedFields = contactFormSchema.safeParse(rawData);
 
   if (!validatedFields.success) {
@@ -28,7 +26,6 @@ export async function submitContactForm(
 
   const { name, email, subject, message } = validatedFields.data;
 
-  // 2. Rate Limiting (Spam Protection)
   const headersList = await headers();
   const ip = headersList.get('x-forwarded-for') || '127.0.0.1';
   
@@ -41,7 +38,6 @@ export async function submitContactForm(
     };
   }
 
-  // 3. Save to Database
   try {
     await prisma.contactMessage.create({
        data: {
@@ -61,7 +57,6 @@ export async function submitContactForm(
     };
   }
 
-  // 4. Send Email Notification
   try {
     await sendContactEmail({
       name,
@@ -71,7 +66,6 @@ export async function submitContactForm(
     });
   } catch (error) {
     console.error('Email error:', error);
-    // Don't fail the form if email fails, just log it
   }
 
   return { success: true };

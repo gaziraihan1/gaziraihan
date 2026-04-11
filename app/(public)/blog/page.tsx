@@ -1,4 +1,3 @@
-// app/(public)/blog/page.tsx
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
@@ -32,8 +31,6 @@ export const metadata: Metadata = {
 export const revalidate = 3600; // 1 hour
 
 
-// ✅ OPTIMIZATION 1: Cache filter options with in-memory cache
-// Revalidate every 24 hours or on-demand
 const FILTER_CACHE_KEY = 'blog:filters';
 const FILTER_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -43,7 +40,6 @@ async function getFilterOptions() {
     async () => {
       console.log('🔍 Fetching filter options from database...');
       
-      // ✅ OPTIMIZATION 2: Select only needed fields
       const tags = await prisma.tag.findMany({
         select: { 
           id: true, 
@@ -60,8 +56,6 @@ async function getFilterOptions() {
   );
 }
 
-// ✅ OPTIMIZATION 3: Cache blog posts with in-memory cache
-// Revalidate every hour or on-demand
 const BLOG_CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
 async function getBlogPosts({
@@ -76,7 +70,6 @@ async function getBlogPosts({
   tag?: string;
 }) {
   const queryStart = Date.now()
-  // ✅ OPTIMIZATION 4: Create unique cache key based on query params
   const cacheKey = `blog:posts:page=${page}:limit=${limit}:search=${search || ''}:tag=${tag || ''}`;
   
   return cachedQuery(
@@ -86,14 +79,11 @@ async function getBlogPosts({
       
       const skip = (page - 1) * limit;
 
-      // ✅ OPTIMIZATION 5: Build efficient where clause
       const where: any = {
         published: true,
       };
 
       if (search) {
-        // ✅ OPTIMIZATION 6: Don't search full content - too slow
-        // Only search title and excerpt for better performance
         where.OR = [
           { title: { contains: search, mode: 'insensitive' } },
           { excerpt: { contains: search, mode: 'insensitive' } },
@@ -106,7 +96,6 @@ async function getBlogPosts({
         };
       }
 
-      // ✅ OPTIMIZATION 7: Select only needed fields (prevents N+1)
       const postSelect = {
         id: true,
         title: true,
@@ -123,7 +112,6 @@ async function getBlogPosts({
         },
       };
 
-      // ✅ OPTIMIZATION 8: Fetch posts and count in parallel (batch optimization)
       const [posts, totalCount] = await Promise.all([
         prisma.blogPost.findMany({
           where,
@@ -168,7 +156,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   
   console.log(`🚀 Rendering blog page (page ${page}, search: ${params.search}, tag: ${params.tag})`);
 
-  // ✅ OPTIMIZATION 9: Fetch filters and posts in parallel
   const [filterOptions, { posts, pagination }] = await Promise.all([
     getFilterOptions(),
     getBlogPosts({
@@ -181,17 +168,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <div className="container mx-auto px-4 py-20">
-      {/* Header - Always rendered immediately */}
       <BlogHeader totalPosts={pagination.totalPosts} />
 
-      {/* Filters - Rendered immediately with cached data */}
       <BlogFilters
         tags={filterOptions.tags}
         currentTag={params.tag}
         currentSearch={params.search}
       />
 
-      {/* ✅ OPTIMIZATION 10: Stream content with Suspense */}
       <Suspense key={JSON.stringify(params)} fallback={<BlogSkeleton />}>
         {posts.length === 0 ? (
           <EmptyState
@@ -212,13 +196,11 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         )}
       </Suspense>
 
-      {/* Newsletter - Always rendered immediately */}
       <NewsletterSignup />
     </div>
   );
 }
 
-// Newsletter Signup Component
 function NewsletterSignup() {
   return (
     <div className="mt-20 bg-linear-to-br from-indigo-500/10 via-purple-500/10 to-cyan-500/10 border border-white/10 rounded-3xl p-8 md:p-12 text-center">

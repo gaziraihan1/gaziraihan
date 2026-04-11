@@ -1,4 +1,3 @@
-// components/features/blog/blog-post.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -39,9 +38,7 @@ export function BlogPost({ post }: BlogPostProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Header */}
       <header className="mb-8">
-        {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-6">
           {post.tags.map((tag) => (
             <Badge
@@ -55,15 +52,12 @@ export function BlogPost({ post }: BlogPostProps) {
           ))}
         </div>
 
-        {/* Title */}
         <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
           {post.title}
         </h1>
 
-        {/* Excerpt */}
         <p className="text-xl text-gray-400 mb-8 leading-relaxed">{post.excerpt}</p>
 
-        {/* Meta */}
         <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 pb-8 border-b border-white/10">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4" />
@@ -80,7 +74,6 @@ export function BlogPost({ post }: BlogPostProps) {
         </div>
       </header>
 
-      {/* Featured Image */}
       {post.thumbnail && (
         <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 mb-12">
           <Image
@@ -95,7 +88,6 @@ export function BlogPost({ post }: BlogPostProps) {
         </div>
       )}
 
-      {/* Content */}
       <BlogMarkdown content={post.content} />
     </motion.article>
   );

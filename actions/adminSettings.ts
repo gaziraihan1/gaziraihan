@@ -1,4 +1,3 @@
-// actions/admin-settings.ts
 'use server';
 
 import { getServerSession } from 'next-auth';
@@ -7,7 +6,6 @@ import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
-// Validation Schema
 const siteConfigSchema = z.object({
   key: z.string().min(1).max(100),
   value: z.string(),
@@ -23,7 +21,6 @@ export async function updateSiteConfig(rawData: SiteConfigData) {
     throw new Error('Unauthorized');
   }
 
-  // Validate input
   const data = siteConfigSchema.parse(rawData);
 
   try {

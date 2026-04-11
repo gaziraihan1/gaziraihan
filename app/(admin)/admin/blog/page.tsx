@@ -1,4 +1,3 @@
-// app/(admin)/admin/blog/page.tsx
 import { BlogTable } from '@/components/admin/BlogTable';
 import { CreatePostButton } from '@/components/admin/CreatePostButton';
 import { prisma } from '@/lib/prisma';

@@ -1,4 +1,3 @@
-// components/admin/blog-editor.tsx
 'use client';
 
 import { useState } from 'react';
@@ -15,10 +14,8 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
-// ✅ FIXED: kebab-case filename
 import { createBlogPost, updateBlogPost } from '@/actions/adminBlog';
 
-// ✅ Blog post type definition
 export interface BlogPost {
   id: string;
   title: string;
@@ -39,14 +36,12 @@ export interface BlogPost {
   updatedAt: Date;
 }
 
-// ✅ FIXED: Schema matches BlogPost interface
 const blogPostSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters').max(200),
   slug: z.string().min(5, 'Slug must be at least 5 characters').max(200),
   excerpt: z.string().min(20, 'Excerpt must be at least 20 characters').max(500),
   content: z.string().min(100, 'Content must be at least 100 characters'),
   thumbnail: z.string().url('Must be a valid URL').optional().or(z.literal('')),
-  // ✅ FIXED: Required boolean, no .default()
   published: z.boolean(),
   tags: z.array(z.string()),
 });
@@ -80,7 +75,6 @@ export function BlogEditor({ post, availableTags }: BlogEditorProps) {
       excerpt: post?.excerpt || '',
       content: post?.content || '',
       thumbnail: post?.thumbnail || '',
-      // ✅ FIXED: Ensure boolean value
       published: post?.published ?? false,
       tags: [],
     },
@@ -88,7 +82,6 @@ export function BlogEditor({ post, availableTags }: BlogEditorProps) {
 
   const content = watch('content');
 
-  // ✅ FIXED: Explicitly type the submit handler
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       const submitData = { 
@@ -127,7 +120,6 @@ export function BlogEditor({ post, availableTags }: BlogEditorProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* Toolbar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Button
@@ -147,9 +139,7 @@ export function BlogEditor({ post, availableTags }: BlogEditorProps) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Form Fields */}
         <div className="space-y-4">
-          {/* Title */}
           <div className='space-y-2'>
             <Label className="text-gray-300">Title *</Label>
             <Input 
@@ -160,7 +150,6 @@ export function BlogEditor({ post, availableTags }: BlogEditorProps) {
             {errors.title && <p className="text-sm text-red-400 mt-1">{errors.title.message}</p>}
           </div>
 
-          {/* Slug */}
           <div className='space-y-2'>
             <Label className="text-gray-300">Slug *</Label>
             <Input 
@@ -172,7 +161,6 @@ export function BlogEditor({ post, availableTags }: BlogEditorProps) {
             {errors.slug && <p className="text-sm text-red-400 mt-1">{errors.slug.message}</p>}
           </div>
 
-          {/* Excerpt */}
           <div className='space-y-2'>
             <Label className="text-gray-300">Excerpt *</Label>
             <Textarea
@@ -184,7 +172,6 @@ export function BlogEditor({ post, availableTags }: BlogEditorProps) {
             {errors.excerpt && <p className="text-sm text-red-400 mt-1">{errors.excerpt.message}</p>}
           </div>
 
-          {/* Thumbnail */}
           <div className='space-y-2'>
             <Label className="text-gray-300">Thumbnail URL</Label>
             <Input 
@@ -195,7 +182,6 @@ export function BlogEditor({ post, availableTags }: BlogEditorProps) {
             {errors.thumbnail && <p className="text-sm text-red-400 mt-1">{errors.thumbnail.message}</p>}
           </div>
 
-          {/* Tags */}
           <div className='space-y-2'>
             <Label className="text-gray-300">Tags</Label>
             <div className="flex flex-wrap gap-2 mt-2">
@@ -217,7 +203,6 @@ export function BlogEditor({ post, availableTags }: BlogEditorProps) {
             </div>
           </div>
 
-          {/* Publish Switch */}
           <div className="flex items-center gap-2">
             <Controller
               name="published"
@@ -233,7 +218,6 @@ export function BlogEditor({ post, availableTags }: BlogEditorProps) {
           </div>
         </div>
 
-        {/* Content Editor / Preview */}
         <div className='space-y-2'>
           <Label className="text-gray-300">Content (Markdown) *</Label>
           {isPreview ? (

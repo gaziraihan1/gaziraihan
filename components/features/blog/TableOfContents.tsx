@@ -1,4 +1,3 @@
-// components/features/blog/table-of-contents.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -17,7 +16,6 @@ export function TableOfContents({ content }: { content: string }) {
   const [activeId, setActiveId] = useState<string>('');
 
   useEffect(() => {
-    // Parse headings from markdown content
     const headingRegex = /^(#{1,3})\s+(.+)$/gm;
     const matches = [...content.matchAll(headingRegex)];
     
@@ -29,7 +27,6 @@ export function TableOfContents({ content }: { content: string }) {
 
     setHeadings(items);
 
-    // Scroll spy
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {

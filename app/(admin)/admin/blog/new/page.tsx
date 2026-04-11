@@ -1,4 +1,3 @@
-// app/(admin)/admin/blog/new/page.tsx
 import { BlogEditor } from '@/components/admin/BlogEditor';
 import { prisma } from '@/lib/prisma';
 

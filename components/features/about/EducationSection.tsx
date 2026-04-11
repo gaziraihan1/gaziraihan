@@ -1,4 +1,3 @@
-// components/features/about/education-section.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -6,7 +5,6 @@ import { GraduationCap, Award, CreativeCommons } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-// You can fetch this from Prisma if you add Education/Certification models
 const education = [
   {
     degree: 'Bachelor of Science in Computer Science',
@@ -39,7 +37,6 @@ export function EducationSection() {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Education */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -66,7 +63,6 @@ export function EducationSection() {
           </Card>
         </motion.div>
 
-        {/* Certifications */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}

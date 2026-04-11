@@ -8,7 +8,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 import { FaGithub } from 'react-icons/fa';
 
-
 export interface GitHubStats {
   followers: number;
   publicRepos: number;
@@ -23,7 +22,7 @@ export interface GitHubStats {
 }
 
 interface GitHubStatsCardProps {
-  initialStats?: GitHubStats | null; // ✅ renamed from githubStats
+  initialStats?: GitHubStats | null; 
 }
 
 
@@ -44,7 +43,6 @@ function formatNumber(num: number | undefined | null): string {
   if (safeNum >= 1_000) return (safeNum / 1_000).toFixed(1).replace(/\.0$/, '') + 'k';
   return safeNum.toString();
 }
-
 
 interface StatRowProps {
   icon: React.ReactNode;
@@ -122,7 +120,7 @@ export function GitHubStatsCard({ initialStats }: GitHubStatsCardProps) {
   return (
     <div className="md:col-span-1 md:row-span-1">
       <BentoCard gradientColor="indigo" className="h-full">
-        <div className="flex flex-col h-full p-2">
+        <div className="flex flex-col h-full">
 
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">

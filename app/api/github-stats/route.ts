@@ -1,4 +1,3 @@
-// app/api/github-stats/route.ts
 import { NextResponse } from 'next/server';
 import { cache } from '@/lib/cache';
 
@@ -15,9 +14,6 @@ const githubHeaders = {
   }),
 };
 
-// ============================================================================
-// TYPES
-// ============================================================================
 
 interface GitHubRepo {
   name: string;
@@ -52,9 +48,6 @@ const FALLBACK_STATS: GitHubStats = {
   topRepos: [],
 };
 
-// ============================================================================
-// HELPERS
-// ============================================================================
 
 async function fetchWithTimeout(url: string, signal: AbortSignal): Promise<Response> {
   const res = await fetch(url, {
@@ -70,12 +63,8 @@ async function fetchWithTimeout(url: string, signal: AbortSignal): Promise<Respo
   return res;
 }
 
-// ============================================================================
-// ROUTE HANDLER
-// ============================================================================
 
 export async function GET() {
-  // Return cached data if available
   const cached = cache.get<GitHubStats>(CACHE_KEY);
   if (cached) {
     return NextResponse.json(cached);
@@ -85,7 +74,6 @@ export async function GET() {
   const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
   try {
-    // Fetch user + repos in parallel
     const [userRes, reposRes] = await Promise.all([
       fetchWithTimeout(GITHUB_API, controller.signal),
       fetchWithTimeout(`${GITHUB_API}/repos?per_page=100&sort=stars`, controller.signal),

@@ -1,4 +1,3 @@
-// app/(admin)/admin/page.tsx
 import { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
 import { DashboardStats } from '@/components/admin/DashboardStats';
@@ -60,18 +59,14 @@ export default async function AdminDashboard() {
         <p className="text-gray-400">Welcome back! Here&apos;s what&apos;s happening with your portfolio.</p>
       </div>
 
-      {/* Stats Grid */}
       <DashboardStats stats={data.stats} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Recent Messages */}
         <RecentMessages messages={data.recentMessages} />
 
-        {/* Recent Projects */}
         <RecentProjects projects={data.recentProjects} />
       </div>
 
-      {/* Quick Actions */}
       <QuickActions />
     </div>
   );

@@ -1,4 +1,3 @@
-// components/admin/recent-projects.tsx
 'use client';
 
 import { motion } from 'framer-motion';

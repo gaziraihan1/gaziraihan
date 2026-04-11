@@ -1,4 +1,3 @@
-// components/admin/create-post-button.tsx
 'use client';
 
 import { Plus } from 'lucide-react';

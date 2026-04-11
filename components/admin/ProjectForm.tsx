@@ -1,4 +1,3 @@
-// components/admin/project-form.tsx
 'use client';
 
 import { useState } from 'react';
@@ -21,11 +20,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from 'sonner';
-// ✅ FIXED: kebab-case import
 import { createProject, updateProject } from '@/actions/adminProjects';
 import { useRouter } from 'next/navigation';
 
-// ✅ Project type definition (for display/editing existing projects)
 export interface Project {
   id: string;
   title: string;
@@ -44,7 +41,6 @@ export interface Project {
   updatedAt: Date;
 }
 
-// ✅ Validation schema (server-side)
 const projectSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters').max(200, 'Title must be less than 200 characters'),
   slug: z.string().min(3, 'Slug must be at least 3 characters').max(200, 'Slug must be less than 200 characters'),
@@ -64,7 +60,6 @@ const projectSchema = z.object({
   })).optional(),
 });
 
-// ✅ FIXED: Use Zod-inferred type for form (avoids null/undefined mismatch)
 type FormData = z.infer<typeof projectSchema>;
 
 interface ProjectFormProps {
@@ -100,7 +95,6 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
       description: project?.description || '',
       thumbnail: project?.thumbnail || '',
       images: project?.images || [],
-      // ✅ FIXED: Handle null values properly
       demoUrl: project?.demoUrl ?? '',
       repoUrl: project?.repoUrl ?? '',
       featured: project?.featured ?? false,
@@ -112,17 +106,14 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
 
   const content = watch('description');
 
-  // ✅ FIXED: Use FormData type (Zod-inferred) for submit handler
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     if (isSubmitting) return;
     
     setIsSubmitting(true);
     
     try {
-      // ✅ Transform form data to match server action input
       const submitData = { 
         ...data,
-        // Convert empty strings to null for URL fields
         demoUrl: data.demoUrl === '' ? null : data.demoUrl,
         repoUrl: data.repoUrl === '' ? null : data.repoUrl,
         tags: selectedTags,
@@ -176,7 +167,6 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* Toolbar */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Button
@@ -205,9 +195,7 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Form Fields */}
         <div className="space-y-4">
-          {/* Title */}
           <div className='space-y-2'>
             <Label className="text-gray-300">Title *</Label>
             <Input 
@@ -218,7 +206,6 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
             {errors.title && <p className="text-sm text-red-400 mt-1">{errors.title.message}</p>}
           </div>
 
-          {/* Slug */}
           <div className="space-y-2">
             <Label className="text-gray-300">Slug *</Label>
             <Input 
@@ -230,7 +217,6 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
             {errors.slug && <p className="text-sm text-red-400 mt-1">{errors.slug.message}</p>}
           </div>
 
-          {/* Summary */}
           <div className="space-y-2">
             <Label className="text-gray-300">Summary *</Label>
             <Textarea
@@ -242,7 +228,6 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
             {errors.summary && <p className="text-sm text-red-400 mt-1">{errors.summary.message}</p>}
           </div>
 
-          {/* Thumbnail */}
           <div className="space-y-2">
             <Label className="text-gray-300">Thumbnail URL *</Label>
             <Input 
@@ -253,7 +238,6 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
             {errors.thumbnail && <p className="text-sm text-red-400 mt-1">{errors.thumbnail.message}</p>}
           </div>
 
-          {/* Demo & Repo URLs */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-gray-300">Demo URL</Label>
@@ -273,7 +257,6 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
             </div>
           </div>
 
-          {/* Tags */}
           <div className="space-y-2">
             <Label className="text-gray-300">Tags</Label>
             <div className="flex flex-wrap gap-2 mt-2">
@@ -296,7 +279,6 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
             {errors.tags && <p className="text-sm text-red-400 mt-1">{errors.tags.message}</p>}
           </div>
 
-          {/* Status - Using Controller for shadcn/ui Select */}
           <div className="space-y-2">
             <Label className="text-gray-300">Status</Label>
             <Controller
@@ -321,7 +303,6 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
             {errors.status && <p className="text-sm text-red-400 mt-1">{errors.status.message}</p>}
           </div>
 
-          {/* Featured Switch - Using Controller */}
           <div className="space-y-2">
             <Controller
               name="featured"
@@ -336,7 +317,6 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
             <Label className="text-gray-300 cursor-pointer">Featured on homepage</Label>
           </div>
 
-          {/* Metrics */}
           <div>
             <Label className="text-gray-300">Key Metrics</Label>
             <div className="space-y-2 mt-2">
@@ -374,7 +354,6 @@ export function ProjectForm({ project, availableTags }: ProjectFormProps) {
           </div>
         </div>
 
-        {/* Content Editor / Preview */}
         <div className='space-y-2'>
           <Label className="text-gray-300">Description (Markdown) *</Label>
           {isPreview ? (

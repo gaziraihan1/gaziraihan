@@ -1,4 +1,3 @@
-// components/admin/admin-header.tsx
 'use client';
 
 import { useState } from 'react';
@@ -24,9 +23,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
     <header className="sticky top-0 z-30 h-16 border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur supports-backdrop-filter:bg-[#0a0a0a]/80">
       <div className="flex h-full items-center justify-between px-4 md:px-8">
         
-        {/* Left Side: Mobile Toggle + Search */}
         <div className="flex items-center gap-2 md:gap-4">
-          {/* Mobile Search Toggle - Only visible on mobile */}
           <Button
             variant="ghost"
             size="icon"
@@ -37,7 +34,6 @@ export function AdminHeader({ user }: AdminHeaderProps) {
             {isSearchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
           </Button>
 
-          {/* Desktop Search - Hidden on mobile */}
           <div className="hidden md:block relative w-64 lg:w-96">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
             <Input
@@ -47,7 +43,6 @@ export function AdminHeader({ user }: AdminHeaderProps) {
           </div>
         </div>
 
-        {/* Mobile Search Bar - Slides down when open */}
         {isSearchOpen && (
           <div className="absolute top-16 left-0 right-0 p-4 bg-[#0a0a0a] border-b border-white/10 md:hidden z-20">
             <div className="relative">
@@ -61,9 +56,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
           </div>
         )}
 
-        {/* Right Side: Actions + User */}
         <div className="flex items-center gap-2 md:gap-4">
-          {/* Notifications */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
@@ -78,7 +71,6 @@ export function AdminHeader({ user }: AdminHeaderProps) {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center gap-2 md:gap-3 pl-2 md:pl-4 border-l border-white/10">

@@ -1,4 +1,3 @@
-// components/admin/recent-messages.tsx
 'use client';
 
 import { motion } from 'framer-motion';

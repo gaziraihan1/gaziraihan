@@ -1,4 +1,3 @@
-// components/features/blog/blog-grid.tsx
 import { BlogCard } from './BlogCard';
 
 interface BlogGridProps {

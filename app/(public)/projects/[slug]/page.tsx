@@ -1,4 +1,3 @@
-// app/(public)/projects/[slug]/page.tsx
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
@@ -10,7 +9,6 @@ interface ProjectPageProps {
   params: Promise<{ slug: string }>;
 }
 
-// 1. Generate Dynamic Metadata
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
   const project = await prisma.project.findUnique({
@@ -41,7 +39,6 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     },
   };
 }
-// app/(public)/projects/[slug]/page.tsx
 export async function generateStaticParams() {
   const projects = await prisma.project.findMany({
     where: { status: 'LIVE' },
@@ -50,7 +47,6 @@ export async function generateStaticParams() {
   return projects.map(p => ({ slug: p.slug }));
 }
 
-// 2. Fetch Project Data + Adjacent Projects for Navigation
 async function getProjectData(slug: string) {
   try {
     const project = await prisma.project.findUnique({
@@ -63,7 +59,6 @@ async function getProjectData(slug: string) {
 
     if (!project) return null;
 
-    // Fetch adjacent projects for navigation
     const [previousProject, nextProject] = await Promise.all([
       prisma.project.findFirst({
         where: { 
@@ -90,7 +85,6 @@ async function getProjectData(slug: string) {
   }
 }
 
-// 3. Generate JSON-LD Schema
 function generateSchema(project: any) {
   return {
     '@context': 'https://schema.org',
@@ -108,7 +102,6 @@ function generateSchema(project: any) {
   };
 }
 
-// 4. Main Page Component
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
   const data = await getProjectData(slug);
@@ -121,16 +114,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <>
-      {/* JSON-LD Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(generateSchema(project)) }}
       />
       
-      {/* Reading Progress Bar */}
       <ReadingProgress />
 
-      {/* Main Content */}
       <ProjectDetail
         project={project}
         previousProject={previousProject}

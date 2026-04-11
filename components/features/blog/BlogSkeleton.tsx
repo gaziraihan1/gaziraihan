@@ -1,12 +1,19 @@
-// components/features/blog/blog-skeleton.tsx
-import { Skeleton } from '@/components/ui/skeleton';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 
 export function BlogSkeleton() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {[...Array(6)].map((_, i) => (
-        <Card key={i} className="overflow-hidden bg-white/5 border-white/10 h-full">
+        <Card
+          key={i}
+          className="overflow-hidden bg-white/5 border-white/10 h-full"
+        >
           <Skeleton className="h-48 w-full" />
           <CardHeader className="pb-2">
             <div className="flex gap-2 mb-3">

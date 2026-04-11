@@ -1,4 +1,3 @@
-// app/(public)/page.tsx
 import { Suspense } from "react";
 import { Metadata } from "next";
 import { siteConfig } from "@/config/site";
@@ -20,9 +19,6 @@ import { TechSkill } from "@/types/skills";
 
 export const revalidate = 3600; // 1 hour ISR
 
-// ============================================================================
-// METADATA
-// ============================================================================
 
 export const metadata: Metadata = {
   title: "Home",
@@ -43,9 +39,6 @@ export const metadata: Metadata = {
   },
 };
 
-// ============================================================================
-// CACHE CONFIG
-// ============================================================================
 
 const HOME_CACHE_KEYS = {
   SKILLS:     "home:skills",
@@ -70,9 +63,6 @@ const FALLBACK_GITHUB_STATS: GitHubStats = {
   topRepos: [],
 };
 
-// ============================================================================
-// DATA FETCHING
-// ============================================================================
 
 async function getHomeSkills() {
   return cachedQuery(
@@ -145,16 +135,11 @@ async function getHomeBlogPosts() {
   );
 }
 
-// ✅ Reuse the same cache the API route populates (same key: "home:github")
-// On a cache hit this is instant — no network call at all.
-// On a cache miss it calls the API route internally so the token stays server-side.
 async function getGitHubStats(): Promise<GitHubStats> {
-  // Check shared in-memory cache first (populated by /api/github-stats)
   const cached = cache.get<GitHubStats>(HOME_CACHE_KEYS.GITHUB);
   if (cached) return cached;
 
   try {
-    // Call our own API route — keeps token server-side, shares caching logic
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? process.env.NEXTAUTH_URL ?? 'http://localhost:3000';
 
     const res = await fetch(`${baseUrl}/api/github-stats`, {
@@ -170,7 +155,6 @@ async function getGitHubStats(): Promise<GitHubStats> {
   }
 }
 
-// ✅ All DB queries + external API in parallel
 async function getHomeData() {
   const [skills, projects, experience, blogPosts, githubStats] =
     await Promise.allSettled([
@@ -181,7 +165,6 @@ async function getHomeData() {
       getGitHubStats(),
     ]);
 
-  // Unwrap settled results — each falls back gracefully on rejection
   return {
     skills:      skills.status      === "fulfilled" ? skills.value      : [],
     projects:    projects.status    === "fulfilled" ? projects.value    : [],
@@ -191,16 +174,13 @@ async function getHomeData() {
   };
 }
 
-// ============================================================================
-// PAGE
-// ============================================================================
 
 export default async function HomePage() {
   const data = await getHomeData();
 
   return (
-    <div className="container mx-auto px-4 py-20">
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 auto-rows-[minmax(180px,auto)]">
+    <div className="container mx-auto px-4 md:px-8 xl:px-4 py-20">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 auto-rows-[minmax(180px,auto)]">
 
         <HeroCard />
 
@@ -209,7 +189,6 @@ export default async function HomePage() {
         </Suspense>
 
         <Suspense fallback={<BentoGridSkeleton className="md:col-span-1 md:row-span-1" />}>
-          {/* ✅ Server-fetched stats passed as initialStats — no client fetch needed */}
           <GitHubStatsCard initialStats={data.githubStats} />
         </Suspense>
 

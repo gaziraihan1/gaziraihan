@@ -1,4 +1,3 @@
-// actions/admin-skills.ts
 'use server';
 
 import { getServerSession } from 'next-auth';
@@ -18,7 +17,6 @@ const skillSchema = z.object({
 
 type SkillData = z.infer<typeof skillSchema>;
 
-// actions/admin-skills.ts (add this)
 export async function invalidateHomeCache() {
   cache.delete('home:skills');
   revalidatePath('/');

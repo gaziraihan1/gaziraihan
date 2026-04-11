@@ -1,4 +1,3 @@
-// components/features/blog/blog-card.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -33,14 +32,13 @@ export function BlogCard({ post, index }: BlogCardProps) {
     if (!date) return "";
 
     return new Intl.DateTimeFormat("en-US", {
-      timeZone: "UTC", // 🔥 important
+      timeZone: "UTC", 
       month: "short",
       day: "numeric",
       year: "numeric",
     }).format(new Date(date));
   };
 
-  // Estimate reading time (assuming ~200 words per minute)
   const readingTime = Math.ceil(post.excerpt.split(" ").length / 200) + 3;
 
   return (
@@ -52,7 +50,6 @@ export function BlogCard({ post, index }: BlogCardProps) {
       className="group"
     >
       <Card className="overflow-hidden bg-white/5 border-white/10 hover:border-white/20 transition-all duration-300 h-full flex flex-col">
-        {/* Thumbnail */}
         {post.thumbnail && (
           <div className="relative h-48 overflow-hidden">
             <Image
@@ -68,9 +65,7 @@ export function BlogCard({ post, index }: BlogCardProps) {
           </div>
         )}
 
-        {/* Content */}
         <CardHeader className="pb-2">
-          {/* Tags */}
           <div className="flex flex-wrap gap-1.5 mb-3">
             <div className="flex flex-wrap gap-1.5 mb-3">
               {post.tags.slice(0, 3).map((tag) => {
@@ -103,7 +98,6 @@ export function BlogCard({ post, index }: BlogCardProps) {
             {post.excerpt}
           </p>
 
-          {/* Meta */}
           <div className="flex items-center gap-4 text-xs text-gray-500">
             <div className="flex items-center gap-1">
               <Calendar className="w-3 h-3" />

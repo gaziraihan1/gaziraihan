@@ -1,4 +1,3 @@
-// components/features/blog/blog-pagination.tsx
 'use client';
 
 import { useRouter, usePathname } from 'next/navigation';
@@ -57,7 +56,6 @@ export function BlogPagination({ pagination, currentParams }: BlogPaginationProp
       transition={{ duration: 0.5 }}
       className="mt-12 flex items-center justify-center gap-2"
     >
-      {/* Previous Button */}
       <Button
         variant="outline"
         size="icon"
@@ -68,7 +66,6 @@ export function BlogPagination({ pagination, currentParams }: BlogPaginationProp
         <ChevronLeft className="w-4 h-4" />
       </Button>
 
-      {/* Page Numbers */}
       <div className="flex items-center gap-1">
         {getPageNumbers().map((page, index) =>
           page === '...' ? (
@@ -89,7 +86,6 @@ export function BlogPagination({ pagination, currentParams }: BlogPaginationProp
         )}
       </div>
 
-      {/* Next Button */}
       <Button
         variant="outline"
         size="icon"

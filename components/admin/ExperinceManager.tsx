@@ -1,4 +1,3 @@
-// components/admin/experience-manager.tsx
 'use client';
 
 import { useState } from 'react';
@@ -19,7 +18,6 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-// ✅ FIXED: kebab-case import + import type
 import { createExperience, updateExperience, deleteExperience, type CreateExperienceInput } from '@/actions/adminExperience';
 
 interface Experience {
@@ -93,7 +91,6 @@ export function ExperienceManager({ experience }: { experience: Experience[] }) 
     setIsSubmitting(true);
     
     try {
-      // ✅ FIXED: Explicitly type submitData to match server action input
       const submitData: CreateExperienceInput = {
         company: formData.company,
         role: formData.role,
@@ -124,7 +121,6 @@ export function ExperienceManager({ experience }: { experience: Experience[] }) 
     } catch (error: any) {
       console.error('Error saving experience:', error);
       
-      // ✅ FIXED: Use 'issues' for Zod v3.22+
       if (error instanceof Error && 'issues' in error) {
         const zodError = error as { issues: Array<{ path?: (string | number)[]; message: string }> };
         toast.error(`Validation error: ${zodError.issues.map(issue => 
@@ -274,7 +270,6 @@ export function ExperienceManager({ experience }: { experience: Experience[] }) 
         )}
       </div>
 
-      {/* Add/Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={(open) => {
         setIsDialogOpen(open);
         if (!open) resetForm();

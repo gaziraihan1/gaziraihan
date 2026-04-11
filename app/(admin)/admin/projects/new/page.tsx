@@ -1,4 +1,3 @@
-// app/(admin)/admin/projects/new/page.tsx
 import { ProjectForm } from '@/components/admin/ProjectForm';
 import BackButton from '@/components/features/projects/BackButton';
 import { prisma } from '@/lib/prisma';

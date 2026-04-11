@@ -1,4 +1,3 @@
-// app/(public)/projects/page.tsx
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
@@ -33,7 +32,6 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600; // 1 hour
 
-// ✅ OPTIMIZATION 1: Cache filter options with in-memory cache
 const FILTER_CACHE_KEY = 'projects:filters';
 const FILTER_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -64,7 +62,6 @@ async function getFilterOptions() {
   );
 }
 
-// ✅ OPTIMIZATION 2: Cache projects with in-memory cache
 const PROJECTS_CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
 async function getProjects({
@@ -81,7 +78,6 @@ async function getProjects({
   category?: string;
 }) {
   const totalStart = Date.now()
-  // ✅ Create unique cache key based on query params
   const cacheKey = `projects:page=${page}:limit=${limit}:search=${search || ''}:tag=${tag || ''}:category=${category || ''}`;
   
   return cachedQuery(
@@ -92,13 +88,11 @@ async function getProjects({
       
       const skip = (page - 1) * limit;
 
-      // ✅ Build efficient where clause
       const where: any = {
         status: 'LIVE',
       };
 
       if (search) {
-        // ✅ Only search title and summary (not full description)
         where.OR = [
           { title: { contains: search, mode: 'insensitive' } },
           { summary: { contains: search, mode: 'insensitive' } },
@@ -111,14 +105,12 @@ async function getProjects({
         };
       }
 
-      // ✅ FIXED: Add category filter if provided
       if (category) {
         where.skills = {
           some: { category },
         };
       }
 
-      // ✅ OPTIMIZATION 3: Select only needed fields (prevents N+1)
       const projectSelect = {
         id: true,
         title: true,
@@ -128,18 +120,14 @@ async function getProjects({
         status: true,
         featured: true,
         createdAt: true,
-        // ✅ Only fetch tags that are actually used in UI
         tags: {
           select: { id: true, name: true, slug: true, color: true },
         },
-        // ✅ FIXED: Only fetch metrics if you actually display them in ProjectGrid
-        // If ProjectGrid doesn't use metrics, REMOVE this to save query time
         metrics: {
           select: { id: true, label: true, value: true },
         },
       };
 
-      // ✅ OPTIMIZATION 4: Fetch projects and count in parallel
       const [projects, totalCount] = await Promise.all([
         prisma.project.findMany({
           where,
@@ -186,7 +174,6 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
   
   console.log(`🚀 Rendering projects page (page ${page}, search: ${params.search}, tag: ${params.tag}, category: ${params.category})`);
 
-  // ✅ OPTIMIZATION 5: Fetch filters and projects in parallel
   const [filterOptions, { projects, pagination }] = await Promise.all([
     getFilterOptions(),
     getProjects({
@@ -198,15 +185,12 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
   ]);
 
 
-  // ✅ OPTIMIZATION 6: Use stable key for Suspense (avoid JSON.stringify)
   const suspenseKey = `page=${page}:tag=${params.tag || ''}:search=${params.search || ''}`;
 
   return (
     <div className="container mx-auto px-4 py-20">
-      {/* Header */}
       <ProjectsHeader totalProjects={pagination.totalProjects} />
 
-      {/* Filters */}
       <ProjectFilters
         tags={filterOptions.tags}
         categories={filterOptions.categories}
@@ -215,7 +199,6 @@ export default async function ProjectsPage({ searchParams }: ProjectsPageProps) 
         currentSearch={params.search}
       />
 
-      {/* Project Grid - Streaming with Suspense */}
       <Suspense key={suspenseKey} fallback={<ProjectsSkeleton />}>
         {projects.length === 0 ? (
           <EmptyState

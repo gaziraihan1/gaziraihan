@@ -1,4 +1,3 @@
-// components/features/contact/contact-form.tsx
 'use client';
 
 import { useState } from 'react'; // ✅ Removed useTransition (not needed for async forms)
@@ -39,14 +38,11 @@ export function ContactForm() {
     },
   });
 
-  // ✅ FIXED: Add 'data' parameter - this is where react-hook-form passes form values
   const onSubmit = async (data: FormData) => {
-    // ✅ Set submitting state BEFORE async call
     setIsSubmitting(true);
     setStatus({ type: 'loading' });
 
     try {
-      // ✅ Call server action with form data
       const result = await submitContactForm(data);
 
       if (result?.success) {
@@ -54,7 +50,7 @@ export function ContactForm() {
           type: 'success', 
           message: 'Message sent successfully! I\'ll get back to you soon.' 
         });
-        reset(); // ✅ Reset form fields after success
+        reset(); 
       } else {
         setStatus({ 
           type: 'error', 
@@ -68,10 +64,8 @@ export function ContactForm() {
         message: 'Failed to send message. Please try again later.' 
       });
     } finally {
-      // ✅ Always reset submitting state
       setIsSubmitting(false);
       
-      // ✅ Auto-clear status messages after 5 seconds
       setTimeout(() => {
         setStatus((prev) => (prev.type === 'success' || prev.type === 'error' ? { type: 'idle' } : prev));
       }, 5000);
@@ -92,10 +86,8 @@ export function ContactForm() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {/* ✅ Pass onSubmit to handleSubmit - react-hook-form will call it with form data */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
             
-            {/* Name Field */}
             <div className="space-y-4">
               <label htmlFor="name" className="text-sm font-medium text-gray-300">
                 Name <span className="text-red-400">*</span>
@@ -117,7 +109,6 @@ export function ContactForm() {
               )}
             </div>
 
-            {/* Email Field */}
             <div className="space-y-4">
               <label htmlFor="email" className="text-sm font-medium text-gray-300">
                 Email <span className="text-red-400">*</span>
@@ -140,7 +131,6 @@ export function ContactForm() {
               )}
             </div>
 
-            {/* Subject Field */}
             <div className="space-y-4">
               <label htmlFor="subject" className="text-sm font-medium text-gray-300">
                 Subject <span className="text-red-400">*</span>
@@ -162,7 +152,6 @@ export function ContactForm() {
               )}
             </div>
 
-            {/* Message Field */}
             <div className="space-y-4">
               <label htmlFor="message" className="text-sm font-medium text-gray-300">
                 Message <span className="text-red-400">*</span>
@@ -185,7 +174,6 @@ export function ContactForm() {
               )}
             </div>
 
-            {/* Submit Button */}
             <Button
               type="submit"
               size="lg"
@@ -206,7 +194,6 @@ export function ContactForm() {
               )}
             </Button>
 
-            {/* Status Messages with Animations */}
             <AnimatePresence mode="wait">
               {status.type === 'success' && (
                 <motion.div
@@ -241,7 +228,6 @@ export function ContactForm() {
               )}
             </AnimatePresence>
 
-            {/* Privacy Note */}
             <p className="text-xs text-gray-500 text-center pt-2">
               I respect your privacy. Your information will never be shared with third parties.
             </p>

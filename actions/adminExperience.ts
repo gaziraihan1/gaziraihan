@@ -1,4 +1,3 @@
-// actions/admin-experience.ts
 'use server';
 
 import { getServerSession } from 'next-auth';
@@ -8,12 +7,10 @@ import { revalidatePath } from 'next/cache';
 import { z, ZodError } from 'zod';
 import { cache } from '@/lib/cache';
 
-// ✅ Zod schema (internal - transforms strings to Dates)
 const experienceSchema = z.object({
   company: z.string().min(1, 'Company is required').max(200),
   role: z.string().min(1, 'Role is required').max(200),
   location: z.string().optional().nullable(),
-  // Transform string to Date
   startDate: z.string()
     .min(1, 'Start date is required')
     .refine((val) => !isNaN(new Date(val).getTime()), {
@@ -34,7 +31,6 @@ const experienceSchema = z.object({
   order: z.number().default(0),
 });
 
-// ✅ Export type for CLIENT components (with string dates)
 export type CreateExperienceInput = {
   company: string;
   role: string;
@@ -48,7 +44,6 @@ export type CreateExperienceInput = {
   order: number;
 };
 
-// actions/admin-experience.ts (add this)
 export async function invalidateHomeCache() {
   cache.delete('home:experience');
   revalidatePath('/');
@@ -62,7 +57,6 @@ export async function createExperience(rawData: CreateExperienceInput) {
   }
 
   try {
-    // Zod will transform strings to Dates internally
     const data = experienceSchema.parse(rawData);
 
     const experience = await prisma.experience.create({

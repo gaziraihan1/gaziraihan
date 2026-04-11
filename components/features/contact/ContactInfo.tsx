@@ -61,7 +61,6 @@ export function ContactInfo() {
 
   return (
     <div className="space-y-6">
-      {/* Contact Methods */}
       {contactMethods.map((method, index) => (
         <motion.div
           key={method.title}
@@ -88,7 +87,6 @@ export function ContactInfo() {
         </motion.div>
       ))}
 
-      {/* Social Links */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -122,7 +120,6 @@ export function ContactInfo() {
         </Card>
       </motion.div>
 
-      {/* Availability Badge */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

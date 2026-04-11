@@ -1,4 +1,3 @@
-// components/admin/projects-table.tsx
 'use client';
 
 import { useState } from 'react';
@@ -77,7 +76,6 @@ export function ProjectsTable({ projects }: { projects: Project[] }) {
 
   return (
     <>
-      {/* Filters */}
       <div className="flex items-center gap-4 mb-6">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
@@ -99,7 +97,6 @@ export function ProjectsTable({ projects }: { projects: Project[] }) {
         </select>
       </div>
 
-      {/* Table */}
       <div className="rounded-lg border border-white/10 overflow-hidden">
         <Table>
           <TableHeader>
@@ -219,7 +216,6 @@ export function ProjectsTable({ projects }: { projects: Project[] }) {
         </Table>
       </div>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={!!deleteDialog} onOpenChange={() => setDeleteDialog(null)}>
         <DialogContent className="bg-[#0a0a0a] border-white/10">
           <DialogHeader>

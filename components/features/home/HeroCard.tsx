@@ -36,7 +36,7 @@ export function HeroCard() {
     <div className="md:col-span-2 md:row-span-2">
       <BentoCard gradientColor="indigo" className="h-full">
         <motion.div
-          className="flex flex-col justify-center h-full p-2 md:p-8"
+          className="flex flex-col justify-center h-full md:p-8"
           variants={containerVariants}
           initial="hidden"
           animate="visible"

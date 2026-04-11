@@ -1,4 +1,4 @@
-// app/(public)/about/page.tsx
+// app/(public)/about/page.
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
@@ -33,30 +33,22 @@ export const metadata: Metadata = {
 };
 export const revalidate = 3600; // 24 hours
 
-// ============================================================================
-// CACHED DATA FETCHING FUNCTIONS
-// ============================================================================
-
-// ✅ Cache keys for in-memory caching
 const ABOUT_CACHE_KEYS = {
   SKILLS: 'about:skills',
   EXPERIENCE: 'about:experience',
   SITE_CONFIG: 'about:siteConfig',
 } as const;
 
-// ✅ Cache TTLs (About page data rarely changes)
 const SKILLS_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 const EXPERIENCE_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 const CONFIG_CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days (site config changes rarely)
 
-// ✅ Fetch skills with caching and selective fields
 async function getSkills() {
   return cachedQuery(
     ABOUT_CACHE_KEYS.SKILLS,
     async () => {
       console.log('🔍 Fetching skills from database...');
       
-      // ✅ OPTIMIZATION: Select only needed fields
       const skills = await prisma.skill.findMany({
         select: {
           id: true,
@@ -69,7 +61,6 @@ async function getSkills() {
         orderBy: [{ category: 'asc' }, { order: 'asc' }],
       });
 
-      // ✅ Group skills by category for SkillsVisualization
       const skillsByCategory = skills.reduce((acc, skill) => {
         if (!acc[skill.category]) {
           acc[skill.category] = [];
@@ -86,14 +77,12 @@ async function getSkills() {
   );
 }
 
-// ✅ Fetch experience with caching and selective fields
 async function getExperience() {
   return cachedQuery(
     ABOUT_CACHE_KEYS.EXPERIENCE,
     async () => {
       console.log('🔍 Fetching experience from database...');
       
-      // ✅ OPTIMIZATION: Select only needed fields
       const experience = await prisma.experience.findMany({
         select: {
           id: true,
@@ -118,7 +107,6 @@ async function getExperience() {
   );
 }
 
-// ✅ Fetch site config with caching
 async function getSiteConfig() {
   return cachedQuery(
     ABOUT_CACHE_KEYS.SITE_CONFIG,
@@ -143,13 +131,11 @@ async function getSiteConfig() {
   );
 }
 
-// ✅ Fetch all about data in parallel
 async function getAboutData() {
   const startTime = Date.now();
   console.log('🚀 Fetching about page data...');
 
   try {
-    // ✅ OPTIMIZATION: Fetch all data in parallel
     const [skillsData, experience, siteConfig] = await Promise.all([
       getSkills(),
       getExperience(),
@@ -175,53 +161,34 @@ async function getAboutData() {
   }
 }
 
-// ============================================================================
-// PAGE COMPONENT
-// ============================================================================
 
 export default async function AboutPage() {
   console.log('🎨 Rendering about page...');
 
-  // ✅ Fetch all data (cached, so subsequent loads are instant)
   const data = await getAboutData();
 
 
   return (
-    <div className="container mx-auto px-4 py-20">
+    <div className="container mx-auto px-4 py-20 overflow-hidden">
       <div className="max-w-5xl mx-auto space-y-20">
-        {/* Hero Section - Always rendered immediately */}
         <AboutHero />
 
-        {/* Bio Section - Always rendered immediately */}
         <AboutBio />
 
-        {/* Experience Timeline - Streamed with Suspense */}
         <Suspense fallback={<AboutSkeleton section="experience" />}>
           <ExperienceTimeline experience={data.experience} />
         </Suspense>
 
-        {/* Skills Visualization - Streamed with Suspense */}
         <Suspense fallback={<AboutSkeleton section="skills" />}>
           <SkillsVisualization skillsByCategory={data.skillsByCategory} />
         </Suspense>
 
-        {/* Education & Certifications - Always rendered immediately */}
         <EducationSection />
 
-        {/* Personal Interests - Always rendered immediately */}
         <PersonalInterests />
 
-        {/* Resume Download CTA - Always rendered immediately */}
         <ResumeDownload />
       </div>
     </div>
   );
 }
-
-// ============================================================================
-// NEXT.JS OPTIMIZATIONS
-// ============================================================================
-
-// ✅ OPTIMIZATION: Enable ISR (About page rarely changes)
-
-// ✅ OPTIMIZATION: Pre-render the about page at build time

@@ -1,4 +1,3 @@
-// components/features/about/resume-download.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -15,7 +14,6 @@ export function ResumeDownload() {
         viewport={{ once: true }}
         className="relative overflow-hidden bg-linear-to-br from-indigo-500/10 via-purple-500/10 to-cyan-500/10 border border-white/10 rounded-3xl p-8 md:p-12"
       >
-        {/* Background Glow */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl" />
 
@@ -48,7 +46,6 @@ export function ResumeDownload() {
             </Button>
           </div>
 
-          {/* Quick Stats */}
           <div className="pt-8 mt-8 border-t border-white/10 grid grid-cols-3 gap-8 max-w-lg mx-auto">
             <div>
               <p className="text-2xl font-bold text-white">1+</p>

@@ -1,4 +1,3 @@
-// app/(admin)/admin/login/page.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -18,9 +17,7 @@ export function AdminLoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // ✅ Redirect if already authenticated as admin
   useEffect(() => {
-    // Only redirect when session is loaded AND user is admin
     if (status === 'authenticated' && session?.user?.role === 'ADMIN') {
       const callbackUrl = searchParams.get('callbackUrl') || '/admin';
       router.replace(callbackUrl); // ✅ Use replace to avoid back button issues
@@ -57,7 +54,6 @@ export function AdminLoginForm() {
     }
   }
 
-  // ✅ Show loading state while session is being checked
   if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
@@ -66,7 +62,6 @@ export function AdminLoginForm() {
     );
   }
 
-  // ✅ If already authenticated as admin, don't render form (prevents flash)
   if (status === 'authenticated' && session?.user?.role === 'ADMIN') {
     return null;
   }

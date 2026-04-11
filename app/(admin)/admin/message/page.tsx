@@ -1,4 +1,3 @@
-// app/(admin)/admin/messages/page.tsx
 import { MessagesTable } from '@/components/admin/MessageTable';
 import { prisma } from '@/lib/prisma';
 

@@ -31,7 +31,6 @@ export function useMediaQuery(query: string, defaultValue = false): boolean {
         }
       };
     } catch (error) {
-      // ✅ Fallback if matchMedia fails (rare on mobile)
       console.warn('matchMedia failed:', error);
       setMatches(defaultValue);
     }

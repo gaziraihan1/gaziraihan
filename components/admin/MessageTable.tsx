@@ -1,4 +1,3 @@
-// components/admin/messages-table.tsx
 'use client';
 
 import { useState } from 'react';
@@ -29,7 +28,6 @@ import {
 import { toast } from 'sonner';
 import { updateMessageStatus, deleteMessage } from '@/actions/adminMessage';
 
-// ✅ FIXED: Interface matches Prisma ContactMessage model
 interface Message {
   id: string;
   name: string;
@@ -96,7 +94,6 @@ export function MessagesTable({ messages }: { messages: Message[] }) {
 
   return (
     <>
-      {/* Filters */}
       <div className="flex items-center gap-4 mb-6">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
@@ -119,7 +116,6 @@ export function MessagesTable({ messages }: { messages: Message[] }) {
         </select>
       </div>
 
-      {/* Table */}
       <div className="rounded-lg border border-white/10 overflow-hidden">
         <Table>
           <TableHeader>
@@ -153,7 +149,6 @@ export function MessagesTable({ messages }: { messages: Message[] }) {
                     </div>
                   </TableCell>
                   <TableCell className="text-white">
-                    {/* ✅ Safe null handling for subject */}
                     {msg.subject || <span className="text-gray-500 italic">No subject</span>}
                   </TableCell>
                   <TableCell>
@@ -218,13 +213,11 @@ export function MessagesTable({ messages }: { messages: Message[] }) {
         </Table>
       </div>
 
-      {/* Message Detail Dialog */}
       {selectedMessage && (
         <Dialog open onOpenChange={() => setSelectedMessage(null)}>
           <DialogContent className="bg-[#0a0a0a] border-white/10 max-w-2xl">
             <DialogHeader>
               <DialogTitle className="text-white">
-                {/* ✅ Safe null handling */}
                 {selectedMessage.subject || 'No Subject'}
               </DialogTitle>
             </DialogHeader>

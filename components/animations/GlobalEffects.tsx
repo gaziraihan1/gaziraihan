@@ -1,19 +1,15 @@
-// components/animations/GlobalEffects.tsx
 'use client';
 
 import { motion } from 'framer-motion';
 import { useMousePosition } from '@/hooks/useMousePosition';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
-// GlobalEffects.tsx
 export function AnimatedBackground() {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden bg-[#0a0a0a]">
-      {/* ✅ Static on mobile — no animation, reduced blur */}
       <div className="absolute -top-[20%] -left-[10%] h-125 w-125 rounded-full bg-indigo-600/20 blur-[80px] md:hidden" />
       <div className="absolute top-[40%] -right-[10%] h-150 w-150 rounded-full bg-cyan-600/10 blur-[80px] md:hidden" />
 
-      {/* ✅ Animated only on desktop */}
       <motion.div
         animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3], x: [0, 100, 0], y: [0, -50, 0] }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -32,13 +28,11 @@ export function AnimatedBackground() {
 export function GlowCursor() {
   const isMobile = useMediaQuery('(max-width: 768px)', true);
   
-  // ✅ Don't even run the hook on mobile
   if (isMobile) return null;
   
   return <GlowCursorInner />;
 }
 
-// Move the actual implementation here
 function GlowCursorInner() {
   const { x, y } = useMousePosition();
   return (

@@ -41,7 +41,7 @@ export function FeaturedProjectsCard({ projects }: FeaturedProjectsCardProps) {
   return (
     <div className="md:col-span-2 md:row-span-1">
       <BentoCard gradientColor="purple" className="h-full">
-        <div className="flex flex-col h-full p-2">
+        <div className="flex flex-col h-full">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <Code2 className="w-5 h-5 text-purple-400" />
@@ -61,7 +61,6 @@ export function FeaturedProjectsCard({ projects }: FeaturedProjectsCardProps) {
                 transition={{ delay: index * 0.1 }}
                 className="group relative overflow-hidden rounded-lg bg-white/5 border border-white/10 hover:border-white/20 transition-all"
               >
-                {/* Thumbnail */}
                 <div className="relative h-32 overflow-hidden">
                   <Image
                     src={project.thumbnail}
@@ -73,7 +72,6 @@ export function FeaturedProjectsCard({ projects }: FeaturedProjectsCardProps) {
                   <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent" />
                 </div>
 
-                {/* Content */}
                 <div className="p-4">
                   <h4 className="text-sm font-semibold text-white mb-2 truncate">
                     {project.title}
@@ -82,7 +80,6 @@ export function FeaturedProjectsCard({ projects }: FeaturedProjectsCardProps) {
                     {project.summary}
                   </p>
 
-                  {/* Tags */}
                   <div className="flex flex-wrap gap-1 mb-3">
                     {project.tags.slice(0, 3).map((tag) => (
                       <Badge
@@ -96,7 +93,6 @@ export function FeaturedProjectsCard({ projects }: FeaturedProjectsCardProps) {
                     ))}
                   </div>
 
-                  {/* Links */}
                   <div className="flex gap-2">
                     {project.demoUrl && (
                       <Link

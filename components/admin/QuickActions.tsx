@@ -1,4 +1,3 @@
-// components/admin/quick-actions.tsx
 'use client';
 
 import { motion } from 'framer-motion';

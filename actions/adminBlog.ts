@@ -1,4 +1,3 @@
-// actions/admin-blog.ts
 'use server';
 
 import { getServerSession } from 'next-auth';
@@ -8,11 +7,6 @@ import { revalidatePath } from 'next/cache'; // ✅ Added revalidateTag
 import { z, ZodError } from 'zod'; // ✅ Added ZodError for better error handling
 import { cache } from '@/lib/cache';
 
-// ============================================================================
-// TYPES & SCHEMA
-// ============================================================================
-
-// ✅ Export type for client components
 export type CreateBlogPostInput = {
   title: string;
   slug: string;
@@ -23,7 +17,6 @@ export type CreateBlogPostInput = {
   tags: string[];
 };
 
-// ✅ Zod schema with descriptive error messages
 const blogPostSchema = z.object({
   title: z.string()
     .min(5, 'Title must be at least 5 characters')
@@ -43,7 +36,6 @@ const blogPostSchema = z.object({
   published: z.boolean(),
   tags: z.array(z.string().min(1, 'Tag cannot be empty')),
 });
-// actions/admin-blog.ts (add this)
 export async function invalidateHomeCache() {
   cache.delete('home:blog');
   revalidatePath('/');
@@ -51,38 +43,27 @@ export async function invalidateHomeCache() {
   console.log('✅ Home blog cache invalidated');
 }
 
-// ============================================================================
-// CACHE UTILITIES
-// ============================================================================
-
-// ✅ Helper: Invalidate blog post cache (in-memory + Next.js ISR)
 export async function invalidateBlogPostCache(postSlug?: string) {
   console.log(`🔄 Invalidating cache for blog post: ${postSlug || 'all'}`);
   
-  // Clear in-memory cache
   if (postSlug) {
     cache.delete(`blog:post:${postSlug}`);
     cache.delete(`blog:meta:${postSlug}`);
   } else {
-    // Clear all blog-related cache keys (simplified)
     cache.clear();
   }
   
-  // Revalidate Next.js cache
   revalidatePath('/admin/blog');
   revalidatePath('/blog');
   revalidatePath('/');
   
   if (postSlug) {
     revalidatePath(`/blog/${postSlug}`);
-    // Optional: Revalidate tag-filtered views
-    // revalidateTag(`blog:tag:${postSlug}`);
   }
   
   console.log(`✅ Blog cache invalidated`);
 }
 
-// ✅ Helper: Format Zod errors for client display
 function formatZodError(error: ZodError): string {
   return error.issues
     .map(issue => {
@@ -92,9 +73,6 @@ function formatZodError(error: ZodError): string {
     .join(', ');
 }
 
-// ============================================================================
-// CREATE BLOG POST
-// ============================================================================
 
 export async function createBlogPost(rawData: CreateBlogPostInput) {
   const session = await getServerSession(authOptions);
@@ -108,11 +86,9 @@ export async function createBlogPost(rawData: CreateBlogPostInput) {
   console.log('📝 Creating blog post...');
 
   try {
-    // ✅ Validate input with Zod
     const data = blogPostSchema.parse(rawData);
     console.log('✅ Input validated');
 
-    // ✅ Create post with selective field fetching
     const post = await prisma.blogPost.create({
        data: {
         title: data.title,
@@ -134,7 +110,6 @@ export async function createBlogPost(rawData: CreateBlogPostInput) {
     const createTime = Date.now() - startTime;
     console.log(`✅ Blog post created in ${createTime}ms: ${post.slug}`);
 
-    // ✅ Invalidate cache after successful creation
     await invalidateBlogPostCache(post.slug);
     await invalidateHomeCache()
     
@@ -144,19 +119,14 @@ export async function createBlogPost(rawData: CreateBlogPostInput) {
     const errorTime = Date.now() - startTime;
     console.error(`❌ Error creating blog post after ${errorTime}ms:`, error);
     
-    // ✅ Return specific Zod validation errors
     if (error instanceof ZodError) {
       return { success: false, error: formatZodError(error) };
     }
     
-    // ✅ Return generic error for other failures
     return { success: false, error: 'Failed to create blog post' };
   }
 }
 
-// ============================================================================
-// UPDATE BLOG POST
-// ============================================================================
 
 export async function updateBlogPost(id: string, rawData: CreateBlogPostInput) {
   const session = await getServerSession(authOptions);
@@ -170,18 +140,15 @@ export async function updateBlogPost(id: string, rawData: CreateBlogPostInput) {
   console.log(`✏️ Updating blog post ${id}...`);
 
   try {
-    // ✅ Validate input
     const data = blogPostSchema.parse(rawData);
     console.log('✅ Input validated');
 
-    // ✅ Get current slug for cache invalidation (in case slug changes)
     const currentPost = await prisma.blogPost.findUnique({
       where: { id },
       select: { slug: true },
     });
     console.log('✅ Current post fetched');
 
-    // ✅ Update post
     const post = await prisma.blogPost.update({
       where: { id },
        data: {
@@ -201,7 +168,6 @@ export async function updateBlogPost(id: string, rawData: CreateBlogPostInput) {
     const updateTime = Date.now() - startTime;
     console.log(`✅ Blog post updated in ${updateTime}ms: ${post.slug}`);
 
-    // ✅ Invalidate cache for both old and new slugs
     await invalidateBlogPostCache(currentPost?.slug);
     await invalidateBlogPostCache(post.slug);
     await invalidateHomeCache()
@@ -220,9 +186,6 @@ export async function updateBlogPost(id: string, rawData: CreateBlogPostInput) {
   }
 }
 
-// ============================================================================
-// DELETE BLOG POST
-// ============================================================================
 
 export async function deleteBlogPost(id: string) {
   const session = await getServerSession(authOptions);
@@ -236,7 +199,6 @@ export async function deleteBlogPost(id: string) {
   console.log(`🗑️ Deleting blog post ${id}...`);
 
   try {
-    // ✅ Get slug BEFORE deletion for cache invalidation
     const post = await prisma.blogPost.findUnique({
       where: { id },
       select: { slug: true },
@@ -247,7 +209,6 @@ export async function deleteBlogPost(id: string) {
       return { success: false, error: 'Post not found' };
     }
 
-    // ✅ Delete post
     await prisma.blogPost.delete({
       where: { id },
     });
@@ -255,7 +216,6 @@ export async function deleteBlogPost(id: string) {
     const deleteTime = Date.now() - startTime;
     console.log(`✅ Blog post deleted in ${deleteTime}ms: ${post.slug}`);
 
-    // ✅ Invalidate cache with deleted post's slug
     await invalidateBlogPostCache(post.slug);
     await invalidateHomeCache()
     
@@ -268,9 +228,6 @@ export async function deleteBlogPost(id: string) {
   }
 }
 
-// ============================================================================
-// TOGGLE PUBLISH STATUS (FIXED: Now invalidates cache properly)
-// ============================================================================
 
 export async function toggleBlogPostPublish(id: string) {
   const session = await getServerSession(authOptions);
@@ -284,7 +241,6 @@ export async function toggleBlogPostPublish(id: string) {
   console.log(`🔄 Toggling publish status for post ${id}...`);
 
   try {
-    // ✅ Fetch slug AND published status for cache invalidation
     const post = await prisma.blogPost.findUnique({
       where: { id },
       select: { published: true, slug: true }, // ✅ Added slug
@@ -295,11 +251,9 @@ export async function toggleBlogPostPublish(id: string) {
       return { success: false, error: 'Post not found' };
     }
 
-    // ✅ Calculate new status
     const newPublished = !post.published;
     console.log(`📊 Publish change: ${post.published} → ${newPublished}`);
 
-    // ✅ Update publish status
     await prisma.blogPost.update({
       where: { id },
        data: {
@@ -311,7 +265,6 @@ export async function toggleBlogPostPublish(id: string) {
     const toggleTime = Date.now() - startTime;
     console.log(`✅ Publish status toggled in ${toggleTime}ms: ${post.slug}`);
 
-    // ✅ Invalidate cache with post slug
     await invalidateBlogPostCache(post.slug);
     await invalidateHomeCache()
     
@@ -324,20 +277,10 @@ export async function toggleBlogPostPublish(id: string) {
   }
 }
 
-// ============================================================================
-// UTILITY: Manual Cache Invalidation (For Webhooks/Cron)
-// ============================================================================
-
-/**
- * Manually invalidate blog cache (e.g., from external trigger)
- * @param secret - Shared secret for authentication
- * @param postSlug - Optional: invalidate specific post
- */
 export async function manualInvalidateBlogCache(
   secret: string, 
   postSlug?: string
 ) {
-  // ✅ Verify secret (use environment variable in production)
   if (secret !== process.env.REVALIDATE_SECRET) {
     console.warn('⚠️ Invalid secret for manual cache invalidation');
     return { success: false, error: 'Unauthorized' };

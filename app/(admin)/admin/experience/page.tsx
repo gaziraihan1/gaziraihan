@@ -1,4 +1,3 @@
-// app/(admin)/admin/experience/page.tsx
 import { ExperienceManager } from '@/components/admin/ExperinceManager';
 import { prisma } from '@/lib/prisma';
 

@@ -1,4 +1,3 @@
-// components/features/about/AboutSkeleton.tsx
 'use client';
 
 import { Skeleton } from '@/components/ui/skeleton';
@@ -61,17 +60,14 @@ export function AboutSkeleton({ section = 'all' }: AboutSkeletonProps) {
     );
   }
 
-  // Default: Full page skeleton
   return (
     <div className="space-y-20">
-      {/* Hero Skeleton */}
       <div className="text-center space-y-6">
         <Skeleton className="h-12 w-12 rounded-full mx-auto" />
         <Skeleton className="h-8 w-64 mx-auto" />
         <Skeleton className="h-4 w-96 mx-auto" />
       </div>
 
-      {/* Bio Skeleton */}
       <div className="space-y-4">
         <Skeleton className="h-6 w-32" />
         <div className="space-y-3">
@@ -81,10 +77,8 @@ export function AboutSkeleton({ section = 'all' }: AboutSkeletonProps) {
         </div>
       </div>
 
-      {/* Experience Skeleton */}
       {section === 'all' && <AboutSkeleton section="experience" />}
 
-      {/* Skills Skeleton */}
       {section === 'all' && <AboutSkeleton section="skills" />}
     </div>
   );

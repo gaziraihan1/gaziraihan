@@ -10,12 +10,10 @@ import { useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { TechSkill } from '@/types/skills';
 
-
 interface TechStackCardProps {
   skills: TechSkill[];
 }
 
-// ✅ Extended category icons with more tech categories
 const categoryIcons: Record<string, React.ReactNode> = {
   Frontend: <Layout className="w-4 h-4" />,
   Backend: <Server className="w-4 h-4" />,
@@ -24,7 +22,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
   DevOps: <Server className="w-4 h-4" />,
   Mobile: <Smartphone className="w-4 h-4" />,
   Testing: <Code2 className="w-4 h-4" />,
-  Other: <Globe className="w-4 h-4" />, // ✅ Fallback icon
+  Other: <Globe className="w-4 h-4" />, 
 };
 
 export function TechStackCard({ skills }: TechStackCardProps) {
@@ -36,19 +34,16 @@ export function TechStackCard({ skills }: TechStackCardProps) {
       acc[skill.category].push(skill);
       return acc;
     }, {} as Record<string, TechSkill[]>);
-  }, [skills]); // ✅ Only re-run when skills array changes
+  }, [skills]); 
 
   return (
     <div className="md:col-span-1 md:row-span-1">
       <BentoCard gradientColor="cyan" className="h-full">
-        <div className="flex flex-col h-full p-2">
-          {/* Header */}
+        <div className="flex flex-col h-full">
           <div className="flex items-center gap-2 mb-4">
             <Code2 className="w-5 h-5 text-cyan-400" />
             <h3 className="text-lg font-semibold text-white">Tech Stack</h3>
           </div>
-
-          {/* Skills List - Scrollable */}
           <div className="flex-1 overflow-y-auto space-y-4 pr-1">
             {Object.entries(groupedSkills).map(([category, categorySkills]) => (
               <motion.div
@@ -57,14 +52,11 @@ export function TechStackCard({ skills }: TechStackCardProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                {/* Category Header */}
                 <div className="flex items-center gap-2 mb-2">
-                  {/* ✅ FIXED: Fallback for unknown categories */}
                   {categoryIcons[category] || categoryIcons.Other}
                   <span className="text-xs font-medium text-gray-400">{category}</span>
                 </div>
                 
-                {/* Skill Badges */}
                 <div className="flex flex-wrap gap-2">
                   {categorySkills.slice(0, 4).map((skill) => (
                     <Badge
@@ -81,7 +73,6 @@ export function TechStackCard({ skills }: TechStackCardProps) {
                       {skill.name}
                     </Badge>
                   ))}
-                  {/* Show count for hidden skills */}
                   {categorySkills.length > 4 && (
                     <Badge 
                       variant="secondary" 
@@ -95,8 +86,6 @@ export function TechStackCard({ skills }: TechStackCardProps) {
               </motion.div>
             ))}
           </div>
-
-          {/* Footer Link */}
           <div className="mt-4 pt-4 border-t border-white/10">
             <Link
               href="/uses"

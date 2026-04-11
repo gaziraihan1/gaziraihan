@@ -1,4 +1,3 @@
-// components/admin/skills-manager.tsx
 'use client';
 
 import { useState } from 'react';
@@ -173,7 +172,6 @@ export function SkillsManager({ skills }: { skills: Skill[] }) {
         ))}
       </div>
 
-      {/* Add/Edit Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={(open) => {
         setIsDialogOpen(open);
         if (!open) resetForm();

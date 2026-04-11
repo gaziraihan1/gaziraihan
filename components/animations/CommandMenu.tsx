@@ -1,4 +1,3 @@
-// components/animations/CommandMenu.tsx
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
@@ -31,7 +30,6 @@ export function CommandMenu() {
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -39,7 +37,6 @@ export function CommandMenu() {
               onClick={() => setIsOpen(false)}
               className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
             />
-            {/* Menu */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -74,7 +71,6 @@ export function CommandMenu() {
         )}
       </AnimatePresence>
       
-      {/* Trigger Hint */}
       <div className="fixed bottom-6 right-6 z-40 hidden md:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-400 backdrop-blur-md">
         <Command size={14} />
         <span>Cmd + K</span>

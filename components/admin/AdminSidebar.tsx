@@ -1,4 +1,3 @@
-// components/admin/admin-sidebar.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -36,21 +35,17 @@ export function AdminSidebar() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
-  // ✅ Detect screen size for responsive behavior
   useEffect(() => {
     const checkDesktop = () => {
       setIsDesktop(window.innerWidth >= 768);
     };
     
-    // Initial check
     checkDesktop();
     
-    // Listen for resize
     window.addEventListener('resize', checkDesktop);
     return () => window.removeEventListener('resize', checkDesktop);
   }, []);
 
-  // ✅ Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileOpen && !isDesktop) {
       document.body.style.overflow = 'hidden';
@@ -62,7 +57,6 @@ export function AdminSidebar() {
     };
   }, [isMobileOpen, isDesktop]);
 
-  // ✅ Close mobile menu when switching to desktop
   useEffect(() => {
     if (isDesktop) {
       setIsMobileOpen(false);
@@ -71,7 +65,6 @@ export function AdminSidebar() {
 
   return (
     <>
-      {/* Mobile Toggle Button - Only visible on mobile */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
         className="fixed top-4 left-4 z-50 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors md:hidden"
@@ -80,30 +73,20 @@ export function AdminSidebar() {
         {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
       </button>
 
-      {/* Sidebar */}
       <motion.aside
-        // ✅ FIXED: Different animation for mobile vs desktop
         initial={isDesktop ? { x: 0 } : { x: -280 }}
         animate={{ 
-          // Desktop: always visible at x: 0
-          // Mobile: slide based on isMobileOpen
           x: isDesktop ? 0 : (isMobileOpen ? 0 : -280),
         }}
         transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-        // ✅ FIXED: Proper responsive positioning
         className={cn(
-          // Base styles
           "fixed md:static left-0 top-0 h-full md:h-auto w-64",
           "bg-[#0a0a0a] md:bg-white/5 border-r border-white/10 p-6",
-          // Z-index: high on mobile (overlay), normal on desktop
           "z-40 md:z-auto",
-          // Prevent overflow
           "overflow-y-auto overflow-x-hidden",
-          // Desktop: always visible, no transform
           isDesktop ? "md:translate-x-0" : ""
         )}
       >
-        {/* Logo */}
         <Link href="/admin" className="flex items-center gap-3 mb-8">
           <div className="p-2 rounded-lg bg-indigo-500/20">
             <Code2 className="w-6 h-6 text-indigo-400" />
@@ -111,7 +94,6 @@ export function AdminSidebar() {
           <span className="text-lg font-bold text-white">Admin Panel</span>
         </Link>
 
-        {/* Navigation */}
         <nav className="space-y-2">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -121,7 +103,6 @@ export function AdminSidebar() {
               <Link 
                 key={item.href} 
                 href={item.href}
-                // ✅ Close mobile menu when clicking nav item
                 onClick={() => !isDesktop && setIsMobileOpen(false)}
                 className="block"
               >
@@ -146,7 +127,6 @@ export function AdminSidebar() {
           })}
         </nav>
 
-        {/* Logout */}
         <div className="absolute bottom-6 left-6 right-6">
           <Button
             variant="outline"
@@ -162,7 +142,6 @@ export function AdminSidebar() {
         </div>
       </motion.aside>
 
-      {/* Mobile Overlay - Only visible on mobile when sidebar is open */}
       <AnimatePresence>
         {isMobileOpen && !isDesktop && (
           <motion.div

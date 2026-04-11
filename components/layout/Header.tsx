@@ -1,4 +1,3 @@
-// components/layout/header.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -35,13 +34,11 @@ export function Header() {
         )}
       >
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          {/* Logo */}
           <Link href="/" className="text-xl font-bold tracking-tight">
             <span className="text-white">Raihan </span>
             <span className="text-indigo-400">Gazi</span>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {siteConfig.navItems.map((item) => (
               <Link
@@ -54,15 +51,14 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Social Links + CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <Link href={siteConfig.links.github} target="_blank" rel="noopener noreferrer">
+            <Link href={siteConfig.links.github} aria-label='Github'>
               <FaGithub className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
             </Link>
-            <Link href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer">
+            <Link href={siteConfig.links.linkedin} aria-label='Linkedin'>
               <FaLinkedin className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
             </Link>
-            <Link href={siteConfig.links.twitter} target="_blank" rel="noopener noreferrer">
+            <Link href={siteConfig.links.twitter} aria-label='Twitter / X'>
               <FaTwitter className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
             </Link>
             <Button size="sm" asChild>
@@ -70,7 +66,6 @@ export function Header() {
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             className="md:hidden text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -80,7 +75,6 @@ export function Header() {
         </div>
       </motion.header>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -106,13 +100,13 @@ export function Header() {
               
               <div className="mt-auto flex flex-col gap-4">
                 <div className="flex gap-4">
-                  <Link href={siteConfig.links.github} target="_blank" rel="noopener noreferrer">
+                  <Link href={siteConfig.links.github} aria-label='Github'>
                     <FaGithub className="w-6 h-6 text-gray-400" />
                   </Link>
-                  <Link href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer">
+                  <Link href={siteConfig.links.linkedin} aria-label='Linkedin'>
                     <FaLinkedin className="w-6 h-6 text-gray-400" />
                   </Link>
-                  <Link href={siteConfig.links.twitter} target="_blank" rel="noopener noreferrer">
+                  <Link href={siteConfig.links.twitter} aria-label='Twitter / X'>
                     <FaTwitter className="w-6 h-6 text-gray-400" />
                   </Link>
                 </div>

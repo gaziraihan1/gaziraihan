@@ -1,4 +1,3 @@
-// components/features/blog/related-posts.tsx
 'use client';
 
 import { motion } from 'framer-motion';

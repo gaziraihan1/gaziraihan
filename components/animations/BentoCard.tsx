@@ -69,7 +69,6 @@ function BentoCardDesktop({ children, className, gradientColor = 'indigo' }: Ben
 }
 
 export function BentoCard(props: BentoCardProps) {
-  // ✅ Default true so first render on mobile skips motion entirely (no flash)
   const isMobile = useMediaQuery('(max-width: 768px)', true);
 
   if (isMobile) return <BentoCardMobile className={props.className}>{props.children}</BentoCardMobile>;

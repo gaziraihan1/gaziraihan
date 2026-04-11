@@ -1,9 +1,8 @@
-// config/site.ts
 export const siteConfig = {
   name: "Mohammad Raihan Gazi",
   title: "Full Stack Web Developer & UI/UX Developer",
   description: "Building scalable web experiences & intuitive interfaces with React, Next.js, and modern technologies.",
-  url: "https://yourportfolio.com",
+  url: "https://gaziraihan.vercel.app",
   ogImage: "https://yourportfolio.com/og-image.png",
   links: {
     github: "https://github.com/gaziraihan1",

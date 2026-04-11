@@ -1,4 +1,3 @@
-// components/layout/footer.tsx
 import Link from 'next/link';
 import { siteConfig } from '@/config/site';
 import { Mail } from 'lucide-react';
@@ -11,7 +10,6 @@ export function Footer() {
     <footer className="border-t border-white/10 bg-[#0a0a0a]">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
           <div className="md:col-span-2">
             <Link href="/" className="text-xl font-bold tracking-tight">
               <span className="text-white">Raihan</span>
@@ -22,9 +20,8 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-semibold text-white mb-4">Navigation</h4>
+            <h3 className="text-sm font-semibold text-white mb-4">Navigation</h3>
             <ul className="space-y-2">
               {siteConfig.navItems.map((item) => (
                 <li key={item.href}>
@@ -39,7 +36,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Social */}
           <div>
             <h4 className="text-sm font-semibold text-white mb-4">Connect</h4>
             <div className="flex flex-col gap-3">
@@ -77,7 +73,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-gray-500">
             © {currentYear} {siteConfig.name}. All rights reserved.

@@ -1,4 +1,3 @@
-// components/features/blog/BlogMarkdown.tsx
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
@@ -11,10 +10,8 @@ interface BlogMarkdownProps {
 export function BlogMarkdown({ content }: BlogMarkdownProps) {
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // ✅ Parse markdown to HTML (memoize to avoid re-parsing on every render)
   const htmlContent = parseMarkdownToHtml(content);
 
-  // ✅ Memoize the click handler so we can remove it later
   const handleAnchorClick = useCallback((e: Event) => {
     e.preventDefault();
     const link = e.currentTarget as HTMLAnchorElement;
@@ -33,7 +30,6 @@ export function BlogMarkdown({ content }: BlogMarkdownProps) {
     const contentEl = contentRef.current;
     if (!contentEl) return;
 
-    // Add copy buttons to code blocks
     const codeBlocks = contentEl.querySelectorAll('pre code');
     codeBlocks.forEach((codeBlock) => {
       const pre = codeBlock.parentElement;
@@ -59,13 +55,11 @@ export function BlogMarkdown({ content }: BlogMarkdownProps) {
       pre.appendChild(copyBtn);
     });
 
-    // Add smooth scroll for anchor links
     const anchorLinks = contentEl.querySelectorAll('a[href^="#"]');
     anchorLinks.forEach((link) => {
       link.addEventListener('click', handleAnchorClick);
     });
 
-    // ✅ Proper cleanup: remove the exact same handler reference
     return () => {
       anchorLinks.forEach((link) => {
         link.removeEventListener('click', handleAnchorClick);

@@ -1,4 +1,3 @@
-// lib/auth.ts
 import NextAuth, { 
   NextAuthOptions,
   DefaultSession,    // ✅ Import default types
@@ -9,7 +8,6 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 
-// ✅ CORRECT: Extend DefaultSession, not Session itself
 declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: {
@@ -97,13 +95,10 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 };
 
-// ✅ NextAuth v4: Correct export pattern for API routes
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
 
-// ✅ Export getServerSession for server-side auth checks
 export { getServerSession } from 'next-auth';
 
-// ✅ Client-side auth functions
 export { signIn, signOut } from 'next-auth/react';

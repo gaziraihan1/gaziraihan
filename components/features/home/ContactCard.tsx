@@ -1,4 +1,3 @@
-// components/features/home/contact-card.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -12,7 +11,7 @@ export function ContactCard() {
     <div className="md:col-span-1 md:row-span-1">
       <BentoCard gradientColor="cyan" className="h-full">
         <motion.div
-          className="flex flex-col justify-center h-full p-2"
+          className="flex flex-col justify-center h-full"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
@@ -43,7 +42,6 @@ export function ContactCard() {
             </Button>
           </div>
 
-          {/* Availability Status */}
           <div className="mt-6 pt-4 border-t border-white/10">
             <div className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">

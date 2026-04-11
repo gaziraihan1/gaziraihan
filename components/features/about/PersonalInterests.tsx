@@ -1,4 +1,3 @@
-// components/features/about/personal-interests.tsx
 'use client';
 
 import { motion } from 'framer-motion';

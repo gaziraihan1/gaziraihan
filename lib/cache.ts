@@ -1,4 +1,3 @@
-// lib/cache.ts
 type CacheEntry<T> = {
   data: T;
   timestamp: number;
@@ -12,7 +11,6 @@ class SimpleCache {
     const entry = this.cache.get(key);
     if (!entry) return null;
     
-    // Check if entry has expired
     if (Date.now() > entry.timestamp + entry.ttl) {
       this.cache.delete(key);
       return null;
@@ -22,7 +20,6 @@ class SimpleCache {
   }
 
   set<T>(key: string, data: T, ttl: number = 5 * 60 * 1000): void {
-    // Default TTL: 5 minutes
     this.cache.set(key, {
       data,
       timestamp: Date.now(),
@@ -41,13 +38,11 @@ class SimpleCache {
 
 export const cache = new SimpleCache();
 
-// ✅ Helper function for cached database queries
 export async function cachedQuery<T>(
   key: string,
   query: () => Promise<T>,
   ttl: number = 5 * 60 * 1000
 ): Promise<T> {
-  // Try to get from cache first
   const cached = cache.get<T>(key);
   if (cached) {
     console.log(`✅ Cache hit for: ${key}`);
@@ -56,7 +51,6 @@ export async function cachedQuery<T>(
   
   console.log(`🔄 Cache miss for: ${key}, executing query...`);
   
-  // Execute query and cache result
   const result = await query();
   cache.set(key, result, ttl);
   

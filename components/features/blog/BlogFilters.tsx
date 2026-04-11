@@ -1,4 +1,3 @@
-// components/features/blog/blog-filters.tsx
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
@@ -9,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
-// ✅ Custom type matching selected fields from query
 export type BlogTag = {
   id: string;
   name: string;
@@ -28,17 +26,13 @@ export function BlogFilters({ tags, currentTag, currentSearch }: BlogFiltersProp
   const pathname = usePathname();
   const searchParams = useSearchParams();
   
-  // ✅ Use ref for debounce timeout (not state - doesn't affect render)
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   
-  // ✅ Track whether search value change came from user input or URL sync
   const isUserInputRef = useRef(false);
   
-  // ✅ Local state for search input
   const [searchValue, setSearchValue] = useState(currentSearch || '');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // ✅ Cleanup debounce timer on unmount
   useEffect(() => {
     return () => {
       if (debounceTimerRef.current) {
@@ -47,20 +41,13 @@ export function BlogFilters({ tags, currentTag, currentSearch }: BlogFiltersProp
     };
   }, []);
 
-  // ✅ Sync URL to local state ONLY when change didn't come from user input
-  // This prevents the "setState in effect" warning while maintaining browser nav support
   useEffect(() => {
-    // Only sync if:
-    // 1. The change didn't originate from user typing (isUserInputRef.current === false)
-    // 2. The URL search actually differs from local state
     if (!isUserInputRef.current && currentSearch !== searchValue) {
       setSearchValue(currentSearch || '');
     }
-    // Reset flag after checking
     isUserInputRef.current = false;
   }, [currentSearch, searchValue]); // ✅ Now depends on both to detect changes
 
-  // ✅ Debounced search handler (no setState in effect body)
   const handleSearchSubmit = useCallback((value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     
@@ -70,7 +57,6 @@ export function BlogFilters({ tags, currentTag, currentSearch }: BlogFiltersProp
       params.delete('search');
     }
     
-    // Keep existing tag filter if present
     if (currentTag) {
       params.set('tag', currentTag);
     }
@@ -81,47 +67,38 @@ export function BlogFilters({ tags, currentTag, currentSearch }: BlogFiltersProp
     router.push(newPath);
   }, [router, pathname, searchParams, currentTag]);
 
-  // ✅ Handle search input change with debounce
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     
-    // ✅ Mark this change as coming from user input
     isUserInputRef.current = true;
     setSearchValue(newValue);
     
-    // Clear existing timer
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
     
-    // Set new timer for debounced navigation
     debounceTimerRef.current = setTimeout(() => {
       handleSearchSubmit(newValue);
     }, 300); // 300ms debounce
   };
 
-  // ✅ Handle form submit (for Enter key) - immediate navigation
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    // Clear any pending debounce
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
     handleSearchSubmit(searchValue);
   };
 
-  // ✅ Handle tag click with proper URL updates
   const handleTagClick = (tagSlug: string) => {
     const params = new URLSearchParams(searchParams.toString());
     
-    // Toggle tag: if clicking active tag, remove it; otherwise set it
     if (tagSlug === currentTag) {
       params.delete('tag');
     } else if (tagSlug) {
       params.set('tag', tagSlug);
     }
     
-    // Keep existing search if present
     if (currentSearch) {
       params.set('search', currentSearch);
     }
@@ -132,20 +109,16 @@ export function BlogFilters({ tags, currentTag, currentSearch }: BlogFiltersProp
     router.push(newPath);
   };
 
-  // ✅ Clear all filters
   const clearFilters = () => {
-    // Mark as user action to prevent URL sync loop
     isUserInputRef.current = true;
     setSearchValue('');
     
-    // Clear any pending debounce
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
     router.push(pathname);
   };
 
-  // ✅ Clear individual filter
   const clearSearchFilter = () => {
     isUserInputRef.current = true;
     setSearchValue('');
@@ -190,7 +163,6 @@ export function BlogFilters({ tags, currentTag, currentSearch }: BlogFiltersProp
       role="search"
       aria-label="Blog filters"
     >
-      {/* Search Bar */}
       <form onSubmit={handleSearch} className="relative" role="search">
         <Search 
           className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" 
@@ -220,7 +192,6 @@ export function BlogFilters({ tags, currentTag, currentSearch }: BlogFiltersProp
         )}
       </form>
 
-      {/* Filter Toggle (Mobile) */}
       <div className="flex items-center justify-between md:hidden">
         <Button
           variant="outline"
@@ -250,7 +221,6 @@ export function BlogFilters({ tags, currentTag, currentSearch }: BlogFiltersProp
         )}
       </div>
 
-      {/* Tags Filter */}
       <AnimatePresence>
         {(isFilterOpen || typeof window === 'undefined' || window.innerWidth >= 768) && (
           <motion.div
@@ -303,8 +273,6 @@ export function BlogFilters({ tags, currentTag, currentSearch }: BlogFiltersProp
                   ))}
                 </div>
               </div>
-
-              {/* Active Filters */}
               <AnimatePresence>
                 {hasActiveFilters && (
                   <motion.div

@@ -1,4 +1,3 @@
-// components/features/about/about-hero.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -8,7 +7,6 @@ import Image from 'next/image';
 export function AboutHero() {
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-      {/* Photo */}
       <motion.div
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -16,26 +14,22 @@ export function AboutHero() {
         className="relative order-2 md:order-1"
       >
         <div className="relative aspect-square max-w-md mx-auto">
-          {/* Background Glow */}
           <div className="absolute inset-0 bg-linear-to-br from-indigo-500/20 to-cyan-500/20 rounded-3xl blur-2xl" />
           
-          {/* Image Container */}
           <div className="relative aspect-square rounded-3xl overflow-hidden border border-white/10 bg-white/5">
             <Image
               src="/images/profile.jpg" // Replace with your photo
               alt="Your Name"
               fill
               className="object-cover"
-              priority
+              fetchPriority='high'
               loading='lazy'
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             
-            {/* Overlay Gradient */}
             <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
           </div>
 
-          {/* Floating Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -48,7 +42,6 @@ export function AboutHero() {
         </div>
       </motion.div>
 
-      {/* Content */}
       <motion.div
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
@@ -71,7 +64,6 @@ export function AboutHero() {
           the gap between complex systems and intuitive user experiences.
         </p>
 
-        {/* Quick Info */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
           <div className="flex items-center gap-3 text-gray-400">
             <div className="p-2 rounded-lg bg-white/5 border border-white/10">

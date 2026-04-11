@@ -1,4 +1,3 @@
-// app/(public)/blog/[slug]/page.tsx
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import { siteConfig } from '@/config/site';
@@ -15,14 +14,10 @@ interface BlogPageProps {
   params: Promise<{ slug: string }>;
 }
 
-// ============================================================================
-// METADATA (Server-side, cached)
-// ============================================================================
 
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const { slug } = await params;
   
-  // ✅ Use cached query for metadata (faster, doesn't block render)
   const post = await cachedQuery(
     `blog:meta:${slug}`,
     async () => {
@@ -92,15 +87,9 @@ export async function generateStaticParams() {
 }
 
 
-// ============================================================================
-// CACHED DATA FETCHING
-// ============================================================================
-
-// ✅ Cache key generator for blog posts
 const getBlogPostCacheKey = (slug: string) => `blog:post:${slug}`;
 const BLOG_POST_CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
-// ✅ Fetch post data with caching and selective fields
 async function getPostData(slug: string) {
   return cachedQuery(
     getBlogPostCacheKey(slug),
@@ -108,7 +97,6 @@ async function getPostData(slug: string) {
       console.log(`🔍 Fetching blog post "${slug}" from database...`);
       const fetchStart = Date.now();
       
-      // ✅ OPTIMIZATION 1: Select only needed fields for detail view
       const post = await prisma.blogPost.findUnique({
         where: { slug, published: true },
         select: {
@@ -135,7 +123,6 @@ async function getPostData(slug: string) {
         return null;
       }
 
-      // ✅ OPTIMIZATION 2: Fetch related posts in parallel (don't block post render)
       const relatedPostsPromise = prisma.blogPost.findMany({
         where: {
           slug: { not: slug },
@@ -159,23 +146,18 @@ async function getPostData(slug: string) {
         orderBy: { publishedAt: 'desc' },
       });
 
-      // ✅ OPTIMIZATION 3: Increment view count asynchronously (don't block render)
-      // Fire-and-forget: update views in background
       prisma.blogPost.update({
         where: { id: post.id },
          data:{ views: { increment: 1 } },
       }).catch((err) => {
         console.error(`⚠️ Failed to increment view count for ${slug}:`, err);
-        // Don't throw - view count is non-critical
       });
 
-      // ✅ Wait for related posts (but don't block post render if it fails)
       let relatedPosts: any[] = [];
       try {
         relatedPosts = await relatedPostsPromise;
       } catch (error) {
         console.error(`⚠️ Failed to fetch related posts for ${slug}:`, error);
-        // Continue without related posts - not critical
       }
 
       const fetchTime = Date.now() - fetchStart;
@@ -187,9 +169,6 @@ async function getPostData(slug: string) {
   );
 }
 
-// ============================================================================
-// JSON-LD SCHEMA GENERATOR
-// ============================================================================
 
 function generateSchema(post: any) {
   return {
@@ -220,16 +199,12 @@ function generateSchema(post: any) {
   };
 }
 
-// ============================================================================
-// PAGE COMPONENT
-// ============================================================================
 
 export default async function BlogPostPage({ params }: BlogPageProps) {
   const { slug } = await params;
   
   console.log(`🎨 Rendering blog post: ${slug}`);
 
-  // ✅ Fetch post data (cached, so subsequent loads are instant)
   const data = await getPostData(slug);
 
   if (!data || !data.post) {
@@ -241,30 +216,23 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
 
   return (
     <>
-      {/* JSON-LD Schema for SEO */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(generateSchema(post)) }}
       />
 
-      {/* Reading Progress Indicator */}
       <ReadingProgress />
 
-      {/* Main Content */}
       <div className="container mx-auto px-4 py-12 md:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Main Article Content */}
           <article className="lg:col-span-8">
             <BlogPost post={post} />
           </article>
 
-          {/* Sidebar (Sticky) */}
           <aside className="lg:col-span-4">
             <div className="sticky top-24 space-y-8">
-              {/* Table of Contents - Generated from post content */}
               <TableOfContents content={post.content} />
 
-              {/* Author Info Card */}
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
                 <h3 className="text-lg font-semibold text-white mb-4">About the Author</h3>
                 <div className="flex items-center gap-4">
@@ -282,7 +250,6 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
                 </div>
               </div>
 
-              {/* Share Buttons */}
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
                 <h3 className="text-lg font-semibold text-white mb-4">Share this article</h3>
                 <div className="flex gap-2 flex-wrap">
@@ -320,7 +287,6 @@ export default async function BlogPostPage({ params }: BlogPageProps) {
           </aside>
         </div>
 
-        {/* Related Posts Section */}
         {relatedPosts.length > 0 && (
           <div className="mt-20 pt-12 border-t border-white/10">
             <RelatedPosts posts={relatedPosts} />

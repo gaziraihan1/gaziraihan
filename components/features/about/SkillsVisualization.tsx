@@ -1,4 +1,3 @@
-// components/features/about/skills-visualization.tsx
 'use client';
 
 import { motion, useInView } from 'framer-motion';
@@ -59,7 +58,6 @@ export function SkillsVisualization({ skillsByCategory }: SkillsVisualizationPro
             transition={{ delay: categoryIndex * 0.1 }}
             className={`bg-linear-to-br ${categoryColors[category] || categoryColors.Other} border rounded-2xl p-6`}
           >
-            {/* Category Header */}
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 rounded-lg bg-white/10">
                 {categoryIcons[category] || categoryIcons.Other}
@@ -67,7 +65,6 @@ export function SkillsVisualization({ skillsByCategory }: SkillsVisualizationPro
               <h3 className="text-xl font-semibold text-white">{category}</h3>
             </div>
 
-            {/* Skills List */}
             <div className="space-y-4">
               {skills.map((skill, skillIndex) => (
                 <SkillBar key={skill.id} skill={skill} index={skillIndex} />
@@ -80,7 +77,6 @@ export function SkillsVisualization({ skillsByCategory }: SkillsVisualizationPro
   );
 }
 
-// Individual Skill Bar Component
 function SkillBar({ skill, index }: { skill: Skill; index: number }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });

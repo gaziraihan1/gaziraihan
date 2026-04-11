@@ -1,4 +1,3 @@
-// app/(admin)/admin/skills/page.tsx
 import { SkillsManager } from '@/components/admin/SkillsManager';
 import { prisma } from '@/lib/prisma';
 
