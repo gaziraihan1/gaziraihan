@@ -12,7 +12,7 @@ export function ContactCard() {
     <div className="md:col-span-1 md:row-span-1">
       <BentoCard gradientColor="cyan" className="h-full">
         <motion.div
-          className="flex flex-col justify-center h-full p-6"
+          className="flex flex-col justify-center h-full p-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}

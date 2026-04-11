@@ -1,4 +1,3 @@
-// components/features/home/hero-card.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -37,12 +36,11 @@ export function HeroCard() {
     <div className="md:col-span-2 md:row-span-2">
       <BentoCard gradientColor="indigo" className="h-full">
         <motion.div
-          className="flex flex-col justify-center h-full p-6 md:p-8"
+          className="flex flex-col justify-center h-full p-2 md:p-8"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {/* Status Badge */}
           <motion.div variants={itemVariants} className="mb-6">
             <Badge variant="secondary" className="gap-2 px-3 py-1">
               <span className="relative flex h-2 w-2">
@@ -53,7 +51,6 @@ export function HeroCard() {
             </Badge>
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
             variants={itemVariants}
             className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight leading-tight"
@@ -65,7 +62,6 @@ export function HeroCard() {
             Web Experiences
           </motion.h1>
 
-          {/* Subheadline */}
           <motion.p
             variants={itemVariants}
             className="text-gray-400 text-lg md:text-xl mb-8 max-w-xl"
@@ -74,7 +70,6 @@ export function HeroCard() {
             complex backend architecture and pixel-perfect frontend design.
           </motion.p>
 
-          {/* CTA Buttons */}
           <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
             <Button size="lg" asChild className="group">
               <Link href="/projects">
@@ -98,7 +93,6 @@ export function HeroCard() {
             </Button>
           </motion.div>
 
-          {/* Social Proof */}
           <motion.div
             variants={itemVariants}
             className="mt-12 pt-8 border-t border-white/10"

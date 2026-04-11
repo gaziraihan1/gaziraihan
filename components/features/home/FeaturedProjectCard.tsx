@@ -41,7 +41,7 @@ export function FeaturedProjectsCard({ projects }: FeaturedProjectsCardProps) {
   return (
     <div className="md:col-span-2 md:row-span-1">
       <BentoCard gradientColor="purple" className="h-full">
-        <div className="flex flex-col h-full p-6">
+        <div className="flex flex-col h-full p-2">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <Code2 className="w-5 h-5 text-purple-400" />

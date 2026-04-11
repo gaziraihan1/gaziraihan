@@ -24,7 +24,7 @@ export function ExperienceCard({ experience }: ExperienceCardProps) {
   return (
     <div className="md:col-span-1 md:row-span-2">
       <BentoCard gradientColor="indigo" className="h-full">
-        <div className="flex flex-col h-full p-6">
+        <div className="flex flex-col h-full p-2">
           <div className="flex items-center gap-2 mb-6">
             <Briefcase className="w-5 h-5 text-green-400" />
             <h3 className="text-lg font-semibold text-white">Experience</h3>

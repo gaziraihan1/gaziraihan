@@ -27,20 +27,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
   Other: <Globe className="w-4 h-4" />, // ✅ Fallback icon
 };
 
-// ✅ Extended category colors
-const categoryColors: Record<string, string> = {
-  Frontend: 'text-cyan-400 bg-cyan-500/10 border-cyan-500/20',
-  Backend: 'text-green-400 bg-green-500/10 border-green-500/20',
-  Database: 'text-purple-400 bg-purple-500/10 border-purple-500/20',
-  Design: 'text-pink-400 bg-pink-500/10 border-pink-500/20',
-  DevOps: 'text-orange-400 bg-orange-500/10 border-orange-500/20',
-  Mobile: 'text-blue-400 bg-blue-500/10 border-blue-500/20',
-  Testing: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20',
-  Other: 'text-gray-400 bg-gray-500/10 border-gray-500/20', // ✅ Fallback color
-};
-
 export function TechStackCard({ skills }: TechStackCardProps) {
-  // ✅ FIXED: Memoize grouping logic to avoid re-computation on every render
   const groupedSkills = useMemo(() => {
     return skills.reduce((acc, skill) => {
       if (!acc[skill.category]) {
@@ -54,7 +41,7 @@ export function TechStackCard({ skills }: TechStackCardProps) {
   return (
     <div className="md:col-span-1 md:row-span-1">
       <BentoCard gradientColor="cyan" className="h-full">
-        <div className="flex flex-col h-full p-6">
+        <div className="flex flex-col h-full p-2">
           {/* Header */}
           <div className="flex items-center gap-2 mb-4">
             <Code2 className="w-5 h-5 text-cyan-400" />

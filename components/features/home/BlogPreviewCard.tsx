@@ -31,7 +31,7 @@ export function BlogPreviewCard({ posts }: BlogPreviewCardProps) {
   return (
     <div className="md:col-span-1 md:row-span-1">
       <BentoCard gradientColor="purple" className="h-full">
-        <div className="flex flex-col h-full p-6">
+        <div className="flex flex-col h-full p-2">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-purple-400" />

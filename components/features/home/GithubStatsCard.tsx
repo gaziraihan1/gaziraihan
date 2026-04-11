@@ -8,9 +8,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 import { FaGithub } from 'react-icons/fa';
 
-// ============================================================================
-// TYPES
-// ============================================================================
 
 export interface GitHubStats {
   followers: number;
@@ -29,9 +26,6 @@ interface GitHubStatsCardProps {
   initialStats?: GitHubStats | null; // ✅ renamed from githubStats
 }
 
-// ============================================================================
-// CONSTANTS
-// ============================================================================
 
 const FALLBACK_STATS: GitHubStats = {
   followers: 0,
@@ -42,9 +36,6 @@ const FALLBACK_STATS: GitHubStats = {
 
 const USERNAME = process.env.NEXT_PUBLIC_GITHUB_USERNAME ?? 'gaziraihan1';
 
-// ============================================================================
-// HELPERS
-// ============================================================================
 
 function formatNumber(num: number | undefined | null): string {
   const safeNum = Number(num);
@@ -54,9 +45,6 @@ function formatNumber(num: number | undefined | null): string {
   return safeNum.toString();
 }
 
-// ============================================================================
-// SUB-COMPONENTS
-// ============================================================================
 
 interface StatRowProps {
   icon: React.ReactNode;
@@ -85,16 +73,12 @@ function StatRow({ icon, label, value, title, delay }: StatRowProps) {
   );
 }
 
-// ============================================================================
-// MAIN COMPONENT
-// ============================================================================
 
 export function GitHubStatsCard({ initialStats }: GitHubStatsCardProps) {
   const [stats, setStats] = useState<GitHubStats | null>(initialStats ?? null);
   const [loading, setLoading] = useState(!initialStats);
   const [error, setError] = useState<string | null>(null);
 
-  // ✅ Fetch from API route — token never reaches the browser
   const fetchStats = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -131,7 +115,6 @@ export function GitHubStatsCard({ initialStats }: GitHubStatsCardProps) {
   }, []);
 
   useEffect(() => {
-    // ✅ Skip client fetch — server already provided stats via initialStats
     if (initialStats) return;
     fetchStats();
   }, [initialStats, fetchStats]);
@@ -139,9 +122,8 @@ export function GitHubStatsCard({ initialStats }: GitHubStatsCardProps) {
   return (
     <div className="md:col-span-1 md:row-span-1">
       <BentoCard gradientColor="indigo" className="h-full">
-        <div className="flex flex-col h-full p-6">
+        <div className="flex flex-col h-full p-2">
 
-          {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <FaGithub className="w-5 h-5 text-indigo-400" />
@@ -160,7 +142,6 @@ export function GitHubStatsCard({ initialStats }: GitHubStatsCardProps) {
             )}
           </div>
 
-          {/* Loading */}
           {loading && (
             <div className="flex-1 space-y-4">
               {Array.from({ length: 3 }).map((_, i) => (
@@ -175,7 +156,6 @@ export function GitHubStatsCard({ initialStats }: GitHubStatsCardProps) {
             </div>
           )}
 
-          {/* Error — only when no fallback available */}
           {error && !loading && !stats && (
             <div className="flex-1 flex items-center justify-center">
               <p className="text-gray-400 text-sm text-center">
@@ -186,7 +166,6 @@ export function GitHubStatsCard({ initialStats }: GitHubStatsCardProps) {
             </div>
           )}
 
-          {/* Stats */}
           {stats && !loading && (
             <div className="flex-1 space-y-4">
               <StatRow
@@ -211,7 +190,6 @@ export function GitHubStatsCard({ initialStats }: GitHubStatsCardProps) {
                 delay={0.3}
               />
 
-              {/* Top Repos */}
               {stats.topRepos && stats.topRepos.length > 0 && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -243,7 +221,6 @@ export function GitHubStatsCard({ initialStats }: GitHubStatsCardProps) {
             </div>
           )}
 
-          {/* Footer */}
           <div className="mt-4 pt-4 border-t border-white/10">
             <Link
               href={`https://github.com/${USERNAME}`}
