@@ -1,5 +1,5 @@
+import { PrismaNeon } from "@prisma/adapter-neon";
 import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
 
 async function main() {
   // ✅ Use DIRECT_URL for migrations (if available), fallback to DATABASE_URL
@@ -10,7 +10,7 @@ async function main() {
     process.exit(1);
   }
 
-  const adapter = new PrismaPg({ connectionString });
+  const adapter = new PrismaNeon({ connectionString });
   const prisma = new PrismaClient({ adapter });
 
   try {
