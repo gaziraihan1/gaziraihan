@@ -1,7 +1,8 @@
+// components/admin/AdminLoginForm.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
-import { signIn, useSession } from 'next-auth/react';
+import { signIn, getSession } from 'next-auth/react'; // ✅ Import getSession
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { Code2, Lock, Mail, AlertCircle } from 'lucide-react';
@@ -13,16 +14,27 @@ import { Label } from '@/components/ui/label';
 export function AdminLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const {  data:session, status } = useSession();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
+  // ✅ Get callbackUrl once at mount (more reliable than in effects)
+  const callbackUrl = searchParams.get('callbackUrl') || '/admin';
+
+  // ✅ Check session on mount and when callbackUrl changes
   useEffect(() => {
-    if (status === 'authenticated' && session?.user?.role === 'ADMIN') {
-      const callbackUrl = searchParams.get('callbackUrl') || '/admin';
-      router.replace(callbackUrl); // ✅ Use replace to avoid back button issues
-    }
-  }, [session, status, router, searchParams]);
+    const checkSession = async () => {
+      try {
+        const session = await getSession();
+        if (session?.user?.role === 'ADMIN') {
+          router.replace(callbackUrl);
+        }
+      } catch (err) {
+        console.error('Session check failed:', err);
+      }
+    };
+    
+    checkSession();
+  }, [router, callbackUrl]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -34,6 +46,18 @@ export function AdminLoginForm() {
     const password = formData.get('password') as string;
 
     try {
+      await signIn('credentials', {
+        email,
+        password,
+        callbackUrl, // ✅ Pass callbackUrl directly to signIn
+        redirect: true, // ✅ Let NextAuth handle the redirect
+      });
+      
+      // If we get here, signIn failed (redirect didn't happen)
+      setError('Sign in failed. Please check your credentials.');
+      
+      /* 
+      // ✅ Option B: Manual redirect (if you need more control)
       const result = await signIn('credentials', {
         email,
         password,
@@ -42,28 +66,26 @@ export function AdminLoginForm() {
 
       if (result?.error) {
         setError('Invalid email or password');
-      } else if (result?.ok) {
-        const callbackUrl = searchParams.get('callbackUrl') || '/admin';
+        return;
+      }
+
+      // ✅ Manually fetch updated session to get role
+      const session = await getSession();
+      
+      if (session?.user?.role === 'ADMIN') {
         router.replace(callbackUrl);
         router.refresh();
+      } else {
+        setError('Access denied. Admin role required.');
       }
-    } catch {
+      */
+      
+    } catch (err) {
+      console.error('Login error:', err);
       setError('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
     }
-  }
-
-  if (status === 'loading') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a]">
-        <div className="text-white animate-pulse">Checking authentication...</div>
-      </div>
-    );
-  }
-
-  if (status === 'authenticated' && session?.user?.role === 'ADMIN') {
-    return null;
   }
 
   return (
@@ -95,6 +117,7 @@ export function AdminLoginForm() {
                     placeholder="admin@example.com"
                     className="pl-10 bg-white/5 border-white/10 text-white"
                     required
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -109,6 +132,7 @@ export function AdminLoginForm() {
                     placeholder="••••••••"
                     className="pl-10 bg-white/5 border-white/10 text-white"
                     required
+                    disabled={isLoading}
                   />
                 </div>
               </div>
