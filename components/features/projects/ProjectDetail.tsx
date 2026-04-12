@@ -12,7 +12,7 @@ import { ProjectMarkdown } from './ProjectMarkdown';
 import { ProjectGallery } from './ProjectGallery';
 import { ProjectNavigation } from './ProjectNavigation';
 
-import type { ProjectDetailProps } from '@/types/project';
+import type { ProjectDetailProps, ProjectTag } from '@/types/project';
 
 
 export function ProjectDetail({ project, previousProject, nextProject }: ProjectDetailProps) {
@@ -37,11 +37,11 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
         >
           <div className="mb-8">
             <div className="flex flex-wrap gap-2 mb-4">
-              {project.tags.map((tag) => (
+              {project.tags.map((tag: ProjectTag) => (
                 <Badge
                   key={tag.id}
                   variant="outline"
-                  style={{ borderColor: tag.color + '40', color: tag.color }}
+                  style={{ borderColor: tag.color + '40', color: tag.color! }}
                 >
                   {tag.name}
                 </Badge>
