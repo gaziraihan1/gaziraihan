@@ -3,22 +3,10 @@ const nextConfig = {
   allowedDevOrigins: ["192.168.1.104"],
   images: {
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
-        hostname: "github.com",
-      },
-      {
-        protocol: "https",
-        hostname: "your-cdn.com",
-      },
-      {
-        protocol: "https",
-        hostname: "*",
-      },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "github.com" },
+      { protocol: "https", hostname: "your-cdn.com" },
+      { protocol: "https", hostname: "**" }, // ✅ '**' for wildcard, not '*'
     ],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60,
@@ -27,10 +15,14 @@ const nextConfig = {
   },
   compress: true,
   reactStrictMode: true,
+  // ✅ Catch type errors and lint errors at build time
+  typescript: {
+    ignoreBuildErrors: false,
+  },
   experimental: {
     optimizeCss: true,
   },
-  turbopack: {},
+  // ✅ Remove empty turbopack — causes warnings in Next.js 16
 };
 
 module.exports = nextConfig;
