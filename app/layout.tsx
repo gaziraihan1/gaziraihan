@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/providers/SessionProvider";
 import { PageLoadTracker } from "@/components/performance/PageLoadTracker";
+import { auth } from "@/lib/auth";
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -47,15 +48,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth(); // ✅ fetch session server-side
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#0a0a0a] text-white`}>
-        <AuthProvider >
+        <AuthProvider session={session}>
           {children}
           <PageLoadTracker />
         </AuthProvider>
@@ -63,4 +66,3 @@ export default function RootLayout({
     </html>
   );
 }
-
