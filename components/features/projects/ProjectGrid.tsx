@@ -1,4 +1,3 @@
-// components/features/projects/project-grid.tsx
 import { ProjectCard } from './ProjectCard';
 
 interface ProjectGridProps {

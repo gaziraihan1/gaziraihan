@@ -211,7 +211,6 @@ export function MessagesTable({ messages, pagination, currentParams }: MessagesT
                           align="end" 
                           className="z-100 bg-[#0a0a0a] border-white/10"
                           sideOffset={4}
-                          // ✅ FIX 5: Suppress hydration warning for minor style mismatches
                           suppressHydrationWarning
                         >
                           <DropdownMenuItem 
@@ -256,7 +255,6 @@ export function MessagesTable({ messages, pagination, currentParams }: MessagesT
         </Table>
       </div>
 
-      {/* Pagination */}
       {pagination.totalPages > 1 && (
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-400">
@@ -291,10 +289,9 @@ export function MessagesTable({ messages, pagination, currentParams }: MessagesT
         </div>
       )}
 
-      {/* Message Detail Dialog */}
       {selectedMessage && (
-        <Dialog open onOpenChange={() => setSelectedMessage(null)}>
-          <DialogContent className="bg-[#0a0a0a] border-white/10 max-w-2xl max-h-[90vh] overflow-y-auto">
+        <Dialog open onOpenChange={() => setSelectedMessage(null)} >
+          <DialogContent className="bg-[#0a0a0a] border-white/10 max-w-2xl px-4 mx-auto max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="text-white">
                 {selectedMessage.subject || 'No Subject'}
@@ -304,7 +301,6 @@ export function MessagesTable({ messages, pagination, currentParams }: MessagesT
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
-              {/* Message Meta */}
               <div className="flex flex-wrap items-center gap-4 text-sm pb-4 border-b border-white/10">
                 <div className="flex items-center gap-2 text-gray-400">
                   <Mail className="w-4 h-4" />
@@ -327,14 +323,12 @@ export function MessagesTable({ messages, pagination, currentParams }: MessagesT
                 </Badge>
               </div>
               
-              {/* Message Content */}
               <div className="p-4 rounded-lg bg-white/5 border border-white/10">
                 <p className="text-gray-300 whitespace-pre-wrap leading-relaxed">
                   {selectedMessage.message}
                 </p>
               </div>
               
-              {/* Technical Details */}
               {(selectedMessage.ipAddr || selectedMessage.userAgent) && (
                 <details className="text-xs text-gray-500">
                   <summary className="cursor-pointer hover:text-gray-300 transition-colors">
@@ -351,7 +345,6 @@ export function MessagesTable({ messages, pagination, currentParams }: MessagesT
                 </details>
               )}
               
-              {/* Action Buttons */}
               <div className="flex flex-wrap gap-2 pt-4 border-t border-white/10">
                 <Button
                   variant="outline"

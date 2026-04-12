@@ -4,6 +4,7 @@ import { siteConfig } from '@/config/site';
 import { prisma } from '@/lib/prisma';
 import { ReadingProgress } from '@/components/features/projects/ReadingProgress';
 import { ProjectDetail } from '@/components/features/projects/ProjectDetail';
+import { ProjectTag } from '@/types/project';
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -98,7 +99,7 @@ function generateSchema(project: any) {
       name: siteConfig.name,
       url: siteConfig.url,
     },
-    keywords: project.tags.map((t: any) => t.name).join(', '),
+    keywords: project.tags.map((t: ProjectTag) => t.name).join(', '),
   };
 }
 

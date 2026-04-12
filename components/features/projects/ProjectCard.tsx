@@ -1,4 +1,3 @@
-// components/features/projects/project-card.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -35,7 +34,6 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
       className="group"
     >
       <Card className="overflow-hidden bg-white/5 border-white/10 hover:border-white/20 transition-all duration-300 h-full flex flex-col">
-        {/* Thumbnail */}
         <div className="relative h-48 overflow-hidden">
           <Image
             src={project.thumbnail}
@@ -48,7 +46,6 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent" />
           
-          {/* Featured Badge */}
           {project.featured && (
             <div className="absolute top-3 right-3">
               <Badge className="bg-indigo-500 text-white border-none">
@@ -57,7 +54,6 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             </div>
           )}
 
-          {/* Overlay on Hover */}
           <div className="absolute inset-0 bg-indigo-500/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
             {project.demoUrl && (
               <Link
@@ -78,7 +74,6 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
           </div>
         </div>
 
-        {/* Content */}
         <CardHeader className="pb-2">
           <h3 className="text-lg font-semibold text-white group-hover:text-indigo-400 transition-colors">
             {project.title}
@@ -87,7 +82,6 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
         </CardHeader>
 
         <CardContent className="flex-1">
-          {/* Tags */}
           <div className="flex flex-wrap gap-1.5 mb-4">
             {project.tags.slice(0, 4).map((tag) => (
               <Badge
@@ -101,7 +95,6 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             ))}
           </div>
 
-          {/* Metrics */}
           {project.metrics.length > 0 && (
             <div className="grid grid-cols-2 gap-2">
               {project.metrics.slice(0, 2).map((metric) => (

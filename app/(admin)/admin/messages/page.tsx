@@ -36,7 +36,7 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
   const unreadCount = messages.filter(m => m.status === "UNREAD").length;
   
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-2 py-8">
       <MessagesHeader 
         totalMessages={pagination.totalMessages}
         unreadCount={unreadCount}
@@ -44,7 +44,6 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
         currentSearch={search}
       />
       
-      {/* ✅ Stream table with Suspense for better UX */}
       <Suspense fallback={<MessagesSkeleton />}>
         <MessagesTable
           messages={messages}

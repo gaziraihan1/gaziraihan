@@ -1,4 +1,3 @@
-// components/features/projects/project-gallery.tsx
 'use client';
 
 import { useState } from 'react';
@@ -38,7 +37,6 @@ export function ProjectGallery({ images }: { images: string[] }) {
         ))}
       </div>
 
-      {/* Lightbox */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div

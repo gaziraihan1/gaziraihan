@@ -63,7 +63,7 @@ export function AdminSidebar() {
     <>
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="fixed top-4 left-4 z-50 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors md:hidden"
+        className="fixed top-4 left-4 z-100 p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors md:hidden"
         aria-label={isMobileOpen ? 'Close menu' : 'Open menu'}
       >
         {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

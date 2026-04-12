@@ -1,4 +1,3 @@
-// components/features/projects/project-markdown.tsx
 'use client';
 
 import ReactMarkdown from 'react-markdown';
@@ -17,7 +16,6 @@ export function ProjectMarkdown({ content }: ProjectMarkdownProps) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={{
-          // Custom Code Block
           code({ inline, className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || '');
             return !inline && match ? (
@@ -36,7 +34,6 @@ export function ProjectMarkdown({ content }: ProjectMarkdownProps) {
               </code>
             );
           },
-          // Custom Headings
           h1: (props) => <h1 className="text-3xl font-bold text-white mt-12 mb-6" {...props} />,
           h2: (props) => <h2 className="text-2xl font-bold text-white mt-10 mb-4" {...props} />,
           h3: (props) => <h3 className="text-xl font-semibold text-white mt-8 mb-3" {...props} />,
@@ -46,7 +43,6 @@ export function ProjectMarkdown({ content }: ProjectMarkdownProps) {
           blockquote: (props) => (
             <blockquote className="border-l-4 border-indigo-500 pl-4 italic text-gray-400 my-6" {...props} />
           ),
-          // ✅ SIMPLEST FIX: Use regular <img> instead of Next.js Image
           img: (props) => (
             < Image
               src={props.src as string}

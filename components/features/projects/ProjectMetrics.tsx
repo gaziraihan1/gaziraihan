@@ -1,4 +1,3 @@
-// components/features/projects/project-metrics.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -10,8 +9,6 @@ interface Metric {
   value: string;
 }
 
-// ✅ FIXED: Record requires 2 type arguments: <KeyType, ValueType>
-// Key: string (metric label), Value: LucideIcon component
 const iconMap: Record<string, LucideIcon> = {
   Performance: Zap,
   Growth: TrendingUp,
@@ -23,7 +20,6 @@ export function ProjectMetrics({ metrics }: { metrics: Metric[] }) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
       {metrics.map((metric, index) => {
-        // ✅ Fallback to default icon if label not in map
         const Icon = iconMap[metric.label] || TrendingUp;
         
         return (

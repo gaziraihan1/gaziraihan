@@ -1,4 +1,3 @@
-// components/features/projects/project-detail.tsx
 'use client';
 
 import { motion } from 'framer-motion';
@@ -29,7 +28,6 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
         </Button>
       </div>
 
-      {/* Hero Section */}
       <section className="container mx-auto px-4 mb-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -37,7 +35,6 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
           transition={{ duration: 0.5 }}
           className="max-w-5xl mx-auto"
         >
-          {/* Title & Meta */}
           <div className="mb-8">
             <div className="flex flex-wrap gap-2 mb-4">
               {project.tags.map((tag) => (
@@ -76,7 +73,6 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
             </div>
           </div>
 
-          {/* Thumbnail */}
           <div className="relative aspect-video rounded-2xl overflow-hidden border border-white/10 mb-8">
             <Image
               src={project.thumbnail}
@@ -90,7 +86,6 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
             />
           </div>
 
-          {/* Action Links */}
           <div className="flex flex-wrap gap-4 mb-16">
             {project.demoUrl && (
               <Button asChild size="lg">
@@ -112,7 +107,6 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
         </motion.div>
       </section>
 
-      {/* Key Metrics */}
       {project.metrics.length > 0 && (
         <section className="bg-white/5 border-y border-white/10 py-16 mb-16">
           <div className="container mx-auto px-4">
@@ -121,13 +115,10 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
         </section>
       )}
 
-      {/* Main Content (Case Study) */}
       <section className="container mx-auto px-4 mb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Sidebar (Sticky) */}
           <aside className="lg:col-span-4 lg:order-2">
             <div className="sticky top-24 space-y-8">
-              {/* Project Overview Card */}
               <Card className="bg-white/5 border-white/10">
                 <CardContent className="p-6 space-y-4">
                   <h3 className="text-lg font-semibold text-white">Project Overview</h3>
@@ -148,7 +139,6 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
                 </CardContent>
               </Card>
 
-              {/* Tech Stack */}
               <Card className="bg-white/5 border-white/10">
                 <CardContent className="p-6 space-y-4">
                   <h3 className="text-lg font-semibold text-white">Technologies</h3>
@@ -164,14 +154,12 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
             </div>
           </aside>
 
-          {/* Content (Markdown) */}
           <div className="lg:col-span-8 lg:order-1">
             <ProjectMarkdown content={project.description} />
           </div>
         </div>
       </section>
 
-      {/* Gallery */}
       {project.images && project.images.length > 0 && (
         <section className="container mx-auto px-4 mb-16">
           <h2 className="text-2xl font-bold text-white mb-8">Project Gallery</h2>
@@ -179,7 +167,6 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
         </section>
       )}
 
-      {/* Navigation */}
       <section className="container mx-auto px-4 mb-20">
         <ProjectNavigation 
           previous={previousProject} 
