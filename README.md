@@ -9,8 +9,6 @@
 
 > A modern, performant, and fully-featured portfolio website built with Next.js 16, TypeScript, Prisma, and Tailwind CSS. Features a complete admin panel for content management.
 
-![Portfolio Preview](./public/images/og-image.png)
-
 ---
 
 ## ✨ Features
@@ -66,8 +64,8 @@
 ### Clone & Install
 ```bash
 # Clone the repository
-git clone https://github.com/gaziraihan1/my-portfolio.git
-cd my-portfolio
+git clone https://github.com/gaziraihan1/gaziraihan.git
+cd gaziraihan
 
 # Install dependencies
 npm install
@@ -102,9 +100,6 @@ GITHUB_TOKEN="ghp_your_token_here"
 RESEND_API_KEY="your-resend-api-key"
 CONTACT_EMAIL="your-email@example.com"
 
-# Site Config
-NEXT_PUBLIC_SITE_URL="http://localhost:3000"
-NEXT_PUBLIC_SITE_NAME="Raihan Portfolio"
 ```
 
 > 🔐 **Generate NEXTAUTH_SECRET**: Run `openssl rand -base64 32` in terminal
@@ -217,7 +212,7 @@ VALUES (
 | `/admin/projects` | Manage projects |
 | `/admin/blog` | Manage blog posts |
 | `/admin/messages` | View contact messages |
-| `/admin/uses` | Manage uses page content |
+| `/admin/uses/hardware & /admin/uses/software` | Manage uses page content |
 | `/admin/settings` | Site & profile settings |
 
 ---
@@ -356,8 +351,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Mohammad Raihan Gazi**
 
 - 🌐 Portfolio: [https://gaziraihan.vercel.app](https://gaziraihan.vercel.app)
-- 📧 Email: gazyrayhan3@gmail.com
-- 💼 LinkedIn: [linkedin.com/in/gaziraihan](https://linkedin.com/in/gaziraihan)
+- 📧 Email: gazyraihan3@gmail.com
+- 💼 LinkedIn: [linkedin.com/in/gaziraihan](https://linkedin.com/in/mohammad-raihan-gazi)
 - 🐙 GitHub: [github.com/gaziraihan1](https://github.com/gaziraihan1)
 
 ---
@@ -389,4 +384,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Built with ❤️ by Mohammad Raihan Gazi**
 
 </div>
-```
