@@ -13,15 +13,15 @@ export function ContactInfo() {
     {
       icon: <Mail className="w-5 h-5" />,
       title: 'Email',
-      value: 'hello@yourportfolio.com',
-      href: 'mailto:hello@yourportfolio.com',
+      value: 'gazyraihan3@gmail.com',
+      href: 'mailto:gazyraihan3@gmail.com',
       color: 'text-indigo-400',
       bg: 'bg-indigo-500/10',
     },
     {
       icon: <MapPin className="w-5 h-5" />,
       title: 'Location',
-      value: 'San Francisco, CA',
+      value: 'Dhaka, Bangladesh',
       href: '#',
       color: 'text-cyan-400',
       bg: 'bg-cyan-500/10',

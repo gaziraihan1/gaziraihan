@@ -1,5 +1,5 @@
+import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
-import { PrismaClient } from "@prisma/client";
 
 async function main() {
   // ✅ Use DIRECT_URL for migrations (if available), fallback to DATABASE_URL

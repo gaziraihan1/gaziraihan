@@ -1,13 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Heart, Gamepad2, BookOpen, Camera, Music, Plane } from 'lucide-react';
+import { Heart, Gamepad2, BookOpen, Camera, Plane } from 'lucide-react';
 
 const interests = [
   { icon: <Gamepad2 />, title: 'Gaming', description: 'Love exploring open-world games and game design' },
   { icon: <BookOpen />, title: 'Reading', description: 'Tech books, sci-fi novels, and design theory' },
   { icon: <Camera />, title: 'Photography', description: 'Street photography and landscape shots' },
-  { icon: <Music />, title: 'Music', description: 'Playing guitar and producing electronic music' },
   { icon: <Plane />, title: 'Travel', description: 'Exploring new cultures and cuisines' },
   { icon: <Heart />, title: 'Open Source', description: 'Contributing to community projects' },
 ];

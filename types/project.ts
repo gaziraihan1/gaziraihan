@@ -1,5 +1,5 @@
 // types/project.ts
-import type { Project, Tag, ProjectMetric } from '@prisma/client';
+import type { Project, Tag, ProjectMetric } from '@/generated/prisma/client';
 
 
 export interface ProjectFilterState {

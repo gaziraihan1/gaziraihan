@@ -7,17 +7,15 @@ import { Badge } from '@/components/ui/badge';
 
 const education = [
   {
-    degree: 'Bachelor of Science in Computer Science',
-    school: 'University of Technology',
-    year: '2018 - 2022',
-    description: 'Focus on Software Engineering and Human-Computer Interaction',
+    degree: 'N/A',
+    school: '',
+    year: '',
+    description: '',
   },
 ];
 
 const certifications = [
-  { name: 'AWS Certified Developer', issuer: 'Amazon Web Services', year: '2023' },
-  { name: 'Google UX Design Certificate', issuer: 'Google', year: '2022' },
-  { name: 'Meta Frontend Developer', issuer: 'Meta', year: '2023' },
+  { name: 'Mern stack web developer', issuer: 'Programming Hero', year: '2025' },
 ];
 
 export function EducationSection() {

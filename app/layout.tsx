@@ -16,6 +16,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+    metadataBase: new URL('https://gaziraihan.vercel.app'), // ✅ add this
   title: {
     default: "Mohammad Raihan Gazi | Full-stack web Developer",
     template: "%s | Mohammad Raihan Gazi",

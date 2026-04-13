@@ -1,15 +1,33 @@
+// app/(admin)/admin/blog/[id]/page.tsx
 import { prisma } from '@/lib/prisma';
 import { BlogEditor } from '@/components/admin/BlogEditor';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
-export default async function EditBlogPostPage({ params }: { params: { id: string } }) {
+// ✅ FIXED: params is a Promise in Next.js 16+
+interface EditBlogPostPageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function EditBlogPostPage({ params }: EditBlogPostPageProps) {
+  // ✅ FIXED: Await params to get the actual id
+  const { id } = await params;
+  
+  // ✅ Validate id before querying
+  if (!id) {
+    console.error('❌ Blog post id is missing');
+    notFound();
+  }
+
   const post = await prisma.blogPost.findUnique({
-    where: { slug: params.id },
+    where: { id },
     include: { tags: true, author: true },
   });
 
-  if (!post) notFound();
+  if (!post) {
+    console.warn(`⚠️ Blog post not found: ${id}`);
+    notFound();
+  }
 
   const availableTags = await prisma.tag.findMany({
     orderBy: { name: 'asc' },
@@ -23,7 +41,7 @@ export default async function EditBlogPostPage({ params }: { params: { id: strin
         </Link>
         <div>
           <h1 className="text-3xl font-bold text-white">Edit Blog Post</h1>
-          <p className="text-gray-400">Update your article</p>
+          <p className="text-gray-400">Update your article: {post.title}</p>
         </div>
       </div>
       

@@ -62,7 +62,9 @@ export const ModelName = {
   Subscriber: 'Subscriber',
   User: 'User',
   Education: 'Education',
-  Certification: 'Certification'
+  Certification: 'Certification',
+  Hardware: 'Hardware',
+  Software: 'Software'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -254,6 +256,39 @@ export const CertificationScalarFieldEnum = {
 } as const
 
 export type CertificationScalarFieldEnum = (typeof CertificationScalarFieldEnum)[keyof typeof CertificationScalarFieldEnum]
+
+
+export const HardwareScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  purchaseUrl: 'purchaseUrl',
+  price: 'price',
+  isFavorite: 'isFavorite',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HardwareScalarFieldEnum = (typeof HardwareScalarFieldEnum)[keyof typeof HardwareScalarFieldEnum]
+
+
+export const SoftwareScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  websiteUrl: 'websiteUrl',
+  isPaid: 'isPaid',
+  isFavorite: 'isFavorite',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SoftwareScalarFieldEnum = (typeof SoftwareScalarFieldEnum)[keyof typeof SoftwareScalarFieldEnum]
 
 
 export const SortOrder = {

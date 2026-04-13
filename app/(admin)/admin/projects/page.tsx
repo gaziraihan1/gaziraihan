@@ -9,7 +9,7 @@ export default async function AdminProjectsPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 overflow-hidden">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white mb-2">Projects</h1>

@@ -39,31 +39,31 @@ enum ContentType {
 // ------------------------------------------------------------------
 
 model SiteConfig {
-  id          String   @id @default(uuid())
-  key         String   @unique // e.g., "site_title", "hero_subtitle"
-  value       String   @db.Text
-  type        String   @default("string") // string, json, boolean
-  updatedAt   DateTime @updatedAt
-  createdAt   DateTime @default(now())
+  id        String   @id @default(uuid())
+  key       String   @unique // e.g., "site_title", "hero_subtitle"
+  value     String   @db.Text
+  type      String   @default("string") // string, json, boolean
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 
   @@index([key])
 }
 
 /// Professional Experience (Work History)
 model Experience {
-  id          String   @id @default(uuid())
-  company     String
-  role        String
-  location    String?
-  startDate   DateTime
-  endDate     DateTime? // Null means "Present"
-  isCurrent   Boolean  @default(false)
-  description String   @db.Text // Supports Markdown/HTML
-  highlights  String[] // Array of strings for bullet points
+  id           String    @id @default(uuid())
+  company      String
+  role         String
+  location     String?
+  startDate    DateTime
+  endDate      DateTime? // Null means "Present"
+  isCurrent    Boolean   @default(false)
+  description  String    @db.Text // Supports Markdown/HTML
+  highlights   String[] // Array of strings for bullet points
   technologies String[] // Tech used in this role
-  order       Int      @default(0) // For manual sorting
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  order        Int       @default(0) // For manual sorting
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 
   @@index([isCurrent, startDate])
   @@index([order, startDate])
@@ -74,8 +74,8 @@ model Experience {
 model Skill {
   id          String   @id @default(uuid())
   name        String
-  category    String   // e.g., "Frontend", "Backend", "Design"
-  icon        String?  // Lucide icon name
+  category    String // e.g., "Frontend", "Backend", "Design"
+  icon        String? // Lucide icon name
   proficiency Int      @default(50) // 0-100 percentage
   order       Int      @default(0)
   createdAt   DateTime @default(now())
@@ -93,8 +93,8 @@ model Project {
   summary     String        @db.Text
   description String        @db.Text // Full Markdown content
   status      ProjectStatus @default(LIVE)
-  thumbnail   String        // Main image URL
-  images      String[]      // Gallery images
+  thumbnail   String // Main image URL
+  images      String[] // Gallery images
   demoUrl     String?
   repoUrl     String?
   featured    Boolean       @default(false)
@@ -103,21 +103,20 @@ model Project {
   updatedAt   DateTime      @updatedAt
 
   // Relations
-  tags        Tag[]         @relation("ProjectTags")
-  metrics     ProjectMetric[]
+  tags    Tag[]           @relation("ProjectTags")
+  metrics ProjectMetric[]
 
   @@index([slug])
   @@index([featured, status, order, createdAt])
   @@index([status, createdAt])
   @@index([createdAt])
-  
 }
 
 /// Specific metrics for a project (e.g., "Improved load time by 40%")
 model ProjectMetric {
   id        String  @id @default(uuid())
-  label     String  // e.g., "Performance Boost"
-  value     String  // e.g., "+40%"
+  label     String // e.g., "Performance Boost"
+  value     String // e.g., "+40%"
   projectId String
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
@@ -126,22 +125,22 @@ model ProjectMetric {
 
 /// Blog / Articles
 model BlogPost {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
-  slug        String   @unique
-  excerpt     String   @db.Text
-  content     String   @db.Text // Markdown
-  published   Boolean  @default(false)
+  slug        String    @unique
+  excerpt     String    @db.Text
+  content     String    @db.Text // Markdown
+  published   Boolean   @default(false)
   publishedAt DateTime?
-  views       Int      @default(0)
+  views       Int       @default(0)
   thumbnail   String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   // Relations
-  tags        Tag[]     @relation("BlogPostTags")
-  authorId    String?   // If you add Admin auth later
-  author      User?     @relation(fields: [authorId], references: [id])
+  tags     Tag[]   @relation("BlogPostTags")
+  authorId String? // If you add Admin auth later
+  author   User?   @relation(fields: [authorId], references: [id])
 
   @@index([slug])
   @@index([published, publishedAt])
@@ -149,7 +148,6 @@ model BlogPost {
   @@index([authorId, published, publishedAt])
   @@index([published, slug])
   @@index([views])
-  
 }
 
 /// Unified Tags for Projects and Blogs
@@ -161,8 +159,8 @@ model Tag {
   createdAt DateTime @default(now())
 
   // Relations - ✅ OPTIMIZED: Use explicit relation names to avoid ambiguity
-  projects  Project[] @relation("ProjectTags")
-  posts     BlogPost[] @relation("BlogPostTags")
+  projects Project[]  @relation("ProjectTags")
+  posts    BlogPost[] @relation("BlogPostTags")
 
   @@index([slug])
   @@index([name])
@@ -170,16 +168,16 @@ model Tag {
 
 /// Contact Form Submissions
 model ContactMessage {
-  id        String      @id @default(uuid())
+  id        String        @id @default(uuid())
   name      String
   email     String
   subject   String?
-  message   String      @db.Text
+  message   String        @db.Text
   status    MessageStatus @default(UNREAD)
-  ipAddr    String?     // For spam protection
-  userAgent String?     // For debugging
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  ipAddr    String? // For spam protection
+  userAgent String? // For debugging
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
   @@index([status, createdAt])
   @@index([email])
@@ -193,7 +191,7 @@ model Subscriber {
   email     String   @unique
   active    Boolean  @default(true)
   createdAt DateTime @default(now())
-  
+
   @@index([email, active])
   @@index([createdAt])
 }
@@ -202,30 +200,30 @@ model Subscriber {
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
-  password  String   // Hashed
+  password  String // Hashed
   name      String?
   role      Role     @default(ADMIN)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // Relations
-  posts     BlogPost[]
+  posts BlogPost[]
 
   @@index([email, role])
 }
 
 /// Education History (New Model)
 model Education {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   degree      String
   school      String
   location    String?
   startDate   DateTime
   endDate     DateTime?
-  description String?  @db.Text
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description String?   @db.Text
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([startDate, endDate])
   @@index([order, startDate])
@@ -233,17 +231,52 @@ model Education {
 
 /// Certifications (New Model)
 model Certification {
+  id           String    @id @default(uuid())
+  name         String
+  issuer       String
+  issueDate    DateTime?
+  expiryDate   DateTime?
+  credentialId String?
+  url          String?
+  order        Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([order, issueDate])
+  @@index([expiryDate])
+}
+
+/// Hardware/Equipment for Uses page
+model Hardware {
   id          String   @id @default(uuid())
   name        String
-  issuer      String
-  issueDate   DateTime?
-  expiryDate  DateTime?
-  credentialId String?
-  url         String?
+  category    String // "Computer", "Display", "Audio", "Peripherals", "Other"
+  description String?  @db.Text
+  imageUrl    String?
+  purchaseUrl String?
+  price       String?
+  isFavorite  Boolean  @default(false)
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@index([order, issueDate])
-  @@index([expiryDate])
+  @@index([category, order])
+  @@index([isFavorite])
+}
+
+/// Software/Tools for Uses page
+model Software {
+  id          String   @id @default(uuid())
+  name        String
+  category    String // "IDE", "Browser", "Terminal", "Design", "Productivity", "Other"
+  description String?  @db.Text
+  websiteUrl  String?
+  isPaid      Boolean  @default(false)
+  isFavorite  Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category, order])
+  @@index([isFavorite])
 }

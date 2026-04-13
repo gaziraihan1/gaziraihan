@@ -77,3 +77,13 @@ export type Education = Prisma.EducationModel
  * Certifications (New Model)
  */
 export type Certification = Prisma.CertificationModel
+/**
+ * Model Hardware
+ * Hardware/Equipment for Uses page
+ */
+export type Hardware = Prisma.HardwareModel
+/**
+ * Model Software
+ * Software/Tools for Uses page
+ */
+export type Software = Prisma.SoftwareModel

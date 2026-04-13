@@ -143,7 +143,7 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
                 <CardContent className="p-6 space-y-4">
                   <h3 className="text-lg font-semibold text-white">Technologies</h3>
                   <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
+                    {project.tags.map((tag: ProjectTag) => (
                       <Badge key={tag.id} variant="secondary" className="text-xs">
                         {tag.name}
                       </Badge>

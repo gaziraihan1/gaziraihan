@@ -395,7 +395,9 @@ export const ModelName = {
   Subscriber: 'Subscriber',
   User: 'User',
   Education: 'Education',
-  Certification: 'Certification'
+  Certification: 'Certification',
+  Hardware: 'Hardware',
+  Software: 'Software'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -411,7 +413,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "siteConfig" | "experience" | "skill" | "project" | "projectMetric" | "blogPost" | "tag" | "contactMessage" | "subscriber" | "user" | "education" | "certification"
+    modelProps: "siteConfig" | "experience" | "skill" | "project" | "projectMetric" | "blogPost" | "tag" | "contactMessage" | "subscriber" | "user" | "education" | "certification" | "hardware" | "software"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1303,6 +1305,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Hardware: {
+      payload: Prisma.$HardwarePayload<ExtArgs>
+      fields: Prisma.HardwareFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HardwareFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HardwarePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HardwareFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HardwarePayload>
+        }
+        findFirst: {
+          args: Prisma.HardwareFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HardwarePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HardwareFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HardwarePayload>
+        }
+        findMany: {
+          args: Prisma.HardwareFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HardwarePayload>[]
+        }
+        create: {
+          args: Prisma.HardwareCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HardwarePayload>
+        }
+        createMany: {
+          args: Prisma.HardwareCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HardwareCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HardwarePayload>[]
+        }
+        delete: {
+          args: Prisma.HardwareDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HardwarePayload>
+        }
+        update: {
+          args: Prisma.HardwareUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HardwarePayload>
+        }
+        deleteMany: {
+          args: Prisma.HardwareDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HardwareUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HardwareUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HardwarePayload>[]
+        }
+        upsert: {
+          args: Prisma.HardwareUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HardwarePayload>
+        }
+        aggregate: {
+          args: Prisma.HardwareAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHardware>
+        }
+        groupBy: {
+          args: Prisma.HardwareGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HardwareGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HardwareCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HardwareCountAggregateOutputType> | number
+        }
+      }
+    }
+    Software: {
+      payload: Prisma.$SoftwarePayload<ExtArgs>
+      fields: Prisma.SoftwareFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SoftwareFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SoftwarePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SoftwareFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SoftwarePayload>
+        }
+        findFirst: {
+          args: Prisma.SoftwareFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SoftwarePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SoftwareFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SoftwarePayload>
+        }
+        findMany: {
+          args: Prisma.SoftwareFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SoftwarePayload>[]
+        }
+        create: {
+          args: Prisma.SoftwareCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SoftwarePayload>
+        }
+        createMany: {
+          args: Prisma.SoftwareCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SoftwareCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SoftwarePayload>[]
+        }
+        delete: {
+          args: Prisma.SoftwareDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SoftwarePayload>
+        }
+        update: {
+          args: Prisma.SoftwareUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SoftwarePayload>
+        }
+        deleteMany: {
+          args: Prisma.SoftwareDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SoftwareUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SoftwareUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SoftwarePayload>[]
+        }
+        upsert: {
+          args: Prisma.SoftwareUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SoftwarePayload>
+        }
+        aggregate: {
+          args: Prisma.SoftwareAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSoftware>
+        }
+        groupBy: {
+          args: Prisma.SoftwareGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SoftwareGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SoftwareCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SoftwareCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1515,6 +1665,39 @@ export const CertificationScalarFieldEnum = {
 } as const
 
 export type CertificationScalarFieldEnum = (typeof CertificationScalarFieldEnum)[keyof typeof CertificationScalarFieldEnum]
+
+
+export const HardwareScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  imageUrl: 'imageUrl',
+  purchaseUrl: 'purchaseUrl',
+  price: 'price',
+  isFavorite: 'isFavorite',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type HardwareScalarFieldEnum = (typeof HardwareScalarFieldEnum)[keyof typeof HardwareScalarFieldEnum]
+
+
+export const SoftwareScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  websiteUrl: 'websiteUrl',
+  isPaid: 'isPaid',
+  isFavorite: 'isFavorite',
+  order: 'order',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SoftwareScalarFieldEnum = (typeof SoftwareScalarFieldEnum)[keyof typeof SoftwareScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1758,6 +1941,8 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   education?: Prisma.EducationOmit
   certification?: Prisma.CertificationOmit
+  hardware?: Prisma.HardwareOmit
+  software?: Prisma.SoftwareOmit
 }
 
 /* Types for Logging */

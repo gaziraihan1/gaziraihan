@@ -12,7 +12,7 @@ async function main() {
   await prisma.tag.createMany({
     data: [
       { name: "TypeScript", slug: "typescript", color: "#3178c6" },
-      { name: "Next.js", slug: "nextjs", color: "#000000" },
+      { name: "Next.js", slug: "nextjs", color: "#0002343" },
       { name: "React", slug: "react", color: "#61dafb" },
       { name: "Backend", slug: "backend", color: "#22c55e" },
     ],
@@ -32,46 +32,6 @@ async function main() {
     skipDuplicates: true,
   });
 
-  // -----------------------------
-  // 3. PROJECT
-  // -----------------------------
-  const project = await prisma.project.upsert({
-    where: { slug: "ecommerce-dashboard" },
-    update: {},
-    create: {
-      title: "E-Commerce Dashboard",
-      slug: "ecommerce-dashboard",
-      summary: "Analytics dashboard for online stores",
-      description: "Full dashboard built with Next.js, Prisma, PostgreSQL",
-      thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800",
-      images: [
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800",
-        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800",
-      ],
-      demoUrl: "https://demo.example.com",
-      repoUrl: "https://github.com/yourusername/project",
-      featured: true,
-      status: "LIVE",
-      order: 1,
-
-      tags: {
-        connect: [
-          { slug: "typescript" },
-          { slug: "nextjs" },
-        ],
-      },
-
-      metrics: {
-        create: [
-          { label: "Performance", value: "+60%" },
-          { label: "Users", value: "10k+" },
-        ],
-      },
-    },
-  });
-
-  // -----------------------------
-  // 4. BLOG POST
   // -----------------------------
   await prisma.blogPost.upsert({
     where: { slug: "getting-started-nextjs" },
@@ -189,6 +149,155 @@ async function main() {
     ],
     skipDuplicates: true,
   });
+
+  // prisma/seed.ts (or run via Prisma Studio)
+
+await prisma.siteConfig.createMany({
+   data: [
+    {
+      key: 'uses_hardware',
+      value: JSON.stringify([
+        {
+          name: 'Personal Computer | PC',
+          category: 'Computer',
+          description: 'AMD Ryzen 5600G, 16GB RAM, 256GB SSD - my daily driver for development',
+          image: '/images/macbook-pro.jpg',
+          price: '$300',
+          url: 'https://www.apple.com/macbook-pro/',
+          isFavorite: true,
+        },
+        {
+          name: 'Cinexa B22i',
+          category: 'Display',
+          description: '22" 1K display for crisp text and accurate colors',
+          image: '/images/lg-ultrafine.jpg',
+          price: '$85',
+          url: 'https://www.lg.com/',
+        },
+        {
+          name: 'iMice AN-300',
+          category: 'Keyboard',
+          description: 'Wired non Mechanical Keyboard',
+          image: '/images/keychron-q1.jpg',
+          price: '$199',
+          url: 'https://www.keychron.com/',
+          isFavorite: true,
+        },
+        {
+          name: 'iMice AN-300',
+          category: 'Mouse',
+          description: 'Wired gaming mouse',
+          image: '/images/mx-master-3s.jpg',
+          price: '$99',
+          url: 'https://www.logitech.com/',
+        },
+      ]),
+      type: 'json',
+    },
+    {
+      key: 'uses_software',
+      value: JSON.stringify([
+        {
+          name: 'VS Code',
+          category: 'IDE',
+          description: 'Primary code editor with extensive extension ecosystem',
+          url: 'https://code.visualstudio.com/',
+          isFavorite: true,
+        },
+        {
+          name: 'Chrome Browser',
+          category: 'Browser',
+          description: 'Innovative browser with spaces and vertical tabs',
+          url: 'https://arc.net/',
+          isFavorite: true,
+        },
+        {
+          name: 'Powershell',
+          category: 'Terminal',
+          description: 'Modern terminal with AI assistance and workflows',
+          url: 'https://www.warp.dev/',
+        },
+        {
+          name: 'Figma',
+          category: 'Design',
+          description: 'Collaborative design tool for UI/UX work',
+          url: 'https://www.figma.com/',
+          isPaid: true,
+        },
+        {
+          name: 'Focura',
+          category: 'Productivity',
+          description: 'All-in-one workspace for notes, docs, and project management',
+          url: 'https://focura-client.vercel.app/',
+          isPaid: true,
+        },
+      ]),
+      type: 'json',
+    },
+    {
+      key: 'uses_workflow',
+      value: JSON.stringify([
+        {
+          title: 'Git & GitHub',
+          description: 'Version control with feature branches, PR reviews, and CI/CD',
+          icon: 'git',
+        },
+        {
+          title: 'TypeScript First',
+          description: 'Strict TypeScript for type safety and better DX',
+          icon: 'process',
+        },
+        {
+          title: 'Component-Driven',
+          description: 'Build UIs with reusable, tested components',
+          icon: 'process',
+        },
+        {
+          title: 'Automated Testing',
+          description: 'Vitest for unit tests, Playwright for E2E',
+          icon: 'automation',
+        },
+        {
+          title: 'Performance Budgets',
+          description: 'Lighthouse CI to catch regressions early',
+          icon: 'zap',
+        },
+      ]),
+      type: 'json',
+    },
+    {
+      key: 'uses_learning',
+      value: JSON.stringify([
+        {
+          name: 'Frontend Masters',
+          description: 'In-depth courses on modern web development',
+          url: 'https://frontendmasters.com/',
+        },
+        {
+          name: 'React Documentation',
+          description: 'Official React docs with excellent examples',
+          url: 'https://react.dev/',
+        },
+        {
+          name: 'Web.dev',
+          description: 'Google\'s guides for modern web best practices',
+          url: 'https://web.dev/',
+        },
+        {
+          name: 'CSS-Tricks',
+          description: 'Practical CSS techniques and tutorials',
+          url: 'https://css-tricks.com/',
+        },
+        {
+          name: 'Smashing Magazine',
+          description: 'Articles on design, UX, and front-end development',
+          url: 'https://www.smashingmagazine.com/',
+        },
+      ]),
+      type: 'json',
+    },
+  ],
+});
 
 
   console.log("✅ Seeding completed!");
