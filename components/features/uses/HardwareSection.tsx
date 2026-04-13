@@ -4,11 +4,11 @@
 import { motion } from 'framer-motion';
 import { Monitor, Keyboard, Mouse, Headphones, Cpu, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { UsesItem } from '@/actions/uses'; // ✅ Now includes category
+import { UsesHardware } from '@/actions/uses'; // ✅ Use correct type
 import Image from 'next/image';
 
 interface HardwareSectionProps {
-  hardware: UsesItem[];
+  hardware: UsesHardware[]; // ✅ Use correct type
 }
 
 const hardwareIcons: Record<string, React.ReactNode> = {
@@ -23,13 +23,13 @@ const hardwareIcons: Record<string, React.ReactNode> = {
 export function HardwareSection({ hardware }: HardwareSectionProps) {
   if (hardware.length === 0) return null;
 
-  // ✅ Group hardware by category (with type-safe access)
+  // Group hardware by category
   const grouped = hardware.reduce((acc, item) => {
-    const category = item.category || 'Other'; // ✅ category now exists on UsesItem
+    const category = item.category || 'Other';
     if (!acc[category]) acc[category] = [];
     acc[category].push(item);
     return acc;
-  }, {} as Record<string, UsesItem[]>);
+  }, {} as Record<string, UsesHardware[]>);
 
   return (
     <motion.section
@@ -55,7 +55,7 @@ export function HardwareSection({ hardware }: HardwareSectionProps) {
             <div className="grid sm:grid-cols-2 gap-4">
               {items.map((item, index) => (
                 <motion.div
-                  key={item.name}
+                  key={item.id} // ✅ Use item.id
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -64,10 +64,10 @@ export function HardwareSection({ hardware }: HardwareSectionProps) {
                 >
                   <div className="flex items-start gap-4">
                     {/* Image */}
-                    {item.image && (
+                    {item.imageUrl && (
                       <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-white/5">
                         <Image
-                          src={item.image}
+                          src={item.imageUrl} // ✅ Use imageUrl
                           alt={item.name}
                           fill
                           className="object-cover"
@@ -96,14 +96,14 @@ export function HardwareSection({ hardware }: HardwareSectionProps) {
                         {item.price && (
                           <span className="text-sm text-gray-500">{item.price}</span>
                         )}
-                        {item.url && (
+                        {item.purchaseUrl && (
                           <Button
                             variant="ghost"
                             size="sm"
                             className="text-xs text-indigo-400 hover:text-indigo-300 p-0 h-auto"
                             asChild
                           >
-                            <a href={item.url} target="_blank" rel="noopener noreferrer">
+                            <a href={item.purchaseUrl} target="_blank" rel="noopener noreferrer">
                               View <ExternalLink className="w-3 h-3 ml-1" />
                             </a>
                           </Button>

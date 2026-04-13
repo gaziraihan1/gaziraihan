@@ -5,10 +5,10 @@ import { motion } from 'framer-motion';
 import { Code, Globe, Terminal, Palette, FileText, ExternalLink, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { UsesItem } from '@/actions/uses'; // ✅ Now includes category, isPaid
+import { UsesSoftware } from '@/actions/uses'; // ✅ Use correct type
 
 interface SoftwareSectionProps {
-  software: UsesItem[];
+  software: UsesSoftware[]; // ✅ Use correct type
 }
 
 const softwareIcons: Record<string, React.ReactNode> = {
@@ -23,13 +23,13 @@ const softwareIcons: Record<string, React.ReactNode> = {
 export function SoftwareSection({ software }: SoftwareSectionProps) {
   if (software.length === 0) return null;
 
-  // ✅ Group software by category (type-safe now)
+  // Group software by category
   const grouped = software.reduce((acc, item) => {
-    const category = item.category || 'Other'; // ✅ category now exists
+    const category = item.category || 'Other';
     if (!acc[category]) acc[category] = [];
     acc[category].push(item);
     return acc;
-  }, {} as Record<string, UsesItem[]>);
+  }, {} as Record<string, UsesSoftware[]>);
 
   return (
     <motion.section
@@ -55,7 +55,7 @@ export function SoftwareSection({ software }: SoftwareSectionProps) {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {items.map((item, index) => (
                 <motion.div
-                  key={item.name}
+                  key={item.id} // ✅ Use item.id
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -75,26 +75,26 @@ export function SoftwareSection({ software }: SoftwareSectionProps) {
                         </p>
                       )}
                       
-                      {/* Badges - ✅ isPaid and category now exist */}
+                      {/* Badges */}
                       <div className="flex flex-wrap gap-1 mt-2">
-                        {item.isPaid && ( // ✅ isPaid now exists on UsesItem
+                        {item.isPaid && (
                           <Badge variant="secondary" className="text-[10px]">Paid</Badge>
                         )}
-                        {item.category && ( // ✅ category now exists on UsesItem
+                        {item.category && (
                           <Badge variant="outline" className="text-[10px]">{item.category}</Badge>
                         )}
                       </div>
                     </div>
                     
                     {/* Link */}
-                    {item.url && (
+                    {item.websiteUrl && (
                       <Button
                         variant="ghost"
                         size="icon"
                         className="shrink-0"
                         asChild
                       >
-                        <a href={item.url} target="_blank" rel="noopener noreferrer">
+                        <a href={item.websiteUrl} target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="w-4 h-4" />
                         </a>
                       </Button>

@@ -1,4 +1,4 @@
-// components/admin/ProjectForm.tsx (Enhanced with Gallery)
+// components/admin/ProjectForm.tsx
 'use client';
 
 import { useState } from 'react';
@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { 
   Eye, EyeOff, Save, Plus, X, Loader2, 
-  Trash2, ArrowUp, ArrowDown 
+  Trash2, ArrowUp, ArrowDown, Star, StarOff
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,7 +15,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
 import {
   Select,
   SelectContent,
@@ -78,7 +77,7 @@ export function ProjectForm({ project, availableTags, mode = 'create' }: Project
   const [isPreview, setIsPreview] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // ✅ Gallery state
+  // Gallery state
   const [galleryImages, setGalleryImages] = useState<string[]>(
     project?.images || []
   );
@@ -130,7 +129,7 @@ export function ProjectForm({ project, availableTags, mode = 'create' }: Project
         demoUrl: data.demoUrl === '' ? null : data.demoUrl,
         repoUrl: data.repoUrl === '' ? null : data.repoUrl,
         tags: selectedTags,
-        images: galleryImages, // ✅ Use gallery state
+        images: galleryImages,
         metrics: metrics.filter((m) => m.label.trim() && m.value.trim()).map(({ id, ...rest }) => rest),
       };
       
@@ -165,7 +164,7 @@ export function ProjectForm({ project, availableTags, mode = 'create' }: Project
     );
   };
 
-  // ✅ Gallery management functions
+  // Gallery management functions
   const validateImageUrl = (url: string): boolean => {
     try {
       new URL(url);
@@ -221,7 +220,7 @@ export function ProjectForm({ project, availableTags, mode = 'create' }: Project
     setMetrics(updated);
   };
 
-  // ✅ Thumbnail preview
+  // Thumbnail preview
   const thumbnailUrl = watch('thumbnail');
 
   return (
@@ -449,7 +448,7 @@ export function ProjectForm({ project, availableTags, mode = 'create' }: Project
             </div>
           </Card>
 
-          {/* Tags & Status */}
+          {/* Tags & Status & Featured */}
           <Card className="p-6 bg-white/5 border-white/10 space-y-4">
             <h3 className="text-lg font-semibold text-white">Classification</h3>
             
@@ -475,6 +474,7 @@ export function ProjectForm({ project, availableTags, mode = 'create' }: Project
               {errors.tags && <p className="text-sm text-red-400 mt-1">{errors.tags.message}</p>}
             </div>
 
+            {/* ✅ FIXED: Status dropdown with proper z-index */}
             <div className="space-y-2">
               <Label className="text-gray-300">Status</Label>
               <Controller
@@ -485,10 +485,16 @@ export function ProjectForm({ project, availableTags, mode = 'create' }: Project
                     onValueChange={field.onChange} 
                     value={field.value}
                   >
-                    <SelectTrigger className="bg-white/5 border-white/10 text-white mt-2">
+                    {/* ✅ FIXED: Trigger with proper styling */}
+                    <SelectTrigger className="bg-white/5 border-white/10 text-white mt-2 relative z-0">
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
-                    <SelectContent>
+                    {/* ✅ FIXED: Content with high z-index and proper positioning */}
+                    <SelectContent 
+                      className="z-9999 bg-[#0a0a0a] border-white/10"
+                      position="popper"
+                      sideOffset={4}
+                    >
                       <SelectItem value="LIVE">Live</SelectItem>
                       <SelectItem value="ARCHIVED">Archived</SelectItem>
                       <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
@@ -499,21 +505,40 @@ export function ProjectForm({ project, availableTags, mode = 'create' }: Project
               {errors.status && <p className="text-sm text-red-400 mt-1">{errors.status.message}</p>}
             </div>
 
-            <div className="flex items-center space-x-2">
+            {/* ✅ FIXED: Featured Toggle Button (more prominent than Switch) */}
+            <div className="pt-2 border-t border-white/10">
+              <Label className="text-gray-300 mb-2 block">Visibility</Label>
               <Controller
                 name="featured"
                 control={control}
                 render={({ field }) => (
-                  <Switch
-                    id="featured"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
+                  <Button
+                    type="button"
+                    variant={field.value ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => field.onChange(!field.value)}
+                    className={field.value 
+                      ? 'bg-amber-500 hover:bg-amber-600 text-white border-amber-500' 
+                      : 'bg-white/5 border-white/10 text-gray-300 hover:bg-white/10'
+                    }
+                  >
+                    {field.value ? (
+                      <>
+                        <Star className="w-4 h-4 mr-2 fill-current" />
+                        Featured
+                      </>
+                    ) : (
+                      <>
+                        <StarOff className="w-4 h-4 mr-2" />
+                        Not Featured
+                      </>
+                    )}
+                  </Button>
                 )}
               />
-              <Label htmlFor="featured" className="text-gray-300 cursor-pointer">
-                Featured on homepage
-              </Label>
+              <p className="text-xs text-gray-500 mt-2">
+                Featured projects appear prominently on the homepage
+              </p>
             </div>
           </Card>
 
@@ -562,7 +587,6 @@ export function ProjectForm({ project, availableTags, mode = 'create' }: Project
             
             {isPreview ? (
               <div className="prose prose-invert prose-sm max-w-none h-150 overflow-y-auto pr-2">
-                {/* ✅ Simple markdown preview - in production, use a proper markdown renderer */}
                 <div className="whitespace-pre-wrap text-gray-300 text-sm leading-relaxed">
                   {content || <span className="text-gray-500 italic">Start writing your description...</span>}
                 </div>
