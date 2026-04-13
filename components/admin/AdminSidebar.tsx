@@ -15,6 +15,8 @@ import {
   Menu,
   X,
   FileText,
+  Cpu,
+  Code,
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
@@ -27,6 +29,8 @@ const navItems = [
   { href: '/admin/skills', label: 'Skills', icon: Code2 },
   { href: '/admin/experience', label: 'Experience', icon: Briefcase },
   { href: '/admin/blog', label: 'Blog', icon: FileText },
+  { href: '/admin/uses/hardware', label: 'Hardware uses', icon: Cpu },
+  { href: '/admin/uses/software', label: 'Software uses', icon: Code },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 

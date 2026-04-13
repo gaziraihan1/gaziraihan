@@ -1,12 +1,12 @@
 // components/features/uses/LearningSection.tsx
 'use client';
 
+import { UsesLearningItem } from '@/actions/uses';
 import { motion } from 'framer-motion';
 import { BookOpen, ExternalLink } from 'lucide-react';
-import { UsesItem } from '@/actions/uses';
 
 interface LearningSectionProps {
-  resources: UsesItem[];
+  resources: UsesLearningItem[];
 }
 
 export function LearningSection({ resources }: LearningSectionProps) {

@@ -2,7 +2,6 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-// ✅ FIXED: Import cachedQuery (not cache.getOrSet)
 import { cachedQuery } from '@/lib/cache';
 
 // ✅ Type for skill with category grouping
@@ -15,24 +14,49 @@ export type UsesSkill = {
   order: number;
 };
 
-// ✅ FIXED: UsesItem type with ALL properties components need
-export type UsesItem = {
+// ✅ Type for hardware items (matches Hardware model)
+export type UsesHardware = {
+  id: string;
   name: string;
-  description?: string;
-  url?: string;
-  image?: string;
-  price?: string;
-  isFavorite?: boolean;
-  // ✅ Add missing properties:
-  category?: string;
-  isPaid?: boolean;
+  category: string;
+  description?: string | null;
+  imageUrl?: string | null;
+  purchaseUrl?: string | null;
+  price?: string | null;
+  isFavorite: boolean;
+  order: number;
+};
+
+// ✅ Type for software items (matches Software model)
+export type UsesSoftware = {
+  id: string;
+  name: string;
+  category: string;
+  description?: string | null;
+  websiteUrl?: string | null;
+  isPaid: boolean;
+  isFavorite: boolean;
+  order: number;
+};
+
+// ✅ Type for workflow/learning items (from SiteConfig JSON)
+export type UsesWorkflowItem = {
+  title: string;
+  description: string;
+  icon?: string;
+};
+
+export type UsesLearningItem = {
+  name: string;
+  description: string;
+  url: string;
 };
 
 // ✅ Cache configuration
 const USES_CACHE_KEY = 'uses:data';
 const USES_CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
 
-// ✅ FIXED: Use cachedQuery helper (not cache.getOrSet)
+// ✅ Fetch all uses data from correct sources
 export async function getUsesData() {
   return cachedQuery(
     USES_CACHE_KEY,
@@ -40,7 +64,7 @@ export async function getUsesData() {
       console.log('🔍 Fetching uses page data...');
       const fetchStart = Date.now();
       
-      // ✅ Fetch skills with selective fields (NO N+1)
+      // ✅ 1. Fetch skills from Prisma (NO N+1)
       const skills = await prisma.skill.findMany({
         select: {
           id: true,
@@ -63,11 +87,42 @@ export async function getUsesData() {
         return acc;
       }, {} as Record<string, UsesSkill[]>);
       
-      // ✅ Fetch hardware/software from SiteConfig (JSON values)
+      // ✅ 2. Fetch hardware from Hardware table (NOT SiteConfig)
+      const hardware = await prisma.hardware.findMany({
+        select: {
+          id: true,
+          name: true,
+          category: true,
+          description: true,
+          imageUrl: true,
+          purchaseUrl: true,
+          price: true,
+          isFavorite: true,
+          order: true,
+        },
+        orderBy: [{ category: 'asc' }, { order: 'asc' }],
+      }) as UsesHardware[];
+      
+      // ✅ 3. Fetch software from Software table (NOT SiteConfig)
+      const software = await prisma.software.findMany({
+        select: {
+          id: true,
+          name: true,
+          category: true,
+          description: true,
+          websiteUrl: true,
+          isPaid: true,
+          isFavorite: true,
+          order: true,
+        },
+        orderBy: [{ category: 'asc' }, { order: 'asc' }],
+      }) as UsesSoftware[];
+      
+      // ✅ 4. Fetch workflow/learning from SiteConfig (still JSON)
       const configEntries = await prisma.siteConfig.findMany({
         where: {
           key: {
-            in: ['uses_hardware', 'uses_software', 'uses_workflow', 'uses_learning'],
+            in: ['uses_workflow', 'uses_learning'],
           },
         },
         select: { key: true, value: true },
@@ -82,8 +137,8 @@ export async function getUsesData() {
       
       return {
         skillsByCategory,
-        hardware: configMap.uses_hardware || [],
-        software: configMap.uses_software || [],
+        hardware, // ✅ From Hardware table
+        software, // ✅ From Software table
         workflow: configMap.uses_workflow || [],
         learning: configMap.uses_learning || [],
       };
