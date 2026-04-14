@@ -24,15 +24,8 @@ import {
 } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { createSkill, updateSkill, deleteSkill } from '@/actions/adminSkills';
+import { TechSkill } from '@/types/skills';
 
-interface Skill {
-  id: string;
-  name: string;
-  category: string;
-  proficiency: number;
-  icon?: string | null;
-  order: number;
-}
 
 const categoryIcons: Record<string, React.ReactNode> = {
   Frontend: <Layout className="w-4 h-4" />,
@@ -42,9 +35,9 @@ const categoryIcons: Record<string, React.ReactNode> = {
   Other: <Code2 className="w-4 h-4" />,
 };
 
-export function SkillsManager({ skills }: { skills: Skill[] }) {
+export function SkillsManager({ skills }: { skills: TechSkill[] }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
+  const [editingSkill, setEditingSkill] = useState<TechSkill | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     category: 'Frontend',
@@ -57,7 +50,7 @@ export function SkillsManager({ skills }: { skills: Skill[] }) {
     setEditingSkill(null);
   };
 
-  const openEditDialog = (skill: Skill) => {
+  const openEditDialog = (skill: TechSkill) => {
     setEditingSkill(skill);
     setFormData({
       name: skill.name,
@@ -99,7 +92,7 @@ export function SkillsManager({ skills }: { skills: Skill[] }) {
     }
     acc[skill.category].push(skill);
     return acc;
-  }, {} as Record<string, Skill[]>);
+  }, {} as Record<string, TechSkill[]>);
 
   return (
     <div className="space-y-6">

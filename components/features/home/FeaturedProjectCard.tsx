@@ -1,4 +1,3 @@
-// components/features/home/featured-projects-card.tsx
 'use client';
 
 import { motion } from 'framer-motion';

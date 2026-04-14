@@ -3,54 +3,8 @@
 
 import { prisma } from '@/lib/prisma';
 import { cachedQuery } from '@/lib/cache';
+import { UsesSkill,UsesHardware, UsesSoftware } from '@/types/uses';
 
-// ✅ Type for skill with category grouping
-export type UsesSkill = {
-  id: string;
-  name: string;
-  category: string;
-  icon?: string | null;
-  proficiency: number;
-  order: number;
-};
-
-// ✅ Type for hardware items (matches Hardware model)
-export type UsesHardware = {
-  id: string;
-  name: string;
-  category: string;
-  description?: string | null;
-  imageUrl?: string | null;
-  purchaseUrl?: string | null;
-  price?: string | null;
-  isFavorite: boolean;
-  order: number;
-};
-
-// ✅ Type for software items (matches Software model)
-export type UsesSoftware = {
-  id: string;
-  name: string;
-  category: string;
-  description?: string | null;
-  websiteUrl?: string | null;
-  isPaid: boolean;
-  isFavorite: boolean;
-  order: number;
-};
-
-// ✅ Type for workflow/learning items (from SiteConfig JSON)
-export type UsesWorkflowItem = {
-  title: string;
-  description: string;
-  icon?: string;
-};
-
-export type UsesLearningItem = {
-  name: string;
-  description: string;
-  url: string;
-};
 
 // ✅ Cache configuration
 const USES_CACHE_KEY = 'uses:data';

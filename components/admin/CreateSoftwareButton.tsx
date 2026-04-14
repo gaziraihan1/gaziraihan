@@ -1,9 +1,9 @@
 // components/admin/CreateHardwareButton.tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,9 +11,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { SoftwareForm } from './SoftwareForm';
-import { toast } from 'sonner';
+} from "@/components/ui/dialog";
+import { SoftwareForm } from "./SoftwareForm";
+import { toast } from "sonner";
 
 export function CreateSoftwareButton() {
   const [open, setOpen] = useState(false);
@@ -36,7 +36,7 @@ export function CreateSoftwareButton() {
         <SoftwareForm
           onSuccess={() => {
             setOpen(false);
-            toast.success('Hardware created!');
+            toast.success("Hardware created!");
           }}
           onCancel={() => setOpen(false)}
         />

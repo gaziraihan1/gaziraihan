@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/select';
 import { createSoftware, updateSoftware, type SoftwareInput } from '@/actions/adminSoftware';
 import { toast } from 'sonner';
+import { UsesSoftware } from '@/types/uses';
 
 // ✅ Schema matches API input type exactly (no 'order' field)
 const softwareSchema = z.object({
@@ -33,19 +34,9 @@ const softwareSchema = z.object({
 type FormData = z.infer<typeof softwareSchema>;
 
 // ✅ Database model interface (includes 'order', can have nulls)
-interface Software {
-  id: string;
-  name: string;
-  category: string;
-  description?: string | null;
-  websiteUrl?: string | null;
-  isPaid: boolean;
-  isFavorite: boolean;
-  order: number;
-}
 
 interface SoftwareFormProps {
-  software?: Software | null;
+  software?: UsesSoftware | null;
   onSuccess?: () => void;
   onCancel?: () => void;
 }

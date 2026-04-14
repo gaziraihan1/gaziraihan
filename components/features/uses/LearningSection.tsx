@@ -1,7 +1,6 @@
-// components/features/uses/LearningSection.tsx
 'use client';
 
-import { UsesLearningItem } from '@/actions/uses';
+import { UsesLearningItem } from '@/types/uses';
 import { motion } from 'framer-motion';
 import { BookOpen, ExternalLink } from 'lucide-react';
 

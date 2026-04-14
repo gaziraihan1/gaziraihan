@@ -1,4 +1,3 @@
-// components/features/projects/projects-header.tsx
 'use client';
 
 import { motion } from 'framer-motion';

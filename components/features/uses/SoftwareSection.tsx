@@ -1,11 +1,10 @@
-// components/features/uses/SoftwareSection.tsx
 'use client';
 
 import { motion } from 'framer-motion';
 import { Code, Globe, Terminal, Palette, FileText, ExternalLink, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { UsesSoftware } from '@/actions/uses'; // ✅ Use correct type
+import { UsesSoftware } from '@/types/uses';
 
 interface SoftwareSectionProps {
   software: UsesSoftware[]; // ✅ Use correct type
@@ -23,7 +22,6 @@ const softwareIcons: Record<string, React.ReactNode> = {
 export function SoftwareSection({ software }: SoftwareSectionProps) {
   if (software.length === 0) return null;
 
-  // Group software by category
   const grouped = software.reduce((acc, item) => {
     const category = item.category || 'Other';
     if (!acc[category]) acc[category] = [];
@@ -75,7 +73,6 @@ export function SoftwareSection({ software }: SoftwareSectionProps) {
                         </p>
                       )}
                       
-                      {/* Badges */}
                       <div className="flex flex-wrap gap-1 mt-2">
                         {item.isPaid && (
                           <Badge variant="secondary" className="text-[10px]">Paid</Badge>
@@ -86,7 +83,6 @@ export function SoftwareSection({ software }: SoftwareSectionProps) {
                       </div>
                     </div>
                     
-                    {/* Link */}
                     {item.websiteUrl && (
                       <Button
                         variant="ghost"

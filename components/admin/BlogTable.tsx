@@ -31,25 +31,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { deleteBlogPost, toggleBlogPostPublish } from '@/actions/adminBlog'; // ✅ Fixed: kebab-case
+import { BlogPost } from '@/types/blog';
 
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  thumbnail?: string | null;
-  published: boolean;
-  publishedAt?: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
-  views: number;
-  tags: Array<{ id: string; name: string; slug: string; color?: string }>;
-  author?: {
-    id: string;
-    name: string | null;
-    email: string | null;
-  } | null;
-}
 
 export function BlogTable({ posts }: { posts: BlogPost[] }) {
   const [deleteDialog, setDeleteDialog] = useState<string | null>(null);

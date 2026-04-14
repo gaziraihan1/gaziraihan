@@ -15,26 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import { createBlogPost, updateBlogPost } from '@/actions/adminBlog';
-
-export interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  thumbnail?: string | null;
-  published: boolean;  // ✅ Required boolean
-  publishedAt?: Date | null;
-  views: number;
-  tags: Array<{ id: string; name: string; slug: string; color?: string }>;
-  author?: {
-    id: string;
-    name: string | null;
-    email: string | null;
-  } | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { BlogPost } from '@/types/blog';
 
 const blogPostSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters').max(200),

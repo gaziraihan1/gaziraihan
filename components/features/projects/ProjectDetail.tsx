@@ -18,7 +18,6 @@ import type { ProjectDetailProps, ProjectTag } from '@/types/project';
 export function ProjectDetail({ project, previousProject, nextProject }: ProjectDetailProps) {
   return (
     <article className="min-h-screen bg-[#0a0a0a]">
-      {/* Back Button */}
       <div className="container mx-auto px-4 py-16">
         <Button variant="ghost" size="sm" asChild className="gap-2">
           <Link href="/projects">
@@ -57,7 +56,6 @@ export function ProjectDetail({ project, previousProject, nextProject }: Project
             </p>
           </div>
 
-          {/* Meta Info */}
           <div className="flex flex-wrap gap-6 text-sm text-gray-500 mb-8 pb-8 border-b border-white/10">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />

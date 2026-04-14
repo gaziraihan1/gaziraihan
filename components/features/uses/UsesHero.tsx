@@ -1,4 +1,3 @@
-// components/features/uses/UsesHero.tsx
 'use client';
 
 import { motion } from 'framer-motion';

@@ -16,20 +16,11 @@ import {
 import { SoftwareForm } from './SoftwareForm';
 import { deleteSoftware, reorderSoftware } from '@/actions/adminSoftware';
 import { toast } from 'sonner';
+import { UsesSoftware } from '@/types/uses';
 
-interface Software {
-  id: string;
-  name: string;
-  category: string;
-  description?: string | null;
-  websiteUrl?: string | null;
-  isPaid: boolean;
-  isFavorite: boolean;
-  order: number;
-}
 
 interface SoftwareTableProps {
-  softwareByCategory: Record<string, Software[]>;
+  softwareByCategory: Record<string, UsesSoftware[]>;
 }
 
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -42,7 +33,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
 };
 
 export function SoftwareTable({ softwareByCategory }: SoftwareTableProps) {
-  const [editingItem, setEditingItem] = useState<Software | null>(null);
+  const [editingItem, setEditingItem] = useState<UsesSoftware | null>(null);
   const [deleteDialog, setDeleteDialog] = useState<string | null>(null);
 
   const handleReorder = async (id: string, newOrder: number) => {

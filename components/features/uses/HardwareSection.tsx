@@ -1,11 +1,10 @@
-// components/features/uses/HardwareSection.tsx
 'use client';
 
 import { motion } from 'framer-motion';
 import { Monitor, Keyboard, Mouse, Headphones, Cpu, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { UsesHardware } from '@/actions/uses'; // ✅ Use correct type
 import Image from 'next/image';
+import { UsesHardware } from '@/types/uses';
 
 interface HardwareSectionProps {
   hardware: UsesHardware[]; // ✅ Use correct type
@@ -23,7 +22,6 @@ const hardwareIcons: Record<string, React.ReactNode> = {
 export function HardwareSection({ hardware }: HardwareSectionProps) {
   if (hardware.length === 0) return null;
 
-  // Group hardware by category
   const grouped = hardware.reduce((acc, item) => {
     const category = item.category || 'Other';
     if (!acc[category]) acc[category] = [];
@@ -76,7 +74,6 @@ export function HardwareSection({ hardware }: HardwareSectionProps) {
                       </div>
                     )}
                     
-                    {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
                         <h4 className="font-medium text-white truncate">{item.name}</h4>
@@ -91,7 +88,6 @@ export function HardwareSection({ hardware }: HardwareSectionProps) {
                         </p>
                       )}
                       
-                      {/* Price & Link */}
                       <div className="flex items-center justify-between mt-3">
                         {item.price && (
                           <span className="text-sm text-gray-500">{item.price}</span>

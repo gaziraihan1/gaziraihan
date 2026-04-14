@@ -1,4 +1,3 @@
-// components/admin/HardwareForm.tsx
 'use client';
 
 import { useForm, Controller } from 'react-hook-form'; // ✅ Import Controller
@@ -18,8 +17,8 @@ import {
 } from '@/components/ui/select';
 import { createHardware, updateHardware, type HardwareInput } from '@/actions/adminHardware'; // ✅ Import HardwareInput type
 import { toast } from 'sonner';
+import { UsesHardware } from '@/types/uses';
 
-// ✅ Schema matches API input type exactly (no 'order' field)
 const hardwareSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').max(200),
   category: z.string().min(2, 'Category is required'),
@@ -30,24 +29,10 @@ const hardwareSchema = z.object({
   isFavorite: z.boolean(),
 });
 
-// ✅ FormData type matches schema
 type FormData = z.infer<typeof hardwareSchema>;
 
-// ✅ Database model interface (includes 'order', can have nulls)
-interface Hardware {
-  id: string;
-  name: string;
-  category: string;
-  description?: string | null;
-  imageUrl?: string | null;
-  purchaseUrl?: string | null;
-  price?: string | null;
-  isFavorite: boolean;
-  order: number; // ✅ Not in form, managed separately
-}
-
 interface HardwareFormProps {
-  hardware?: Hardware | null;
+  hardware?: UsesHardware | null;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
@@ -71,7 +56,6 @@ export function HardwareForm({ hardware, onSuccess, onCancel }: HardwareFormProp
     reset,
   } = useForm<FormData>({
     resolver: zodResolver(hardwareSchema),
-    // ✅ Ensure defaultValues match FormData type exactly
     defaultValues: {
       name: hardware?.name ?? '',
       category: hardware?.category ?? '',
@@ -79,20 +63,16 @@ export function HardwareForm({ hardware, onSuccess, onCancel }: HardwareFormProp
       imageUrl: hardware?.imageUrl ?? '',
       purchaseUrl: hardware?.purchaseUrl ?? '',
       price: hardware?.price ?? '',
-      // ✅ Coerce to boolean to avoid undefined
       isFavorite: hardware?.isFavorite === true,
     },
   });
 
   const onSubmit = async ( data: FormData) => {
     try {
-      // ✅ Convert FormData to HardwareInput (API type)
       const apiData: HardwareInput = {
         ...data,
-        // ✅ Ensure booleans are never undefined
         isFavorite: data.isFavorite === true,
         
-        // ✅ 'order' is not in form, API will handle it
       };
 
       let result;

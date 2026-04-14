@@ -1,9 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { User } from 'next-auth';
-import { Bell, Search, X } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -17,45 +15,12 @@ interface AdminHeaderProps {
 }
 
 export function AdminHeader({ user }: AdminHeaderProps) {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-30 h-16 border-b border-white/10 bg-[#0a0a0a]/95 backdrop-blur supports-backdrop-filter:bg-[#0a0a0a]/80">
       <div className="flex h-full items-center justify-between px-4 md:px-8">
-        
-        <div className="flex items-center gap-2 md:gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsSearchOpen(!isSearchOpen)}
-            aria-label={isSearchOpen ? 'Close search' : 'Open search'}
-          >
-            {isSearchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
-          </Button>
-
-          <div className="hidden md:block relative w-64 lg:w-96">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-            <Input
-              placeholder="Search..."
-              className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500 focus:border-indigo-500"
-            />
-          </div>
+        <div>
         </div>
-
-        {isSearchOpen && (
-          <div className="absolute top-16 left-0 right-0 p-4 bg-[#0a0a0a] border-b border-white/10 md:hidden z-20">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-              <Input
-                placeholder="Search..."
-                className="pl-10 bg-white/5 border-white/10 text-white w-full"
-                autoFocus
-              />
-            </div>
-          </div>
-        )}
-
         <div className="flex items-center gap-2 md:gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

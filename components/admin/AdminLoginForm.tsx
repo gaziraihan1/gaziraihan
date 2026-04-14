@@ -35,8 +35,6 @@ export function AdminLoginForm() {
       if (result?.error) {
         setError('Invalid email or password');
       } else if (result?.ok) {
-        // ✅ router.refresh() triggers the server layout to re-check auth
-        // which then redirects to /admin automatically
         const callbackUrl = searchParams.get('callbackUrl') || '/admin';
         router.replace(callbackUrl);
         router.refresh();

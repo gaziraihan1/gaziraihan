@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { submitContactForm } from '@/actions/contactAction';
 
-// ✅ OPTIMIZATION: Lazy-load heavy validation libs only when needed
 let zod: typeof import('zod');
 let reactHookForm: typeof import('react-hook-form');
 let zodResolver: typeof import('@hookform/resolvers/zod').zodResolver;
@@ -107,11 +106,9 @@ export const ContactForm = memo(function ContactForm() {
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Final validation before submit
     const allErrors = simpleValidate(formData);
     if (Object.keys(allErrors).length > 0) {
       setErrors(allErrors);
-      // Scroll to first error
       const firstError = Object.keys(allErrors)[0];
       document.getElementById(firstError)?.focus();
       return;
@@ -145,7 +142,6 @@ export const ContactForm = memo(function ContactForm() {
     } finally {
       setIsSubmitting(false);
       
-      // Auto-clear status after 5 seconds
       setTimeout(() => {
         setStatus(prev => 
           prev.type === 'success' || prev.type === 'error' 
@@ -167,7 +163,6 @@ export const ContactForm = memo(function ContactForm() {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
           
-          {/* Name Field */}
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium text-gray-300">
               Name <span className="text-red-400">*</span>
@@ -191,7 +186,6 @@ export const ContactForm = memo(function ContactForm() {
             )}
           </div>
 
-          {/* Email Field */}
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium text-gray-300">
               Email <span className="text-red-400">*</span>
@@ -216,7 +210,6 @@ export const ContactForm = memo(function ContactForm() {
             )}
           </div>
 
-          {/* Subject Field */}
           <div className="space-y-2">
             <label htmlFor="subject" className="text-sm font-medium text-gray-300">
               Subject <span className="text-red-400">*</span>
@@ -240,7 +233,6 @@ export const ContactForm = memo(function ContactForm() {
             )}
           </div>
 
-          {/* Message Field */}
           <div className="space-y-2">
             <label htmlFor="message" className="text-sm font-medium text-gray-300">
               Message <span className="text-red-400">*</span>
@@ -265,7 +257,6 @@ export const ContactForm = memo(function ContactForm() {
             )}
           </div>
 
-          {/* Submit Button */}
           <Button
             type="submit"
             size="lg"
@@ -286,7 +277,6 @@ export const ContactForm = memo(function ContactForm() {
             )}
           </Button>
 
-          {/* Status Messages - CSS-only transitions (no Framer Motion) */}
           {status.type === 'success' && (
             <div 
               className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 flex items-start gap-3 transition-opacity duration-200"
@@ -309,7 +299,6 @@ export const ContactForm = memo(function ContactForm() {
             </div>
           )}
 
-          {/* Privacy Note */}
           <p className="text-xs text-gray-500 text-center pt-2">
             I respect your privacy. Your information will never be shared with third parties.
           </p>
@@ -319,5 +308,4 @@ export const ContactForm = memo(function ContactForm() {
   );
 });
 
-// ✅ Add displayName for React DevTools
 ContactForm.displayName = 'ContactForm';

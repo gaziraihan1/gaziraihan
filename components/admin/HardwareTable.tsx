@@ -17,21 +17,11 @@ import { HardwareForm } from './HardwareForm';
 import { deleteHardware, reorderHardware } from '@/actions/adminHardware';
 import { toast } from 'sonner';
 import Image from 'next/image';
+import { UsesHardware } from '@/types/uses';
 
-interface Hardware {
-  id: string;
-  name: string;
-  category: string;
-  description?: string | null;
-  imageUrl?: string | null;
-  purchaseUrl?: string | null;
-  price?: string | null;
-  isFavorite: boolean;
-  order: number;
-}
 
 interface HardwareTableProps {
-  hardwareByCategory: Record<string, Hardware[]>;
+  hardwareByCategory: Record<string, UsesHardware[]>;
 }
 
 const categoryIcons: Record<string, React.ReactNode> = {
@@ -44,9 +34,8 @@ const categoryIcons: Record<string, React.ReactNode> = {
 };
 
 export function HardwareTable({ hardwareByCategory }: HardwareTableProps) {
-  const [editingItem, setEditingItem] = useState<Hardware | null>(null);
+  const [editingItem, setEditingItem] = useState<UsesHardware | null>(null);
   const [deleteDialog, setDeleteDialog] = useState<string | null>(null);
-  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const handleReorder = async (id: string, newOrder: number) => {
     try {

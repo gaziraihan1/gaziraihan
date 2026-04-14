@@ -19,24 +19,11 @@ import {
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { createExperience, updateExperience, deleteExperience, type CreateExperienceInput } from '@/actions/adminExperience';
+import { ExperienceItem } from '@/types/experience';
 
-interface Experience {
-  id: string;
-  company: string;
-  role: string;
-  location?: string | null;
-  startDate: Date;
-  endDate?: Date | null;
-  isCurrent: boolean;
-  description?: string | null;
-  highlights: string[];
-  technologies: string[];
-  order: number;
-}
-
-export function ExperienceManager({ experience }: { experience: Experience[] }) {
+export function ExperienceManager({ experience }: { experience: ExperienceItem[] }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<Experience | null>(null);
+  const [editingItem, setEditingItem] = useState<ExperienceItem | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [formData, setFormData] = useState({
@@ -68,7 +55,7 @@ export function ExperienceManager({ experience }: { experience: Experience[] }) 
     setEditingItem(null);
   };
 
-  const openEditDialog = (item: Experience) => {
+  const openEditDialog = (item: ExperienceItem) => {
     setEditingItem(item);
     setFormData({
       company: item.company,

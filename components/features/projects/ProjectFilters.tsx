@@ -1,4 +1,3 @@
-// components/features/projects/project-filters.tsx
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
@@ -9,9 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ProjectTag } from '@/types/project';
-
-// ✅ FIXED: Custom type matching selected fields from query
-
 
 interface ProjectFiltersProps {
   tags: ProjectTag[];
@@ -32,17 +28,13 @@ export function ProjectFilters({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   
-  // ✅ Use ref for debounce timeout (not state)
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
   
-  // ✅ Track whether search change came from user or URL sync
   const isUserInputRef = useRef(false);
   
-  // ✅ Local state for search input
   const [searchValue, setSearchValue] = useState(currentSearch || '');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-  // ✅ Cleanup debounce timer on unmount
   useEffect(() => {
     return () => {
       if (debounceTimerRef.current) {
@@ -51,7 +43,6 @@ export function ProjectFilters({
     };
   }, []);
 
-  // ✅ Sync URL to local state ONLY when change didn't come from user
   useEffect(() => {
     if (!isUserInputRef.current && currentSearch !== searchValue) {
       setSearchValue(currentSearch || '');
@@ -78,7 +69,6 @@ export function ProjectFilters({
     router.push(newPath);
   }, [router, pathname, searchParams, currentTag, currentCategory]);
 
-  // ✅ Handle search input change with debounce
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     
@@ -94,7 +84,6 @@ export function ProjectFilters({
     }, 300);
   };
 
-  // ✅ Handle form submit (Enter key) - immediate navigation
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (debounceTimerRef.current) {
@@ -103,7 +92,6 @@ export function ProjectFilters({
     handleSearchSubmit(searchValue);
   };
 
-  // ✅ Handle tag click with proper URL updates
   const handleTagClick = (tagSlug: string) => {
     const params = new URLSearchParams(searchParams.toString());
     
@@ -122,7 +110,6 @@ export function ProjectFilters({
     router.push(newPath);
   };
 
-  // ✅ Handle category click
   const handleCategoryClick = (category: string) => {
     const params = new URLSearchParams(searchParams.toString());
     
@@ -141,7 +128,6 @@ export function ProjectFilters({
     router.push(newPath);
   };
 
-  // ✅ Clear all filters
   const clearFilters = () => {
     isUserInputRef.current = true;
     setSearchValue('');
@@ -152,7 +138,6 @@ export function ProjectFilters({
     router.push(pathname);
   };
 
-  // ✅ Clear individual filters
   const clearSearchFilter = () => {
     isUserInputRef.current = true;
     setSearchValue('');
@@ -207,7 +192,6 @@ export function ProjectFilters({
       role="search"
       aria-label="Project filters"
     >
-      {/* Search Bar */}
       <form onSubmit={handleSearch} className="relative" role="search">
         <Search 
           className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" 
@@ -237,7 +221,6 @@ export function ProjectFilters({
         )}
       </form>
 
-      {/* Filter Toggle (Mobile) */}
       <div className="flex items-center justify-between md:hidden">
         <Button
           variant="outline"
@@ -267,7 +250,6 @@ export function ProjectFilters({
         )}
       </div>
 
-      {/* Filters Content */}
       <AnimatePresence>
         {(isFilterOpen || typeof window === 'undefined' || window.innerWidth >= 768) && (
           <motion.div
@@ -314,7 +296,6 @@ export function ProjectFilters({
                 </div>
               </div>
 
-              {/* Tags */}
               <div>
                 <p className="text-xs text-gray-500 mb-2" id="tags-label">Technologies</p>
                 <div 
@@ -346,7 +327,6 @@ export function ProjectFilters({
                 </div>
               </div>
 
-              {/* Active Filters */}
               <AnimatePresence>
                 {hasActiveFilters && (
                   <motion.div

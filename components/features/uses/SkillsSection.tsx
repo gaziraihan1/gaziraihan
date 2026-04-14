@@ -1,9 +1,8 @@
-// components/features/uses/SkillsSection.tsx
 'use client';
 
+import { UsesSkill } from '@/types/uses';
 import { motion } from 'framer-motion';
 import { Code2, Database, Layout, Server, Palette, Globe, Smartphone, Shield } from 'lucide-react';
-import { UsesSkill } from '@/actions/uses';
 
 interface SkillsSectionProps {
   skillsByCategory: Record<string, UsesSkill[]>;
@@ -61,7 +60,6 @@ export function SkillsSection({ skillsByCategory }: SkillsSectionProps) {
       <div className="grid gap-8">
         {Object.entries(skillsByCategory).map(([category, skills]) => (
           <motion.div key={category} variants={item} className="space-y-4">
-            {/* Category Header */}
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-lg ${categoryColors[category] || categoryColors.Other}`}>
                 {categoryIcons[category] || categoryIcons.Other}
@@ -69,7 +67,6 @@ export function SkillsSection({ skillsByCategory }: SkillsSectionProps) {
               <h3 className="text-lg font-semibold text-white">{category}</h3>
             </div>
             
-            {/* Skills Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
               {skills.map((skill) => (
                 <motion.div
@@ -81,7 +78,6 @@ export function SkillsSection({ skillsByCategory }: SkillsSectionProps) {
                     <span className="text-sm font-medium text-white truncate" title={skill.name}>
                       {skill.name}
                     </span>
-                    {/* Proficiency indicator */}
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
                         <div
@@ -96,7 +92,6 @@ export function SkillsSection({ skillsByCategory }: SkillsSectionProps) {
                     </div>
                   </div>
                   
-                  {/* Proficiency bar */}
                   <div className="h-1 bg-white/10 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-indigo-500 rounded-full transition-all duration-500"
@@ -104,7 +99,6 @@ export function SkillsSection({ skillsByCategory }: SkillsSectionProps) {
                     />
                   </div>
                   
-                  {/* Proficiency text */}
                   <p className="text-xs text-gray-500 mt-1">{skill.proficiency}%</p>
                 </motion.div>
               ))}
