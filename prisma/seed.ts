@@ -6,18 +6,32 @@ import { prisma } from "@/lib/prisma";
 async function main() {
   console.log("🌱 Seeding database...");
 
-  // -----------------------------
-  // 1. TAGS
-  // -----------------------------
-  await prisma.tag.createMany({
-    data: [
-      { name: "TypeScript", slug: "typescript", color: "#3178c6" },
-      { name: "Next.js", slug: "nextjs", color: "#0002343" },
-      { name: "React", slug: "react", color: "#61dafb" },
-      { name: "Backend", slug: "backend", color: "#22c55e" },
-    ],
-    skipDuplicates: true,
-  });
+await prisma.tag.createMany({
+  data: [
+    { name: "TypeScript", slug: "typescript", color: "#38bdf8" }, // sky-400
+    { name: "Next.js", slug: "nextjs", color: "#ffffff" }, // white (works best in dark UI)
+    { name: "React", slug: "react", color: "#22d3ee" }, // cyan-400
+
+    { name: "Node.js", slug: "nodejs", color: "#4ade80" }, // green-400
+    { name: "Express", slug: "express", color: "#a3a3a3" }, // neutral-400
+
+    { name: "PostgreSQL", slug: "postgresql", color: "#60a5fa" }, // blue-400
+    { name: "MongoDB", slug: "mongodb", color: "#34d399" }, // emerald-400
+    { name: "Prisma", slug: "prisma", color: "#a855f7" }, // purple-500
+
+    { name: "shadcn/ui", slug: "shadcn-ui", color: "#f1f5f9" }, // slate-100
+    { name: "TailwindCSS", slug: "tailwindcss", color: "#38bdf8" }, // sky-400
+
+    { name: "Docker", slug: "docker", color: "#0ea5e9" }, // blue-500
+    { name: "Git", slug: "git", color: "#f97316" }, // orange-500
+
+    { name: "REST API", slug: "rest-api", color: "#94a3b8" }, // slate-400
+
+    { name: "Backend", slug: "backend", color: "#22c55e" }, // green-500
+    { name: "Frontend", slug: "frontend", color: "#60a5fa" }, // blue-400
+  ],
+  skipDuplicates: true,
+});
 
   // -----------------------------
   // 2. SKILLS
